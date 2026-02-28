@@ -38,14 +38,21 @@ export default function SignupPage() {
   const onSubmit = async (data: SignupFormData) => {
     setError(null);
 
-    const { error: signupError } = await insforge.auth.signUp({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: any = await insforge.auth.signUp({
       email: data.email,
       password: data.password,
       name: data.full_name,
     });
 
-    if (signupError) {
-      setError(signupError.message);
+    if (result.error) {
+      setError(result.error.message);
+      return;
+    }
+
+    // If email verification is required, redirect to verify page
+    if (result.data?.requireEmailVerification) {
+      router.push(`/verify-email?email=${encodeURIComponent(data.email)}&name=${encodeURIComponent(data.full_name)}`);
       return;
     }
 
