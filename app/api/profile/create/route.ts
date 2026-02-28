@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       full_name: user?.profile?.name || body.full_name || "",
       discovery_completed: false,
       onboarding_completed: false,
-      xp: 0,
+      xp_total: 0,
       level: 1,
     });
 
