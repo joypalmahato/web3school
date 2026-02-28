@@ -6,6 +6,7 @@
  */
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { MessageSquare, Route, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -92,7 +93,7 @@ export function HowItWorks() {
             size="lg"
             className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-8 py-6 text-lg font-semibold transition-all active:scale-[0.98] shadow-lg shadow-purple-primary/25"
           >
-            <a href="#waitlist">Join the Waitlist</a>
+            <Link href="/signup">Get Started Free</Link>
           </Button>
         </motion.div>
       </div>

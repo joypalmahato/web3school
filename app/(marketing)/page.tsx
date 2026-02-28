@@ -2,7 +2,7 @@
  * @component LandingPage
  * @part-of Web3School — Marketing
  * @design Assembles all landing page sections with section IDs for nav links
- * @flow Hero → Problem → Solution → WhoIsThisFor → Comparison → Roles → HowItWorks → Mission → Waitlist
+ * @flow Hero → Problem → Solution → WhoIsThisFor → Comparison → Roles → HowItWorks → Mission → SignupCTA
  */
 import { Hero } from "@/components/landing/Hero";
 import { Problem } from "@/components/landing/Problem";

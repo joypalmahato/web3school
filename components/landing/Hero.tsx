@@ -2,10 +2,11 @@
  * @component Hero
  * @part-of Web3School — Landing Page
  * @design Animated gradient mesh background, grid overlay, dark theme
- * @flow Two CTAs: "Join the Waitlist" (primary) → #waitlist, "See How It Works" → #solution
+ * @flow Two CTAs: "Start Your Discovery" (primary) → /signup, "See How It Works" → #solution
  */
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -79,10 +80,10 @@ export function Hero() {
             size="lg"
             className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-8 py-6 text-lg font-semibold transition-all active:scale-[0.98] shadow-lg shadow-purple-primary/25"
           >
-            <a href="#waitlist">
-              Join the Waitlist
+            <Link href="/signup">
+              Start Your Discovery — Free
               <ArrowRight className="ml-2 h-5 w-5" />
-            </a>
+            </Link>
           </Button>
           <Button
             asChild
@@ -94,14 +95,17 @@ export function Hero() {
           </Button>
         </motion.div>
 
-        {/* Social proof hint */}
+        {/* Login hint */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-12 text-text-muted text-sm"
         >
-          Join 100+ early adopters already on the waitlist
+          Already have an account?{" "}
+          <Link href="/login" className="text-purple-primary hover:underline">
+            Log in
+          </Link>
         </motion.p>
       </div>
     </section>
