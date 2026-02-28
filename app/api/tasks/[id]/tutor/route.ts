@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { anthropic, AI_MODEL } from "@/lib/ai/client";
 import { TUTOR_SYSTEM_PROMPT } from "@/lib/ai/prompts/tutor";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -10,12 +11,9 @@ interface RouteParams {
 export async function POST(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -29,11 +27,10 @@ export async function POST(request: Request, { params }: RouteParams) {
     }
 
     // Get task context
-    const { data: task } = await supabase
-      .from("daily_tasks")
+    const { data: task } = await db("daily_tasks")
       .select("*, roadmap:roadmaps(role_id)")
       .eq("id", id)
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .single();
 
     if (!task) {
@@ -43,18 +40,16 @@ export async function POST(request: Request, { params }: RouteParams) {
     // Get role info
     const roadmap = task.roadmap as { role_id: string } | null;
     const { data: role } = roadmap
-      ? await supabase
-          .from("roles")
+      ? await db("roles")
           .select("name, category")
           .eq("id", roadmap.role_id)
           .single()
       : { data: null };
 
     // Get profile for level
-    const { data: profile } = await supabase
-      .from("profiles")
+    const { data: profile } = await db("profiles")
       .select("level, xp_total")
-      .eq("id", user.id)
+      .eq("user_id", userId)
       .single();
 
     // Build context

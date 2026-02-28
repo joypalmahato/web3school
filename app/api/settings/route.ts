@@ -1,26 +1,23 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId, user } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
+    const { data: profile } = await db("profiles")
       .select("full_name, email, avatar_url, timezone, preferred_language")
-      .eq("id", user.id)
+      .eq("user_id", userId)
       .single();
 
     return NextResponse.json({
       profile: profile || {},
-      email: user.email,
+      email: user?.email,
     });
   } catch (err) {
     console.error("Settings fetch error:", err);
@@ -33,12 +30,9 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -62,10 +56,9 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "No valid fields to update" }, { status: 400 });
     }
 
-    const { error } = await supabase
-      .from("profiles")
+    const { error } = await db("profiles")
       .update(safeUpdates)
-      .eq("id", user.id);
+      .eq("user_id", userId);
 
     if (error) {
       return NextResponse.json(

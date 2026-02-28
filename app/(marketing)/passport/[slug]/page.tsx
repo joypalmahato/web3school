@@ -4,7 +4,7 @@
  * @design Public view, no auth, OG meta tags, CTA to signup
  */
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { db } from "@/lib/db";
 import { APP_NAME, APP_URL } from "@/lib/utils/constants";
 import { PublicPassportClient } from "./PublicPassportClient";
 
@@ -14,10 +14,8 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const { data: passport } = await supabase
-    .from("skill_passports")
+  
+  const { data: passport } = await db("skill_passports")
     .select("user_id, role_id, total_score")
     .eq("public_slug", slug)
     .eq("is_public", true)
@@ -27,15 +25,13 @@ export async function generateMetadata({ params }: Props) {
     return { title: "Passport Not Found" };
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
+  const { data: profile } = await db("profiles")
     .select("full_name, level")
-    .eq("id", passport.user_id)
+    .eq("user_id", passport.user_id)
     .single();
 
   const { data: role } = passport.role_id
-    ? await supabase
-        .from("roles")
+    ? await db("roles")
         .select("name")
         .eq("id", passport.role_id)
         .single()
@@ -66,11 +62,9 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function PublicPassportPage({ params }: Props) {
   const { slug } = await params;
-  const supabase = await createClient();
-
+  
   // Get passport
-  const { data: passport } = await supabase
-    .from("skill_passports")
+  const { data: passport } = await db("skill_passports")
     .select("*")
     .eq("public_slug", slug)
     .eq("is_public", true)
@@ -81,24 +75,21 @@ export default async function PublicPassportPage({ params }: Props) {
   }
 
   // Get profile
-  const { data: profile } = await supabase
-    .from("profiles")
+  const { data: profile } = await db("profiles")
     .select("full_name, avatar_url, xp_total, level, streak_count, longest_streak")
-    .eq("id", passport.user_id)
+    .eq("user_id", passport.user_id)
     .single();
 
   // Get role
   const { data: role } = passport.role_id
-    ? await supabase
-        .from("roles")
+    ? await db("roles")
         .select("name, key_skills")
         .eq("id", passport.role_id)
         .single()
     : { data: null };
 
   // Get roadmap progress
-  const { data: roadmap } = await supabase
-    .from("roadmaps")
+  const { data: roadmap } = await db("roadmaps")
     .select("id")
     .eq("user_id", passport.user_id)
     .eq("status", "active")
@@ -108,23 +99,21 @@ export default async function PublicPassportPage({ params }: Props) {
   let projectCount = 0;
 
   if (roadmap) {
-    const { data: tasks } = await supabase
-      .from("daily_tasks")
+    const { data: tasks } = await db("daily_tasks")
       .select("task_type, status")
       .eq("roadmap_id", roadmap.id);
 
     if (tasks) {
-      const completed = tasks.filter((t) => t.status === "completed");
+      const completed = tasks.filter((t: { status: string }) => t.status === "completed");
       completionPercent = Math.round(
         (completed.length / Math.max(tasks.length, 1)) * 100
       );
-      projectCount = completed.filter((t) => t.task_type === "project").length;
+      projectCount = completed.filter((t: { task_type: string }) => t.task_type === "project").length;
     }
   }
 
   // Get traits
-  const { data: discovery } = await supabase
-    .from("discovery_sessions")
+  const { data: discovery } = await db("discovery_sessions")
     .select("extracted_traits")
     .eq("user_id", passport.user_id)
     .eq("status", "completed")

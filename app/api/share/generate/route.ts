@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 import { APP_URL } from "@/lib/utils/constants";
 
 function generateSlug(): string {
@@ -13,12 +14,9 @@ function generateSlug(): string {
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -34,11 +32,10 @@ export async function POST(request: Request) {
 
     // Check if a card already exists for this session
     if (session_id) {
-      const { data: existing } = await supabase
-        .from("result_cards")
+      const { data: existing } = await db("result_cards")
         .select("share_slug")
         .eq("session_id", session_id)
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .single();
 
       if (existing) {
@@ -50,8 +47,8 @@ export async function POST(request: Request) {
 
     const share_slug = generateSlug();
 
-    const { error: insertError } = await supabase.from("result_cards").insert({
-      user_id: user.id,
+    const { error: insertError } = await db("result_cards").insert({
+      user_id: userId,
       session_id: session_id || null,
       role_name,
       role_category: role_category || "technical",

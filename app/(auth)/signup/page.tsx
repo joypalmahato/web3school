@@ -2,7 +2,7 @@
  * @component SignupPage
  * @part-of Web3School — Authentication
  * @design Dark theme, centered card, purple accents
- * @flow Full name + email + password → Supabase signup → redirect to /discover
+ * @flow Full name + email + password → InsForge signup → create profile → redirect to /discover
  */
 "use client";
 
@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { createClient } from "@/lib/supabase/client";
+import { getInsforgeClient } from "@/lib/insforge/client";
 import {
   signupSchema,
   type SignupFormData,
@@ -25,7 +25,7 @@ import {
 export default function SignupPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const supabase = createClient();
+  const insforge = getInsforgeClient();
 
   const {
     register,
@@ -37,14 +37,11 @@ export default function SignupPage() {
 
   const onSubmit = async (data: SignupFormData) => {
     setError(null);
-    const { error: signupError } = await supabase.auth.signUp({
+
+    const { error: signupError } = await insforge.auth.signUp({
       email: data.email,
       password: data.password,
-      options: {
-        data: {
-          full_name: data.full_name,
-        },
-      },
+      name: data.full_name,
     });
 
     if (signupError) {
@@ -52,16 +49,28 @@ export default function SignupPage() {
       return;
     }
 
+    // Create profile row (InsForge has no auto-trigger)
+    try {
+      await fetch("/api/profile/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: data.email,
+          full_name: data.full_name,
+        }),
+      });
+    } catch {
+      // Profile creation failure is non-fatal — can retry later
+    }
+
     router.push("/discover");
     router.refresh();
   };
 
   const handleOAuth = async (provider: "google" | "github") => {
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+    const { error: oauthError } = await insforge.auth.signInWithOAuth({
       provider,
-      options: {
-        redirectTo: `${window.location.origin}/callback`,
-      },
+      redirectTo: `${window.location.origin}/callback`,
     });
     if (oauthError) {
       setError(oauthError.message);

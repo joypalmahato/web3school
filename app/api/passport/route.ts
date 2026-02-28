@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
-import { INITIAL_ROLES } from "@/data/roles";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 import { INITIAL_SKILLS } from "@/data/skills";
 
 function generateSlug(): string {
@@ -14,20 +14,16 @@ function generateSlug(): string {
 
 export async function GET() {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get profile
-    const { data: profile } = await supabase
-      .from("profiles")
+    const { data: profile } = await db("profiles")
       .select("*")
-      .eq("id", user.id)
+      .eq("user_id", userId)
       .single();
 
     if (!profile) {
@@ -35,18 +31,16 @@ export async function GET() {
     }
 
     // Get or create passport
-    let { data: passport } = await supabase
-      .from("skill_passports")
+    let { data: passport } = await db("skill_passports")
       .select("*")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .single();
 
     if (!passport) {
       // Create one
-      const { data: newPassport } = await supabase
-        .from("skill_passports")
+      const { data: newPassport } = await db("skill_passports")
         .insert({
-          user_id: user.id,
+          user_id: userId,
           role_id: profile.current_role_id,
           skills_verified: [],
           projects_completed: [],
@@ -61,10 +55,9 @@ export async function GET() {
     }
 
     // Get roadmap progress
-    const { data: roadmap } = await supabase
-      .from("roadmaps")
+    const { data: roadmap } = await db("roadmaps")
       .select("id, current_week, total_weeks")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("status", "active")
       .single();
 
@@ -72,36 +65,26 @@ export async function GET() {
     let completedProjects: string[] = [];
 
     if (roadmap) {
-      const { data: tasks } = await supabase
-        .from("daily_tasks")
+      const { data: tasks } = await db("daily_tasks")
         .select("title, task_type, status")
         .eq("roadmap_id", roadmap.id);
 
       if (tasks) {
-        const completed = tasks.filter((t) => t.status === "completed");
+        const completed = tasks.filter((t: { status: string }) => t.status === "completed");
         completionPercent = Math.round(
           (completed.length / Math.max(tasks.length, 1)) * 100
         );
         completedProjects = completed
-          .filter((t) => t.task_type === "project")
-          .map((t) => t.title);
+          .filter((t: { task_type: string }) => t.task_type === "project")
+          .map((t: { title: string }) => t.title);
       }
     }
-
-    // Get role info
-    const roleData = profile.current_role_id
-      ? INITIAL_ROLES.find((r) => {
-          // Match by checking all roles — we don't have UUID here
-          return true; // Will use DB lookup below
-        })
-      : null;
 
     let roleName = "Web3 Professional";
     let roleSkills: string[] = [];
 
     if (profile.current_role_id) {
-      const { data: dbRole } = await supabase
-        .from("roles")
+      const { data: dbRole } = await db("roles")
         .select("name, slug, key_skills")
         .eq("id", profile.current_role_id)
         .single();
@@ -113,7 +96,7 @@ export async function GET() {
     }
 
     // Build skill nodes from role skills + general skills
-    const skillNodes = roleSkills.map((skillName, i) => {
+    const skillNodes = roleSkills.map((skillName: string, i: number) => {
       const proficiency = Math.min(
         Math.round((completionPercent / 100) * (100 - i * 5)),
         100
@@ -150,10 +133,9 @@ export async function GET() {
     }));
 
     // Get discovery traits
-    const { data: discovery } = await supabase
-      .from("discovery_sessions")
+    const { data: discovery } = await db("discovery_sessions")
       .select("extracted_traits")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("status", "completed")
       .order("completed_at", { ascending: false })
       .limit(1)
@@ -192,21 +174,17 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { is_public } = await request.json();
 
-    await supabase
-      .from("skill_passports")
+    await db("skill_passports")
       .update({ is_public })
-      .eq("user_id", user.id);
+      .eq("user_id", userId);
 
     return NextResponse.json({ success: true, is_public });
   } catch (err) {

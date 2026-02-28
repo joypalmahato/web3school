@@ -1,22 +1,19 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get profile
-    const { data: profile } = await supabase
-      .from("profiles")
+    const { data: profile } = await db("profiles")
       .select("*")
-      .eq("id", user.id)
+      .eq("user_id", userId)
       .single();
 
     if (!profile) {
@@ -24,10 +21,9 @@ export async function GET() {
     }
 
     // Get active roadmap
-    const { data: roadmap } = await supabase
-      .from("roadmaps")
+    const { data: roadmap } = await db("roadmaps")
       .select("id, current_week, total_weeks, title")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("status", "active")
       .single();
 
@@ -37,17 +33,16 @@ export async function GET() {
     let totalMinutes = 0;
 
     if (roadmap) {
-      const { data: tasks } = await supabase
-        .from("daily_tasks")
+      const { data: tasks } = await db("daily_tasks")
         .select("status, estimated_minutes")
         .eq("roadmap_id", roadmap.id);
 
       if (tasks) {
         totalTasks = tasks.length;
-        const completed = tasks.filter((t) => t.status === "completed");
+        const completed = tasks.filter((t: { status: string }) => t.status === "completed");
         tasksCompleted = completed.length;
         totalMinutes = completed.reduce(
-          (sum, t) => sum + (t.estimated_minutes || 0),
+          (sum: number, t: { estimated_minutes?: number }) => sum + (t.estimated_minutes || 0),
           0
         );
       }
@@ -58,26 +53,23 @@ export async function GET() {
     ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
     const ninetyDaysAgoStr = ninetyDaysAgo.toISOString().split("T")[0];
 
-    const { data: streakHistory } = await supabase
-      .from("streak_history")
+    const { data: streakHistory } = await db("streak_history")
       .select("date, tasks_completed")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .gte("date", ninetyDaysAgoStr)
       .order("date", { ascending: true });
 
     // Get recent XP log
-    const { data: recentXP } = await supabase
-      .from("xp_log")
+    const { data: recentXP } = await db("xp_log")
       .select("amount, source, description, created_at")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(10);
 
     // Get discovery traits
-    const { data: discovery } = await supabase
-      .from("discovery_sessions")
+    const { data: discovery } = await db("discovery_sessions")
       .select("extracted_traits")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("status", "completed")
       .order("completed_at", { ascending: false })
       .limit(1)
@@ -121,7 +113,7 @@ export async function GET() {
             ? Math.round((tasksCompleted / totalTasks) * 100)
             : 0,
       },
-      heatmap: (streakHistory || []).map((s) => ({
+      heatmap: (streakHistory || []).map((s: { date: string; tasks_completed?: number }) => ({
         date: s.date,
         count: s.tasks_completed || 0,
       })),

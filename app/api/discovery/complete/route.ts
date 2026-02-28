@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
 import { anthropic, AI_MODEL } from "@/lib/ai/client";
 import { DISCOVERY_ANALYSIS_PROMPT } from "@/lib/ai/prompts/discovery";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 import { matchRoles } from "@/lib/ai/tools/role-matcher";
 import type { TraitScores } from "@/lib/types";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -90,15 +88,13 @@ export async function POST(request: Request) {
 
     // Get the primary role from our database
     const primaryRoleSlug = finalRoles[0]?.role_slug;
-    const { data: primaryRole } = await supabase
-      .from("roles")
+    const { data: primaryRole } = await db("roles")
       .select("id")
       .eq("slug", primaryRoleSlug)
       .single();
 
     // Update discovery session
-    await supabase
-      .from("discovery_sessions")
+    await db("discovery_sessions")
       .update({
         status: "completed",
         extracted_traits: analysisData.traits,
@@ -110,13 +106,12 @@ export async function POST(request: Request) {
       .eq("id", session_id);
 
     // Update user profile
-    await supabase
-      .from("profiles")
+    await db("profiles")
       .update({
         discovery_completed: true,
         current_role_id: primaryRole?.id || null,
       })
-      .eq("id", user.id);
+      .eq("user_id", userId);
 
     return NextResponse.json({
       success: true,

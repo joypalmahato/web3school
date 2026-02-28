@@ -1,21 +1,18 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 export async function POST() {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await supabase
-      .from("nudges")
+    await db("nudges")
       .update({ is_read: true })
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("is_read", false);
 
     return NextResponse.json({ success: true });
