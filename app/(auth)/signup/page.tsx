@@ -78,10 +78,12 @@ export default function SignupPage() {
     // Use skipBrowserRedirect to capture the PKCE codeVerifier,
     // then store it in a cookie (survives cross-origin redirects,
     // unlike sessionStorage which can be lost in some browsers).
+    // Redirect to /api/auth/callback (not /callback) so the code
+    // is handled server-side before the SDK's detectAuthCallback runs.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = await insforge.auth.signInWithOAuth({
       provider,
-      redirectTo: `${window.location.origin}/callback`,
+      redirectTo: `${window.location.origin}/api/auth/callback`,
       skipBrowserRedirect: true,
     });
     if (result.error) {
