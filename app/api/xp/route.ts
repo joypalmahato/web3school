@@ -31,9 +31,8 @@ export async function POST(request: Request) {
     // Log XP
     await db("xp_log").insert({
       user_id: userId,
-      amount,
-      source: action,
-      description: description || action,
+      xp_amount: amount,
+      action,
     });
 
     // Get current profile

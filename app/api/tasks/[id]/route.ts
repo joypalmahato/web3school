@@ -85,9 +85,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     // Award XP
     await db("xp_log").insert({
       user_id: userId,
-      amount: xpAmount,
-      source: `task_${task.task_type}`,
-      description: `Completed: ${task.title}`,
+      xp_amount: xpAmount,
+      action: `task_${task.task_type}`,
     });
 
     // Update streak
@@ -133,9 +132,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       const streakBonus = XP_REWARDS.STREAK_MAINTAINED;
       await db("xp_log").insert({
         user_id: userId,
-        amount: streakBonus,
-        source: "streak_maintained",
-        description: `Day ${currentStreak} streak bonus`,
+        xp_amount: streakBonus,
+        action: "streak_maintained",
       });
 
       xpAmount += streakBonus;
@@ -182,9 +180,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       // Award week completion bonus
       await db("xp_log").insert({
         user_id: userId,
-        amount: XP_REWARDS.WEEK_COMPLETED,
-        source: "week_completed",
-        description: `Completed Week ${task.week_number}`,
+        xp_amount: XP_REWARDS.WEEK_COMPLETED,
+        action: "week_completed",
       });
 
       // Advance to next week

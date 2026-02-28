@@ -61,7 +61,7 @@ export async function GET() {
 
     // Get recent XP log
     const { data: recentXP } = await db("xp_log")
-      .select("amount, source, description, created_at")
+      .select("xp_amount, action, created_at")
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(10);
