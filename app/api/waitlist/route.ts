@@ -68,20 +68,19 @@ export async function POST(request: Request) {
     if (process.env.RESEND_API_KEY) {
       try {
         const { Resend } = await import("resend");
+        const { waitlistConfirmationEmail } = await import("@/lib/emails/templates");
         const resend = new Resend(process.env.RESEND_API_KEY);
+        const email = waitlistConfirmationEmail({
+          name: parsed.name,
+          position: data.waitlist_position,
+          referralCode: data.referral_code,
+          appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://web3school.io",
+        });
         await resend.emails.send({
           from: "Web3School <onboarding@resend.dev>",
           to: parsed.email,
-          subject: "You're on the Web3School waitlist!",
-          html: `
-            <div style="font-family: 'Inter', sans-serif; background: #0A0A1A; color: #F0F0F8; padding: 40px; border-radius: 16px;">
-              <h1 style="color: #6C63FF; font-size: 24px;">Welcome to Web3School!</h1>
-              <p>Hey ${parsed.name},</p>
-              <p>You're #${data.waitlist_position} on the waitlist. We'll notify you as soon as we launch.</p>
-              <p>Share your referral link to move up: <a href="${process.env.NEXT_PUBLIC_APP_URL}?ref=${data.referral_code}" style="color: #00D4FF;">${process.env.NEXT_PUBLIC_APP_URL}?ref=${data.referral_code}</a></p>
-              <p style="color: #666688; margin-top: 20px;">— The Web3School Team</p>
-            </div>
-          `,
+          subject: email.subject,
+          html: email.html,
         });
       } catch (emailErr) {
         // Don't fail the request if email fails
