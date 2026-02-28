@@ -74,7 +74,7 @@ export default function LoginPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = await insforge.auth.signInWithOAuth({
       provider,
-      redirectTo: `${window.location.origin}/callback`,
+      redirectTo: `${window.location.origin}/api/auth/callback`,
       skipBrowserRedirect: true,
     });
     if (result.error) {
