@@ -167,16 +167,16 @@ export function DiscoveryChat() {
 
   const progressPercentage = Math.min((progress / 10) * 100, 100);
   const progressLabels = [
-    "Getting started",
-    "Background",
-    "Background",
-    "Interests",
-    "Interests",
-    "Work style",
-    "Work style",
-    "Web3 awareness",
-    "Web3 awareness",
-    "Wrapping up",
+    "Saying hey",
+    "Getting to know you",
+    "Getting to know you",
+    "What lights you up",
+    "What lights you up",
+    "How you work",
+    "How you work",
+    "Web3 vibes",
+    "Web3 vibes",
+    "Almost there",
   ];
 
   return (
@@ -219,20 +219,20 @@ export function DiscoveryChat() {
                 <Sparkles className="w-8 h-8 text-purple-primary" />
               </div>
               <h2 className="text-2xl font-heading font-bold text-text-primary">
-                Career Discovery
+                Let's find your path
               </h2>
               <p className="text-text-secondary max-w-md mx-auto">
-                Have a 10-minute conversation with our AI to discover your ideal
-                Web3 career path. Just be yourself — there are no wrong answers.
+                Quick chat, no wrong answers. We'll figure out which Web3 career
+                actually fits you — not what sounds cool on paper.
               </p>
               <Button
                 onClick={() => {
-                  setInput("Hey, I'm ready to discover my career path!");
+                  setInput("Hey! I'm curious about getting into Web3.");
                   setTimeout(() => sendMessage(), 100);
                 }}
                 className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-6 py-3 font-semibold"
               >
-                Start Conversation
+                Let's go
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </motion.div>
@@ -324,7 +324,7 @@ export function DiscoveryChat() {
               className="text-center space-y-3"
             >
               <p className="text-text-secondary text-sm">
-                Your discovery conversation is complete!
+                Nice chat! Let's see what fits you best.
               </p>
               <Button
                 onClick={handleCompleteDiscovery}
