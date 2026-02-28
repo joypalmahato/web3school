@@ -8,23 +8,29 @@
  *   - InsForge:  client.database.from("table")
  *
  * This wrapper normalizes that difference.
+ *
+ * IMPORTANT: Supabase is imported via dynamic require only when BACKEND=supabase
+ * to prevent @supabase/supabase-js (which bundles auth-js with hardcoded
+ * Supabase URLs) from being included in client-side JS when using InsForge.
  */
 import { BACKEND } from "@/lib/config";
+import { getInsforgeServerClient } from "@/lib/insforge/server";
 
-// ─── Supabase ────────────────────────────────────────────────────
-import { createClient as createSupabaseAdmin } from "@supabase/supabase-js";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _supabaseAdmin: any = null;
 
 function getSupabaseAdmin() {
-  return createSupabaseAdmin(
+  if (_supabaseAdmin) return _supabaseAdmin;
+  // Dynamic require prevents bundler from including @supabase/supabase-js
+  // in the client bundle when BACKEND=insforge
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { createClient } = require("@supabase/supabase-js");
+  _supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
+  return _supabaseAdmin;
 }
-
-// ─── InsForge ────────────────────────────────────────────────────
-import { getInsforgeServerClient } from "@/lib/insforge/server";
-
-// ─── Unified interface ──────────────────────────────────────────
 
 /**
  * Returns a query builder for the given table, routed to the active backend.
