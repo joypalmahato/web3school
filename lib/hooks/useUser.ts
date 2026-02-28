@@ -1,13 +1,13 @@
 /**
  * @hook useUser
  * @part-of Web3School — Authentication
- * @data Returns current user profile from Supabase
+ * @data Returns current user profile from InsForge
  * @flow Auto-refreshes on auth state change, provides loading/error states
  */
 "use client";
 
 import { useEffect, useCallback } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { getInsforgeClient } from "@/lib/insforge/client";
 import { useUserStore } from "@/lib/stores/user-store";
 import type { Profile } from "@/lib/types";
 
@@ -16,22 +16,20 @@ export function useUser() {
     useUserStore();
 
   const fetchProfile = useCallback(async () => {
-    const supabase = createClient();
+    const insforge = getInsforgeClient();
     setLoading(true);
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: userData } = await insforge.auth.getCurrentUser();
 
-    if (!user) {
+    if (!userData?.user) {
       reset();
       return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await insforge.database
       .from("profiles")
       .select("*")
-      .eq("id", user.id)
+      .eq("user_id", userData.user.id)
       .single();
 
     if (error || !data) {
@@ -44,24 +42,11 @@ export function useUser() {
 
   useEffect(() => {
     fetchProfile();
-
-    const supabase = createClient();
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        fetchProfile();
-      } else {
-        reset();
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [fetchProfile, reset]);
+  }, [fetchProfile]);
 
   const signOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    const insforge = getInsforgeClient();
+    await insforge.auth.signOut();
     reset();
   };
 

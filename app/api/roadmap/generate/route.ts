@@ -1,27 +1,24 @@
 import { NextResponse } from "next/server";
 import { anthropic, AI_MODEL } from "@/lib/ai/client";
 import { ROADMAP_GENERATION_PROMPT } from "@/lib/ai/prompts/roadmap";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 import { INITIAL_ROLES } from "@/data/roles";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { role_slug } = await request.json();
 
     // Get user profile
-    const { data: profile } = await supabase
-      .from("profiles")
+    const { data: profile } = await db("profiles")
       .select("*")
-      .eq("id", user.id)
+      .eq("user_id", userId)
       .single();
 
     if (!profile) {
@@ -30,8 +27,7 @@ export async function POST(request: Request) {
 
     // Get role details
     const roleData = INITIAL_ROLES.find((r) => r.slug === role_slug);
-    const { data: dbRole } = await supabase
-      .from("roles")
+    const { data: dbRole } = await db("roles")
       .select("id")
       .eq("slug", role_slug)
       .single();
@@ -41,10 +37,9 @@ export async function POST(request: Request) {
     }
 
     // Check if roadmap already exists
-    const { data: existingRoadmap } = await supabase
-      .from("roadmaps")
+    const { data: existingRoadmap } = await db("roadmaps")
       .select("id")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("role_id", dbRole.id)
       .eq("status", "active")
       .single();
@@ -58,10 +53,9 @@ export async function POST(request: Request) {
     }
 
     // Get discovery session traits
-    const { data: session } = await supabase
-      .from("discovery_sessions")
+    const { data: session } = await db("discovery_sessions")
       .select("extracted_traits")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("status", "completed")
       .order("completed_at", { ascending: false })
       .limit(1)
@@ -136,10 +130,9 @@ Please generate the full roadmap in the specified JSON format.`,
     }));
 
     // Create roadmap
-    const { data: roadmap, error: roadmapError } = await supabase
-      .from("roadmaps")
+    const { data: roadmap, error: roadmapError } = await db("roadmaps")
       .insert({
-        user_id: user.id,
+        user_id: userId,
         role_id: dbRole.id,
         title: roadmapData.title,
         description: roadmapData.description,
@@ -164,7 +157,7 @@ Please generate the full roadmap in the specified JSON format.`,
     if (week1?.tasks) {
       const taskInserts = week1.tasks.map((task) => ({
         roadmap_id: roadmap.id,
-        user_id: user.id,
+        user_id: userId,
         week_number: 1,
         day_number: task.day,
         title: task.title,
@@ -177,7 +170,7 @@ Please generate the full roadmap in the specified JSON format.`,
         xp_reward: task.type === "quiz" ? 20 : task.type === "project" ? 50 : 10,
       }));
 
-      await supabase.from("daily_tasks").insert(taskInserts);
+      await db("daily_tasks").insert(taskInserts);
     }
 
     return NextResponse.json({

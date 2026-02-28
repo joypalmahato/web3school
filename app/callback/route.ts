@@ -1,61 +1,50 @@
 /**
  * @route GET /callback
  * @part-of Web3School — Authentication
- * @design Server-side OAuth callback that exchanges the auth code for a session
- * @flow Supabase redirects here with ?code= → exchange for session → redirect to app
+ * @design Server-side OAuth callback for InsForge
+ * @flow InsForge redirects here with tokens → ensure profile exists → redirect to app
+ *
+ * InsForge middleware automatically extracts access_token from URL and stores in cookies.
+ * This route handles profile creation for OAuth users and redirects.
  */
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/discover";
+  const { origin } = new URL(request.url);
 
-  if (code) {
-    const cookieStore = await cookies();
+  try {
+    const { userId, user } = await auth();
 
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll();
-          },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options);
-            });
-          },
-        },
-      }
-    );
+    if (userId) {
+      // Ensure profile exists (OAuth users won't have one yet)
+      const { data: existing } = await db("profiles")
+        .select("user_id, discovery_completed")
+        .eq("user_id", userId)
+        .single();
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-    if (!error) {
-      // Check if user has completed discovery to decide redirect
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("discovery_completed")
-          .eq("id", user.id)
-          .single();
-
-        const redirectPath = profile?.discovery_completed ? "/roadmap" : "/discover";
-        return NextResponse.redirect(`${origin}${redirectPath}`);
+      if (!existing) {
+        // Create profile for OAuth user
+        await db("profiles").insert({
+          user_id: userId,
+          email: user?.email || "",
+          full_name: user?.profile?.name || "",
+          discovery_completed: false,
+          onboarding_completed: false,
+          xp: 0,
+          level: 1,
+        });
+        return NextResponse.redirect(`${origin}/discover`);
       }
 
-      return NextResponse.redirect(`${origin}${next}`);
+      const redirectPath = existing.discovery_completed ? "/roadmap" : "/discover";
+      return NextResponse.redirect(`${origin}${redirectPath}`);
     }
+  } catch (err) {
+    console.error("Callback error:", err);
   }
 
-  // If code exchange fails, redirect to login with error
-  return NextResponse.redirect(`${origin}/login?error=auth_failed`);
+  // Fallback: redirect to discover (middleware will handle auth check)
+  return NextResponse.redirect(`${origin}/discover`);
 }

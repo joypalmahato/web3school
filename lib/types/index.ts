@@ -16,6 +16,7 @@ export type DemandLevel = "low" | "medium" | "high" | "very_high";
 
 export interface Profile {
   id: string;
+  user_id?: string;
   full_name: string | null;
   email: string;
   avatar_url: string | null;

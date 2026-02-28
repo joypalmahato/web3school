@@ -1,17 +1,15 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 import { XP_REWARDS, getLevelFromXP } from "@/lib/types";
 
 type XPAction = keyof typeof XP_REWARDS;
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -31,18 +29,17 @@ export async function POST(request: Request) {
     }
 
     // Log XP
-    await supabase.from("xp_log").insert({
-      user_id: user.id,
+    await db("xp_log").insert({
+      user_id: userId,
       amount,
       source: action,
       description: description || action,
     });
 
     // Get current profile
-    const { data: profile } = await supabase
-      .from("profiles")
+    const { data: profile } = await db("profiles")
       .select("xp_total, level")
-      .eq("id", user.id)
+      .eq("user_id", userId)
       .single();
 
     const previousLevel = profile?.level || 1;
@@ -50,13 +47,12 @@ export async function POST(request: Request) {
     const newLevel = getLevelFromXP(newTotal);
 
     // Update profile
-    await supabase
-      .from("profiles")
+    await db("profiles")
       .update({
         xp_total: newTotal,
         level: newLevel,
       })
-      .eq("id", user.id);
+      .eq("user_id", userId);
 
     return NextResponse.json({
       xp_awarded: amount,

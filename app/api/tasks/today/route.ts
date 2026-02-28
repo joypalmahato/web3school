@@ -1,24 +1,21 @@
 import { NextResponse } from "next/server";
 import { anthropic, AI_MODEL } from "@/lib/ai/client";
 import { TASK_CONTENT_GENERATION_PROMPT } from "@/lib/ai/prompts/roadmap";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get active roadmap
-    const { data: roadmap } = await supabase
-      .from("roadmaps")
+    const { data: roadmap } = await db("roadmaps")
       .select("id, current_week, role_id, milestones")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("status", "active")
       .single();
 
@@ -27,8 +24,7 @@ export async function GET() {
     }
 
     // Get tasks for the current week
-    let { data: tasks } = await supabase
-      .from("daily_tasks")
+    let { data: tasks } = await db("daily_tasks")
       .select("*")
       .eq("roadmap_id", roadmap.id)
       .eq("week_number", roadmap.current_week)
@@ -55,7 +51,7 @@ export async function GET() {
       if (currentMilestone?.tasks) {
         const taskInserts = currentMilestone.tasks.map((task) => ({
           roadmap_id: roadmap.id,
-          user_id: user.id,
+          user_id: userId,
           week_number: roadmap.current_week,
           day_number: task.day,
           title: task.title,
@@ -74,10 +70,9 @@ export async function GET() {
             task.type === "quiz" ? 20 : task.type === "project" ? 50 : 10,
         }));
 
-        await supabase.from("daily_tasks").insert(taskInserts);
+        await db("daily_tasks").insert(taskInserts);
 
-        const { data: newTasks } = await supabase
-          .from("daily_tasks")
+        const { data: newTasks } = await db("daily_tasks")
           .select("*")
           .eq("roadmap_id", roadmap.id)
           .eq("week_number", roadmap.current_week)
@@ -88,8 +83,10 @@ export async function GET() {
     }
 
     // Find today's task(s) — first incomplete task
-    const pendingTasks = (tasks || []).filter((t) => t.status !== "completed");
-    const completedTasks = (tasks || []).filter((t) => t.status === "completed");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pendingTasks = (tasks || []).filter((t: any) => t.status !== "completed");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const completedTasks = (tasks || []).filter((t: any) => t.status === "completed");
     const currentTask = pendingTasks[0] || null;
 
     // If the current task has no content, generate it
@@ -99,8 +96,7 @@ export async function GET() {
         Object.keys(currentTask.content as object).length === 0)
     ) {
       try {
-        const { data: role } = await supabase
-          .from("roles")
+        const { data: role } = await db("roles")
           .select("name, category")
           .eq("id", roadmap.role_id)
           .single();
@@ -142,8 +138,7 @@ Generate the content in the specified JSON format.`,
           content = { lesson_text: contentText };
         }
 
-        await supabase
-          .from("daily_tasks")
+        await db("daily_tasks")
           .update({ content })
           .eq("id", currentTask.id);
 

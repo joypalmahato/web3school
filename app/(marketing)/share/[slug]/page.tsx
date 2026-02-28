@@ -5,7 +5,7 @@
  * @flow Viewer sees shared result → CTA to sign up and discover their own path
  */
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { db } from "@/lib/db";
 import { APP_NAME, APP_URL } from "@/lib/utils/constants";
 import { SharePageClient } from "./SharePageClient";
 
@@ -15,10 +15,8 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const supabase = await createClient();
 
-  const { data: card } = await supabase
-    .from("result_cards")
+  const { data: card } = await db("result_cards")
     .select("role_name, match_percentage, role_category")
     .eq("share_slug", slug)
     .single();
@@ -50,10 +48,8 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function PublicSharePage({ params }: Props) {
   const { slug } = await params;
-  const supabase = await createClient();
 
-  const { data: card } = await supabase
-    .from("result_cards")
+  const { data: card } = await db("result_cards")
     .select("*")
     .eq("share_slug", slug)
     .single();
@@ -63,8 +59,7 @@ export default async function PublicSharePage({ params }: Props) {
   }
 
   // Increment view count (fire and forget)
-  supabase
-    .from("result_cards")
+  db("result_cards")
     .update({ view_count: (card.view_count || 0) + 1 })
     .eq("id", card.id)
     .then();

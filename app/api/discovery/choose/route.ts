@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -22,8 +20,7 @@ export async function POST(request: Request) {
     }
 
     // Find the role in the database
-    const { data: role } = await supabase
-      .from("roles")
+    const { data: role } = await db("roles")
       .select("id")
       .eq("slug", role_slug)
       .single();
@@ -33,13 +30,12 @@ export async function POST(request: Request) {
     }
 
     // Update user profile with chosen role
-    await supabase
-      .from("profiles")
+    await db("profiles")
       .update({
         current_role_id: role.id,
         onboarding_completed: true,
       })
-      .eq("id", user.id);
+      .eq("user_id", userId);
 
     return NextResponse.json({ success: true, role_id: role.id });
   } catch (err) {

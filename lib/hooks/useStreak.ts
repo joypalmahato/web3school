@@ -1,13 +1,13 @@
 /**
  * @hook useStreak
  * @part-of Web3School — Gamification
- * @data Fetches current streak from Supabase streak_history
+ * @data Fetches current streak from InsForge streak_history
  * @flow Returns streak count, longest streak, whether maintained today
  */
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { getInsforgeClient } from "@/lib/insforge/client";
 import { useUserStore } from "@/lib/stores/user-store";
 
 interface StreakData {
@@ -30,14 +30,14 @@ export function useStreak(): StreakData {
       return;
     }
 
-    const supabase = createClient();
+    const insforge = getInsforgeClient();
     const today = new Date().toISOString().split("T")[0];
 
     // Check if user has a streak entry for today
-    const { data: todayEntry } = await supabase
+    const { data: todayEntry } = await insforge.database
       .from("streak_history")
       .select("id")
-      .eq("user_id", profile.id)
+      .eq("user_id", profile.user_id || profile.id)
       .eq("date", today)
       .single();
 

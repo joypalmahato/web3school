@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { db } from "@/lib/db";
 import { z } from "zod/v4";
 
 const waitlistSchema = z.object({
@@ -23,15 +23,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const parsed = waitlistSchema.parse(body);
 
-    // Use service role for admin operations
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-
     // Check for duplicate email
-    const { data: existing } = await supabase
-      .from("waitlist")
+    const { data: existing } = await db("waitlist")
       .select("id")
       .eq("email", parsed.email)
       .single();
@@ -44,8 +37,7 @@ export async function POST(request: Request) {
     }
 
     // Insert into waitlist
-    const { data, error } = await supabase
-      .from("waitlist")
+    const { data, error } = await db("waitlist")
       .insert({
         name: parsed.name,
         email: parsed.email,

@@ -1,15 +1,13 @@
 import { anthropic, AI_MODEL } from "@/lib/ai/client";
 import { DISCOVERY_SYSTEM_PROMPT } from "@/lib/ai/prompts/discovery";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
       });
@@ -36,10 +34,9 @@ export async function POST(request: Request) {
     // Create or update discovery session in Supabase
     let currentSessionId = session_id;
     if (!currentSessionId) {
-      const { data: session, error: sessionError } = await supabase
-        .from("discovery_sessions")
+      const { data: session, error: sessionError } = await db("discovery_sessions")
         .insert({
-          user_id: user.id,
+          user_id: userId,
           status: "in_progress",
           conversation_history: [],
         })
@@ -118,8 +115,7 @@ export async function POST(request: Request) {
           },
         ];
 
-        await supabase
-          .from("discovery_sessions")
+        await db("discovery_sessions")
           .update({ conversation_history: updatedHistory })
           .eq("id", currentSessionId);
 

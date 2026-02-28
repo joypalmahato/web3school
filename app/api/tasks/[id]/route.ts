@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 import { XP_REWARDS } from "@/lib/types";
 
 interface RouteParams {
@@ -9,20 +10,16 @@ interface RouteParams {
 export async function GET(_request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { data: task, error } = await supabase
-      .from("daily_tasks")
+    const { data: task, error } = await db("daily_tasks")
       .select("*")
       .eq("id", id)
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .single();
 
     if (error || !task) {
@@ -42,12 +39,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
 export async function PATCH(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -61,11 +55,10 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     // Get the task
-    const { data: task } = await supabase
-      .from("daily_tasks")
+    const { data: task } = await db("daily_tasks")
       .select("*")
       .eq("id", id)
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .single();
 
     if (!task) {
@@ -77,8 +70,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     // Mark task completed
-    await supabase
-      .from("daily_tasks")
+    await db("daily_tasks")
       .update({
         status: "completed",
         completed_at: new Date().toISOString(),
@@ -91,8 +83,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     if (task.task_type === "project") xpAmount = XP_REWARDS.PROJECT_SUBMITTED;
 
     // Award XP
-    await supabase.from("xp_log").insert({
-      user_id: user.id,
+    await db("xp_log").insert({
+      user_id: userId,
       amount: xpAmount,
       source: `task_${task.task_type}`,
       description: `Completed: ${task.title}`,
@@ -100,16 +92,15 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     // Update streak
     const today = new Date().toISOString().split("T")[0];
-    const { data: existingStreak } = await supabase
-      .from("streak_history")
+    const { data: existingStreak } = await db("streak_history")
       .select("id")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("date", today)
       .single();
 
     if (!existingStreak) {
-      await supabase.from("streak_history").insert({
-        user_id: user.id,
+      await db("streak_history").insert({
+        user_id: userId,
         date: today,
         tasks_completed: 1,
       });
@@ -119,17 +110,15 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       yesterday.setDate(yesterday.getDate() - 1);
       const yesterdayStr = yesterday.toISOString().split("T")[0];
 
-      const { data: yesterdayStreak } = await supabase
-        .from("streak_history")
+      const { data: yesterdayStreak } = await db("streak_history")
         .select("id")
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .eq("date", yesterdayStr)
         .single();
 
-      const { data: profile } = await supabase
-        .from("profiles")
+      const { data: profile } = await db("profiles")
         .select("streak_count, longest_streak, xp_total")
-        .eq("id", user.id)
+        .eq("user_id", userId)
         .single();
 
       const currentStreak = yesterdayStreak
@@ -142,8 +131,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
       // Add streak bonus XP
       const streakBonus = XP_REWARDS.STREAK_MAINTAINED;
-      await supabase.from("xp_log").insert({
-        user_id: user.id,
+      await db("xp_log").insert({
+        user_id: userId,
         amount: streakBonus,
         source: "streak_maintained",
         description: `Day ${currentStreak} streak bonus`,
@@ -152,60 +141,54 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       xpAmount += streakBonus;
 
       // Update profile
-      await supabase
-        .from("profiles")
+      await db("profiles")
         .update({
           streak_count: currentStreak,
           longest_streak: longestStreak,
           xp_total: (profile?.xp_total || 0) + xpAmount,
           last_active_at: new Date().toISOString(),
         })
-        .eq("id", user.id);
+        .eq("user_id", userId);
     } else {
       // Already have streak entry for today — just update XP
       const streakRecord = existingStreak as unknown as { id: string; tasks_completed?: number };
-      await supabase
-        .from("streak_history")
+      await db("streak_history")
         .update({
           tasks_completed: (streakRecord.tasks_completed || 0) + 1,
         })
         .eq("id", streakRecord.id);
 
-      const { data: profile } = await supabase
-        .from("profiles")
+      const { data: profile } = await db("profiles")
         .select("xp_total")
-        .eq("id", user.id)
+        .eq("user_id", userId)
         .single();
 
-      await supabase
-        .from("profiles")
+      await db("profiles")
         .update({
           xp_total: (profile?.xp_total || 0) + xpAmount,
           last_active_at: new Date().toISOString(),
         })
-        .eq("id", user.id);
+        .eq("user_id", userId);
     }
 
     // Check for week completion
-    const { data: weekTasks } = await supabase
-      .from("daily_tasks")
+    const { data: weekTasks } = await db("daily_tasks")
       .select("status")
       .eq("roadmap_id", task.roadmap_id)
       .eq("week_number", task.week_number);
 
-    const allCompleted = weekTasks?.every((t) => t.status === "completed");
+    const allCompleted = weekTasks?.every((t: { status: string }) => t.status === "completed");
     if (allCompleted && weekTasks && weekTasks.length > 0) {
       // Award week completion bonus
-      await supabase.from("xp_log").insert({
-        user_id: user.id,
+      await db("xp_log").insert({
+        user_id: userId,
         amount: XP_REWARDS.WEEK_COMPLETED,
         source: "week_completed",
         description: `Completed Week ${task.week_number}`,
       });
 
       // Advance to next week
-      await supabase
-        .from("roadmaps")
+      await db("roadmaps")
         .update({ current_week: task.week_number + 1 })
         .eq("id", task.roadmap_id);
 

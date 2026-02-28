@@ -1,28 +1,24 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
 
 export async function GET() {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
+    const { data: profile } = await db("profiles")
       .select("streak_count, longest_streak, last_active_at")
-      .eq("id", user.id)
+      .eq("user_id", userId)
       .single();
 
     const today = new Date().toISOString().split("T")[0];
-    const { data: todayEntry } = await supabase
-      .from("streak_history")
+    const { data: todayEntry } = await db("streak_history")
       .select("tasks_completed")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("date", today)
       .single();
 
@@ -44,22 +40,18 @@ export async function GET() {
 
 export async function POST() {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!user) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const today = new Date().toISOString().split("T")[0];
 
     // Check if user completed any tasks today
-    const { data: todayEntry } = await supabase
-      .from("streak_history")
+    const { data: todayEntry } = await db("streak_history")
       .select("id, tasks_completed")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("date", today)
       .single();
 
@@ -69,19 +61,17 @@ export async function POST() {
       yesterday.setDate(yesterday.getDate() - 1);
       const yesterdayStr = yesterday.toISOString().split("T")[0];
 
-      const { data: yesterdayEntry } = await supabase
-        .from("streak_history")
+      const { data: yesterdayEntry } = await db("streak_history")
         .select("id")
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .eq("date", yesterdayStr)
         .single();
 
       if (!yesterdayEntry) {
         // Streak is broken — reset
-        await supabase
-          .from("profiles")
+        await db("profiles")
           .update({ streak_count: 0 })
-          .eq("id", user.id);
+          .eq("user_id", userId);
 
         return NextResponse.json({
           streak_maintained: false,
