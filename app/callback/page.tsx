@@ -3,17 +3,37 @@
  * @part-of Web3School — Authentication
  * @design Client-side OAuth callback for InsForge
  * @flow InsForge redirects here with ?insforge_code=xxx →
- *       SDK exchanges code for tokens (PKCE) →
+ *       read PKCE verifier from cookie →
+ *       exchange code for tokens →
  *       ensure profile exists → redirect to app
  *
- * MUST be client-side because the InsForge SDK needs access to
- * sessionStorage (PKCE code_verifier) to exchange the OAuth code.
+ * The SDK's detectAuthCallback() runs on init and will try to exchange
+ * the code using sessionStorage (which fails due to cross-origin redirect).
+ * It also removes insforge_code from the URL. So we capture the code
+ * from the URL in a <script> before React hydrates, then use the cookie-
+ * stored verifier to exchange manually.
  */
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getInsforgeClient } from "@/lib/insforge/client";
+
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function deleteCookie(name: string) {
+  document.cookie = `${name}=; path=/; max-age=0`;
+}
+
+// Capture the code from URL immediately on module load,
+// before the SDK's detectAuthCallback can clean it.
+const INITIAL_CODE =
+  typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("insforge_code")
+    : null;
 
 export default function CallbackPage() {
   const router = useRouter();
@@ -22,67 +42,88 @@ export default function CallbackPage() {
   useEffect(() => {
     const handleCallback = async () => {
       const insforge = getInsforgeClient();
+      const code = INITIAL_CODE;
 
-      try {
-        // The SDK's detectAuthCallback() runs automatically on client init
-        // and exchanges ?insforge_code for tokens via PKCE.
-        // Give it a moment to process.
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get("insforge_code");
+      // Read PKCE verifier from cookie (stored before OAuth redirect)
+      const codeVerifier = getCookie("insforge_pkce");
+      deleteCookie("insforge_pkce");
 
-        if (code) {
-          // Exchange the OAuth code for tokens
+      // Case 1: We have both code and verifier — do the exchange
+      if (code && codeVerifier) {
+        try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const result: any = await insforge.auth.exchangeOAuthCode(code);
+          const result: any = await insforge.auth.exchangeOAuthCode(
+            code,
+            codeVerifier
+          );
 
           if (result.error) {
             console.error("OAuth exchange error:", result.error);
             setError(result.error.message || "OAuth sign-in failed");
             return;
           }
-        }
 
-        // Get the current user after exchange
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { data }: any = await insforge.auth.getCurrentUser();
-
-        if (data?.user) {
-          // Ensure profile exists
-          try {
-            await fetch("/api/profile/create", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                email: data.user.email,
-                full_name: data.user.profile?.name || "",
-              }),
-            });
-          } catch {
-            // Non-fatal
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { data }: any = await insforge.auth.getCurrentUser();
+          if (data?.user) {
+            await ensureProfileAndRedirect(insforge, data.user);
+            return;
           }
-
-          // Check if discovery is completed
-          const { data: profile } = await insforge.database
-            .from("profiles")
-            .select("discovery_completed")
-            .eq("user_id", data.user.id)
-            .single();
-
-          if (profile?.discovery_completed) {
-            router.replace("/roadmap");
-          } else {
-            router.replace("/discover");
-          }
-        } else {
-          // No user after exchange — something went wrong
-          setError("Could not sign in. Please try again.");
+        } catch (err) {
+          console.error("Exchange error:", err);
+          setError("Authentication failed. Please try again.");
+          return;
         }
-      } catch (err) {
-        console.error("Callback error:", err);
-        setError("Authentication failed. Please try again.");
+      }
+
+      // Case 2: SDK's detectAuthCallback might have already handled it
+      // Wait a moment for it to complete, then check for user
+      await new Promise((r) => setTimeout(r, 1000));
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data }: any = await insforge.auth.getCurrentUser();
+      if (data?.user) {
+        await ensureProfileAndRedirect(insforge, data.user);
+        return;
+      }
+
+      // Case 3: Nothing worked
+      if (code && !codeVerifier) {
+        setError("Session expired. Please try signing in again.");
+      } else if (!code) {
+        setError("No authorization code found.");
+      } else {
+        setError("Could not complete sign-in. Please try again.");
       }
     };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async function ensureProfileAndRedirect(insforge: any, user: any) {
+      try {
+        await fetch("/api/profile/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: user.email,
+            full_name: user.profile?.name || "",
+          }),
+        });
+      } catch {
+        // Non-fatal
+      }
+
+      const { data: profile } = await insforge.database
+        .from("profiles")
+        .select("discovery_completed")
+        .eq("user_id", user.id)
+        .single();
+
+      if (profile?.discovery_completed) {
+        router.replace("/roadmap");
+      } else {
+        router.replace("/discover");
+      }
+    }
 
     handleCallback();
   }, [router]);

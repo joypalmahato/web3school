@@ -68,12 +68,24 @@ export default function LoginPage() {
   };
 
   const handleOAuth = async (provider: "google" | "github") => {
-    const { error: oauthError } = await insforge.auth.signInWithOAuth({
+    // Use skipBrowserRedirect to capture the PKCE codeVerifier,
+    // then store it in a cookie (survives cross-origin redirects,
+    // unlike sessionStorage which can be lost in some browsers).
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: any = await insforge.auth.signInWithOAuth({
       provider,
       redirectTo: `${window.location.origin}/callback`,
+      skipBrowserRedirect: true,
     });
-    if (oauthError) {
-      setError(oauthError.message);
+    if (result.error) {
+      setError(result.error.message);
+      return;
+    }
+    if (result.data?.codeVerifier) {
+      document.cookie = `insforge_pkce=${result.data.codeVerifier}; path=/; max-age=600; SameSite=Lax`;
+    }
+    if (result.data?.url) {
+      window.location.href = result.data.url;
     }
   };
 
