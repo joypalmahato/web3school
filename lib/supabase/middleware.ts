@@ -86,14 +86,14 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Redirect logged-in users away from auth pages
-  const authPaths = ["/login", "/signup"];
-  const isAuthRoute = authPaths.some((path) =>
+  // Redirect logged-in users away from auth pages and landing page
+  const authOrLandingPaths = ["/login", "/signup"];
+  const isAuthRoute = authOrLandingPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
   );
+  const isLandingPage = request.nextUrl.pathname === "/";
 
-  if (isAuthRoute && user) {
-    // Check onboarding status to determine redirect target
+  if ((isAuthRoute || isLandingPage) && user) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("discovery_completed")
@@ -101,7 +101,7 @@ export async function updateSession(request: NextRequest) {
       .single();
 
     const url = request.nextUrl.clone();
-    url.pathname = profile?.discovery_completed ? "/learn" : "/discover";
+    url.pathname = profile?.discovery_completed ? "/roadmap" : "/discover";
     return NextResponse.redirect(url);
   }
 

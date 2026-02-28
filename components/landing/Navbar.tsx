@@ -2,7 +2,7 @@
  * @component Navbar
  * @part-of Web3School — Landing Page
  * @design Sticky, transparent → solid on scroll, dark theme
- * @flow Logo left, nav links center, CTA right. Mobile: sheet menu.
+ * @flow Logo left, nav links center, CTA + Log In right. Mobile: sheet menu.
  */
 "use client";
 
@@ -69,12 +69,18 @@ export function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            <Link
+              href="/login"
+              className="text-text-secondary hover:text-text-primary transition-colors text-sm font-medium"
+            >
+              Log In
+            </Link>
             <Button
               asChild
               className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-6 py-3 font-semibold transition-all active:scale-[0.98]"
             >
-              <a href="#waitlist">Join Waitlist</a>
+              <Link href="/signup">Get Started Free</Link>
             </Button>
           </div>
 
@@ -109,16 +115,23 @@ export function Navbar() {
                       </a>
                     ))}
                   </div>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="text-text-secondary hover:text-text-primary transition-colors text-lg font-medium py-2"
+                  >
+                    Log In
+                  </Link>
                   <Button
                     asChild
-                    className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-6 py-3 font-semibold w-full mt-4"
+                    className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-6 py-3 font-semibold w-full mt-2"
                   >
-                    <a
-                      href="#waitlist"
+                    <Link
+                      href="/signup"
                       onClick={() => setMobileOpen(false)}
                     >
-                      Join Waitlist
-                    </a>
+                      Get Started Free
+                    </Link>
                   </Button>
                 </div>
               </SheetContent>
