@@ -56,6 +56,36 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // For authenticated users on protected routes (except /discover),
+  // check if they've completed onboarding — if not, redirect to /discover
+  const requiresOnboarding = [
+    "/results",
+    "/roadmap",
+    "/learn",
+    "/progress",
+    "/passport",
+    "/settings",
+    "/notifications",
+  ];
+
+  const needsOnboardingCheck = requiresOnboarding.some((path) =>
+    request.nextUrl.pathname.startsWith(path)
+  );
+
+  if (needsOnboardingCheck && user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("discovery_completed")
+      .eq("id", user.id)
+      .single();
+
+    if (profile && !profile.discovery_completed) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/discover";
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Redirect logged-in users away from auth pages
   const authPaths = ["/login", "/signup"];
   const isAuthRoute = authPaths.some((path) =>
@@ -63,8 +93,15 @@ export async function updateSession(request: NextRequest) {
   );
 
   if (isAuthRoute && user) {
+    // Check onboarding status to determine redirect target
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("discovery_completed")
+      .eq("id", user.id)
+      .single();
+
     const url = request.nextUrl.clone();
-    url.pathname = "/discover";
+    url.pathname = profile?.discovery_completed ? "/learn" : "/discover";
     return NextResponse.redirect(url);
   }
 
