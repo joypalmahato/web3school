@@ -43,7 +43,7 @@ Score each 0-100 when analyzing later. But during the chat, NEVER mention scores
 - Don't repeat yourself. If you already covered a topic, move on.
 
 ## Roles you're matching against (never say these out loud)
-Community Manager, Smart Contract Developer, DeFi Analyst, NFT Artist/Creator, On-Chain Researcher, Web3 Content Creator, Protocol Researcher, Blockchain QA Tester
+Community Manager, Web3 Content Creator, Web3 Marketing Strategist, Web3 Project Manager, Smart Contract Developer, Protocol Researcher, Full-Stack dApp Developer, Smart Contract Auditor, Blockchain Infrastructure Engineer, DeFi Analyst, On-Chain Researcher, Blockchain QA Tester, Tokenomics Designer, DAO Operations Lead, Web3 Data Analyst, Crypto Compliance Specialist, NFT Artist/Creator, Web3 UX Designer, Web3 Game Designer, Metaverse Architect
 
 ## Progress tracking
 End every message with a hidden marker:
@@ -62,13 +62,25 @@ export const DISCOVERY_ANALYSIS_PROMPT = `Read the conversation below and figure
 
 ## Roles to pick from
 - community-manager: Social, organized, empathetic, people-first
-- smart-contract-developer: Technical, logical, detail-oriented, security-minded
-- defi-analyst: Analytical, numbers-driven, risk-aware, data-heavy
-- nft-creator: Creative, entrepreneurial, visual, community-oriented
-- on-chain-researcher: Investigative, data-driven, independent, thorough
 - web3-content-creator: Good communicator, creative, curious, consistent
+- web3-marketing-strategist: Strategic, creative, data-aware, growth-focused
+- web3-project-manager: Organized, decisive, communicative, keeps teams on track
+- smart-contract-developer: Technical, logical, detail-oriented, security-minded
 - protocol-researcher: Intellectual, theoretical, rigorous, patient
+- fullstack-dapp-developer: Versatile coder, user-focused, builds full apps
+- smart-contract-auditor: Security-obsessed, meticulous, finds vulnerabilities
+- blockchain-infra-engineer: Systems-thinker, DevOps-minded, keeps nodes running
+- defi-analyst: Analytical, numbers-driven, risk-aware, data-heavy
+- on-chain-researcher: Investigative, data-driven, independent, thorough
 - blockchain-qa-tester: Meticulous, systematic, observant, persistent
+- tokenomics-designer: Economic thinker, game theory, incentive design
+- dao-operations-lead: Organized, diplomatic, runs decentralized orgs
+- web3-data-analyst: SQL-savvy, dashboard builder, loves charts and metrics
+- crypto-compliance-specialist: Detail-oriented, regulatory knowledge, cautious
+- nft-creator: Creative, entrepreneurial, visual, community-oriented
+- web3-ux-designer: Empathetic designer, makes complex crypto feel simple
+- web3-game-designer: Creative + analytical, designs game economies
+- metaverse-architect: 3D thinker, builds virtual worlds, spatial creative
 
 Pick the top 3 matches. Write the reasoning like you're explaining it to the person — plain English, no buzzwords.
 

@@ -8,6 +8,8 @@
 import { motion } from "framer-motion";
 import {
   Users, Code, TrendingUp, Palette, Search, PenTool, BookOpen, Bug,
+  Megaphone, FolderKanban, Layers, ShieldCheck, Server, Coins,
+  Building2, BarChart3, Scale, Gamepad2, Globe, Figma,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CATEGORY_BADGE_COLORS } from "@/lib/utils/constants";
@@ -26,13 +28,25 @@ interface RoleMatchCardProps {
 
 const ROLE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   "community-manager": Users,
-  "smart-contract-developer": Code,
-  "defi-analyst": TrendingUp,
-  "nft-creator": Palette,
-  "on-chain-researcher": Search,
   "web3-content-creator": PenTool,
+  "web3-marketing-strategist": Megaphone,
+  "web3-project-manager": FolderKanban,
+  "smart-contract-developer": Code,
   "protocol-researcher": BookOpen,
+  "fullstack-dapp-developer": Layers,
+  "smart-contract-auditor": ShieldCheck,
+  "blockchain-infra-engineer": Server,
+  "defi-analyst": TrendingUp,
+  "on-chain-researcher": Search,
   "blockchain-qa-tester": Bug,
+  "tokenomics-designer": Coins,
+  "dao-operations-lead": Building2,
+  "web3-data-analyst": BarChart3,
+  "crypto-compliance-specialist": Scale,
+  "nft-creator": Palette,
+  "web3-ux-designer": Figma,
+  "web3-game-designer": Gamepad2,
+  "metaverse-architect": Globe,
 };
 
 export function RoleMatchCard({
