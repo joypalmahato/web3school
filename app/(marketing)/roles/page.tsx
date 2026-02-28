@@ -143,8 +143,8 @@ export default function RolesPage() {
             transition={{ delay: 0.1 }}
             className="text-text-secondary mt-4 text-lg"
           >
-            Discover 8 in-demand Web3 roles — from non-technical community
-            builders to protocol architects. Find the one that fits you.
+            Discover 20 in-demand Web3 roles — from community builders to
+            smart contract auditors to game designers. Find the one that fits you.
           </motion.p>
         </div>
 

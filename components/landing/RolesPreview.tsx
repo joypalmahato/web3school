@@ -1,21 +1,17 @@
 /**
  * @component RolesPreview
  * @part-of Web3School — Landing Page
- * @design Grid of 8 role cards from seed data, scrollable on mobile
+ * @design Grid of featured role cards from seed data, scrollable on mobile
  * @flow Explore Web3 Career Paths preview
  */
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Users,
-  Code,
-  TrendingUp,
-  Palette,
-  Search,
-  PenTool,
-  BookOpen,
-  Bug,
+  Users, Code, TrendingUp, Palette, Search, PenTool, BookOpen, Bug,
+  Megaphone, FolderKanban, Layers, ShieldCheck, Server, Coins,
+  Building2, BarChart3, Scale, Gamepad2, Globe, Figma, ArrowRight,
 } from "lucide-react";
 import { INITIAL_ROLES } from "@/data/roles";
 import { CATEGORY_BADGE_COLORS } from "@/lib/utils/constants";
@@ -24,14 +20,42 @@ import type { RoleCategory } from "@/lib/types";
 
 const ROLE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   "community-manager": Users,
-  "smart-contract-developer": Code,
-  "defi-analyst": TrendingUp,
-  "nft-creator": Palette,
-  "on-chain-researcher": Search,
   "web3-content-creator": PenTool,
+  "web3-marketing-strategist": Megaphone,
+  "web3-project-manager": FolderKanban,
+  "smart-contract-developer": Code,
   "protocol-researcher": BookOpen,
+  "fullstack-dapp-developer": Layers,
+  "smart-contract-auditor": ShieldCheck,
+  "blockchain-infra-engineer": Server,
+  "defi-analyst": TrendingUp,
+  "on-chain-researcher": Search,
   "blockchain-qa-tester": Bug,
+  "tokenomics-designer": Coins,
+  "dao-operations-lead": Building2,
+  "web3-data-analyst": BarChart3,
+  "crypto-compliance-specialist": Scale,
+  "nft-creator": Palette,
+  "web3-ux-designer": Figma,
+  "web3-game-designer": Gamepad2,
+  "metaverse-architect": Globe,
 };
+
+// Show a diverse mix of 8 roles on the landing page
+const FEATURED_SLUGS = [
+  "community-manager",
+  "smart-contract-developer",
+  "defi-analyst",
+  "nft-creator",
+  "web3-ux-designer",
+  "fullstack-dapp-developer",
+  "tokenomics-designer",
+  "web3-content-creator",
+];
+
+const FEATURED_ROLES = FEATURED_SLUGS
+  .map((slug) => INITIAL_ROLES.find((r) => r.slug === slug))
+  .filter(Boolean);
 
 export function RolesPreview() {
   return (
@@ -47,12 +71,13 @@ export function RolesPreview() {
           </h2>
         </div>
         <p className="text-text-secondary text-center mb-16 text-lg">
-          Starting with 8 high-demand roles. Expanding to all of tech.
+          20 roles across technical, creative, and non-technical tracks.
         </p>
 
         {/* Desktop: Grid */}
         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {INITIAL_ROLES.map((role, index) => {
+          {FEATURED_ROLES.map((role, index) => {
+            if (!role) return null;
             const Icon = ROLE_ICONS[role.slug] || Code;
             const badgeClass =
               CATEGORY_BADGE_COLORS[role.category as RoleCategory];
@@ -87,7 +112,8 @@ export function RolesPreview() {
 
         {/* Mobile: Horizontal scroll */}
         <div className="md:hidden flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
-          {INITIAL_ROLES.map((role) => {
+          {FEATURED_ROLES.map((role) => {
+            if (!role) return null;
             const Icon = ROLE_ICONS[role.slug] || Code;
             const badgeClass =
               CATEGORY_BADGE_COLORS[role.category as RoleCategory];
@@ -115,6 +141,23 @@ export function RolesPreview() {
             );
           })}
         </div>
+
+        {/* View all roles link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="text-center mt-10"
+        >
+          <Link
+            href="/roles"
+            className="inline-flex items-center gap-2 text-purple-primary hover:text-purple-light font-semibold transition-colors"
+          >
+            View all {INITIAL_ROLES.length} roles
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </motion.div>
       </div>
     </AnimatedSection>
   );
