@@ -1,7 +1,7 @@
 /**
  * @component Navbar
  * @part-of Web3School — Landing Page
- * @design Sticky, transparent → solid on scroll, dark theme
+ * @design Sticky, transparent → glass on scroll, dark theme
  * @flow Logo left, nav links center, CTA + Log In right. Mobile: sheet menu.
  */
 "use client";
@@ -40,16 +40,14 @@ export function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled
-          ? "bg-navy-deep/90 backdrop-blur-md border-b border-border"
-          : "bg-transparent"
+        "fixed top-0 left-0 right-0 z-50 transition-smooth",
+        scrolled ? "glass" : "bg-transparent"
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+      <div className="container-ds">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <Logo size="md" />
@@ -61,7 +59,7 @@ export function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-text-secondary hover:text-text-primary transition-colors duration-200 text-sm font-medium"
+                className="text-text-secondary hover:text-text-primary transition-fast text-sm font-medium"
               >
                 {link.label}
               </a>
@@ -72,13 +70,13 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             <Link
               href="/login"
-              className="text-text-secondary hover:text-text-primary transition-colors text-sm font-medium"
+              className="text-text-secondary hover:text-text-primary transition-fast text-sm font-medium"
             >
               Log In
             </Link>
             <Button
               asChild
-              className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-6 py-3 font-semibold transition-all active:scale-[0.98]"
+              className="bg-purple-primary hover:bg-purple-light text-white rounded-lg px-6 py-3 font-semibold transition-smooth active:scale-[0.98]"
             >
               <Link href="/signup">Get Started Free</Link>
             </Button>
@@ -98,7 +96,7 @@ export function Navbar() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="bg-navy-mid border-border w-72"
+                className="glass-heavy w-72"
               >
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <div className="flex flex-col gap-6 mt-8">
@@ -109,7 +107,7 @@ export function Navbar() {
                         key={link.href}
                         href={link.href}
                         onClick={() => setMobileOpen(false)}
-                        className="text-text-secondary hover:text-text-primary transition-colors text-lg font-medium py-2"
+                        className="text-text-secondary hover:text-text-primary transition-fast text-lg font-medium py-2"
                       >
                         {link.label}
                       </a>
@@ -118,13 +116,13 @@ export function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="text-text-secondary hover:text-text-primary transition-colors text-lg font-medium py-2"
+                    className="text-text-secondary hover:text-text-primary transition-fast text-lg font-medium py-2"
                   >
                     Log In
                   </Link>
                   <Button
                     asChild
-                    className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-6 py-3 font-semibold w-full mt-2"
+                    className="bg-purple-primary hover:bg-purple-light text-white rounded-lg px-6 py-3 font-semibold w-full mt-2"
                   >
                     <Link
                       href="/signup"

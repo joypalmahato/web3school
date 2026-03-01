@@ -575,6 +575,14 @@
     max-width: var(--content-max-subtitle);
   }
 
+  /* ----- Grid overlay pattern (Hero background) ----- */
+  .bg-grid-overlay {
+    background-image:
+      linear-gradient(rgba(108, 99, 255, 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108, 99, 255, 0.3) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
   /* ----- Safe area for mobile bottom nav ----- */
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);

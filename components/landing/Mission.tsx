@@ -17,16 +17,17 @@ const STATS = [
 
 export function Mission() {
   return (
-    <AnimatedSection id="mission" className="py-20 md:py-32 bg-navy-mid">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <AnimatedSection id="mission" className="section-padding bg-navy-subtle">
+      <div className="container-ds">
         {/* Quote */}
         <motion.blockquote
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
           className="text-center mb-16"
         >
-          <p className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-text-primary leading-snug max-w-4xl mx-auto">
+          <p className="text-heading-2 text-text-primary max-w-heading mx-auto">
             &ldquo;Build a future where every person learns with ease and
             thrives with confidence in the{" "}
             <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
@@ -47,8 +48,8 @@ export function Mission() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-navy-deep border border-border rounded-2xl p-8 text-center hover:border-purple-primary/30 transition-all duration-300"
+              transition={{ duration: 0.5, delay: index * 0.08, ease: [0, 0, 0.2, 1] }}
+              className="bg-navy-deep border border-border rounded-2xl p-8 text-center card-interactive hover:glow-purple-sm"
             >
               <p className="text-4xl md:text-5xl font-heading font-bold bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
                 {stat.value}

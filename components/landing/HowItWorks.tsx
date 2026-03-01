@@ -1,7 +1,7 @@
 /**
  * @component HowItWorks
  * @part-of Web3School — Landing Page
- * @design 3 steps with icons, CTA at bottom
+ * @design 3 steps with icons, CTA at bottom, accent gradient background
  * @flow Talk to AI → Get Your Path → Start Learning
  */
 "use client";
@@ -38,11 +38,11 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <AnimatedSection className="py-20 md:py-32 bg-navy-deep">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <AnimatedSection className="section-padding bg-accent-section">
+      <div className="container-ds">
         {/* Title */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-primary leading-tight">
+        <div className="text-center max-w-heading mx-auto mb-16">
+          <h2 className="text-heading-2 text-text-primary">
             Get Started in{" "}
             <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
               3 Steps
@@ -55,14 +55,14 @@ export function HowItWorks() {
           {STEPS.map((step, index) => (
             <motion.div
               key={step.number}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+              initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex flex-col md:flex-row items-start gap-6 bg-navy-mid border border-border rounded-2xl p-8"
+              transition={{ duration: 0.5, delay: index * 0.08, ease: [0, 0, 0.2, 1] }}
+              className="flex flex-col md:flex-row items-start gap-6 bg-navy-mid border border-border rounded-2xl p-6"
             >
               <div className="flex items-center gap-4 md:flex-col md:items-center flex-shrink-0">
-                <span className="text-4xl font-heading font-bold text-purple-primary/30">
+                <span className="text-4xl font-heading font-bold text-text-disabled">
                   {step.number}
                 </span>
                 <div className="w-14 h-14 bg-purple-primary/10 rounded-xl flex items-center justify-center">
@@ -70,7 +70,7 @@ export function HowItWorks() {
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-text-primary mb-2">
+                <h3 className="text-heading-4 text-text-primary mb-2">
                   {step.title}
                 </h3>
                 <p className="text-text-secondary leading-relaxed">
@@ -86,12 +86,13 @@ export function HowItWorks() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ ease: [0, 0, 0.2, 1] }}
           className="text-center mt-12"
         >
           <Button
             asChild
             size="lg"
-            className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-8 py-6 text-lg font-semibold transition-all active:scale-[0.98] shadow-lg shadow-purple-primary/25"
+            className="bg-purple-primary hover:bg-purple-light text-white rounded-lg px-8 py-6 text-lg font-semibold transition-smooth active:scale-[0.98] hover:glow-purple-md shadow-lg shadow-purple-primary/25"
           >
             <Link href="/signup">Get Started Free</Link>
           </Button>
