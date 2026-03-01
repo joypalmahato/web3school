@@ -119,9 +119,9 @@ export default function CallbackPage() {
         .single();
 
       if (profile?.discovery_completed) {
-        router.replace("/roadmap");
+        window.location.href = "/roadmap";
       } else {
-        router.replace("/discover");
+        window.location.href = "/discover";
       }
     }
 
