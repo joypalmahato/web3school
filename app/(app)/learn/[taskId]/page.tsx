@@ -126,7 +126,10 @@ export default function TaskPage({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-text-muted animate-spin" />
+        <div className="text-center space-y-3">
+          <Loader2 className="w-8 h-8 text-text-muted animate-spin mx-auto" />
+          <p className="text-text-muted text-sm">Preparing your lesson...</p>
+        </div>
       </div>
     );
   }
