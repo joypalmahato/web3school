@@ -94,6 +94,18 @@ export default function ResultsPage() {
       });
 
       if (!res.ok) throw new Error("Failed to choose path");
+
+      // Generate the personalized roadmap for this role
+      const roadmapRes = await fetch("/api/roadmap/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role_slug: roleSlug }),
+      });
+
+      if (!roadmapRes.ok) {
+        console.error("Roadmap generation failed, continuing anyway");
+      }
+
       router.push("/learn");
     } catch (err) {
       console.error("Choose path error:", err);
@@ -180,9 +192,12 @@ export default function ResultsPage() {
               onSelect={() => handleChoosePath(primaryRole.role_slug)}
             />
             {isChoosing && (
-              <p className="text-text-muted text-sm text-center mt-2">
-                Setting up your learning path...
-              </p>
+              <div className="flex items-center justify-center gap-2 mt-3">
+                <Loader2 className="w-4 h-4 text-text-muted animate-spin" />
+                <p className="text-text-muted text-sm">
+                  Generating your personalized roadmap...
+                </p>
+              </div>
             )}
           </motion.div>
         )}
