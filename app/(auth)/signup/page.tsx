@@ -1,7 +1,7 @@
 /**
  * @component SignupPage
  * @part-of Web3School — Authentication
- * @design Dark theme, centered card, purple accents
+ * @design Dark theme, centered card, neutral/white accents (Kled style)
  * @flow Full name + email + password → InsForge signup → create profile → redirect to /discover
  */
 "use client";
@@ -109,13 +109,13 @@ export default function SignupPage() {
         </p>
       </div>
 
-      <div className="bg-navy-mid border border-border rounded-2xl p-8">
+      <div className="bg-navy-mid border border-border rounded-xl p-8">
         {/* OAuth buttons */}
         <div className="space-y-3">
           <Button
             type="button"
             variant="outline"
-            className="w-full border-border text-text-primary hover:bg-navy-light rounded-xl py-5"
+            className="w-full border-border text-text-primary hover:bg-navy-light rounded-md py-5"
             onClick={() => handleOAuth("google")}
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -141,7 +141,7 @@ export default function SignupPage() {
           <Button
             type="button"
             variant="outline"
-            className="w-full border-border text-text-primary hover:bg-navy-light rounded-xl py-5"
+            className="w-full border-border text-text-primary hover:bg-navy-light rounded-md py-5"
             onClick={() => handleOAuth("github")}
           >
             <Github className="w-5 h-5 mr-2" />
@@ -164,7 +164,7 @@ export default function SignupPage() {
             <Input
               id="full_name"
               placeholder="Your name"
-              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-purple-primary focus:ring-1 focus:ring-purple-primary rounded-xl"
+              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/20 rounded-md"
               {...register("full_name")}
             />
             {errors.full_name && (
@@ -182,7 +182,7 @@ export default function SignupPage() {
               id="email"
               type="email"
               placeholder="you@example.com"
-              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-purple-primary focus:ring-1 focus:ring-purple-primary rounded-xl"
+              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/20 rounded-md"
               {...register("email")}
             />
             {errors.email && (
@@ -198,7 +198,7 @@ export default function SignupPage() {
               id="password"
               type="password"
               placeholder="Min. 8 characters"
-              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-purple-primary focus:ring-1 focus:ring-purple-primary rounded-xl"
+              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/20 rounded-md"
               {...register("password")}
             />
             {errors.password && (
@@ -216,7 +216,7 @@ export default function SignupPage() {
               id="confirm_password"
               type="password"
               placeholder="Repeat your password"
-              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-purple-primary focus:ring-1 focus:ring-purple-primary rounded-xl"
+              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/20 rounded-md"
               {...register("confirm_password")}
             />
             {errors.confirm_password && (
@@ -227,7 +227,7 @@ export default function SignupPage() {
           </div>
 
           {error && (
-            <div className="bg-red-error/10 border border-red-error/20 rounded-xl p-3">
+            <div className="bg-red-error/10 border border-red-error/20 rounded-md p-3">
               <p className="text-red-error text-sm">{error}</p>
             </div>
           )}
@@ -235,7 +235,7 @@ export default function SignupPage() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-purple-primary hover:bg-purple-light text-white rounded-xl py-5 font-semibold transition-all active:scale-[0.98]"
+            className="w-full bg-white text-black hover:opacity-85 rounded-md py-5 font-semibold transition-all active:scale-[0.98]"
           >
             {isSubmitting ? (
               "Creating account..."
@@ -252,7 +252,7 @@ export default function SignupPage() {
           Already have an account?{" "}
           <Link
             href="/login"
-            className="text-purple-primary hover:text-purple-light transition-colors"
+            className="text-white hover:text-white/80 transition-colors"
           >
             Log in
           </Link>

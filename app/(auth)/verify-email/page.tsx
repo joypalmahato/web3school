@@ -85,8 +85,8 @@ function VerifyEmailForm() {
   return (
     <div className="w-full max-w-md">
       <div className="text-center mb-8">
-        <div className="w-16 h-16 bg-purple-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Mail className="w-8 h-8 text-purple-primary" />
+        <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Mail className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-3xl font-heading font-bold text-text-primary">
           Check your email
@@ -97,7 +97,7 @@ function VerifyEmailForm() {
         </p>
       </div>
 
-      <div className="bg-navy-mid border border-border rounded-2xl p-8">
+      <div className="bg-navy-mid border border-border rounded-xl p-8">
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="code" className="text-text-primary">
@@ -108,7 +108,7 @@ function VerifyEmailForm() {
               type="text"
               inputMode="numeric"
               placeholder="Enter 6-digit code"
-              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-purple-primary focus:ring-1 focus:ring-purple-primary rounded-xl text-center text-2xl tracking-widest"
+              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/20 rounded-md text-center text-2xl tracking-widest"
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
               onKeyDown={(e) => {
@@ -118,7 +118,7 @@ function VerifyEmailForm() {
           </div>
 
           {error && (
-            <div className="bg-red-error/10 border border-red-error/20 rounded-xl p-3">
+            <div className="bg-red-error/10 border border-red-error/20 rounded-md p-3">
               <p className="text-red-error text-sm">{error}</p>
             </div>
           )}
@@ -126,7 +126,7 @@ function VerifyEmailForm() {
           <Button
             onClick={handleVerify}
             disabled={loading || code.length < 4}
-            className="w-full bg-purple-primary hover:bg-purple-light text-white rounded-xl py-5 font-semibold transition-all active:scale-[0.98]"
+            className="w-full bg-white text-black hover:opacity-85 rounded-md py-5 font-semibold transition-all active:scale-[0.98]"
           >
             {loading ? "Verifying..." : "Verify email"}
           </Button>
@@ -136,7 +136,7 @@ function VerifyEmailForm() {
             <button
               onClick={handleResend}
               disabled={resending}
-              className="text-purple-primary hover:text-purple-light transition-colors"
+              className="text-white hover:text-white/80 transition-colors"
             >
               {resending ? "Sending..." : "Resend code"}
             </button>
@@ -152,7 +152,7 @@ export default function VerifyEmailPage() {
     <Suspense
       fallback={
         <div className="w-full max-w-md text-center">
-          <div className="w-8 h-8 border-2 border-purple-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-text-secondary">Loading...</p>
         </div>
       }

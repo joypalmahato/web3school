@@ -1,7 +1,7 @@
 /**
  * @component LoginPage
  * @part-of Web3School — Authentication
- * @design Dark theme, centered card, purple accents
+ * @design Dark theme, centered card, neutral/white accents (Kled style)
  * @flow Email + password → InsForge login → redirect to /learn or /discover
  */
 "use client";
@@ -100,13 +100,13 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="bg-navy-mid border border-border rounded-2xl p-8">
+      <div className="bg-navy-mid border border-border rounded-xl p-8">
         {/* OAuth buttons */}
         <div className="space-y-3">
           <Button
             type="button"
             variant="outline"
-            className="w-full border-border text-text-primary hover:bg-navy-light rounded-xl py-5"
+            className="w-full border-border text-text-primary hover:bg-navy-light rounded-md py-5"
             onClick={() => handleOAuth("google")}
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -132,7 +132,7 @@ export default function LoginPage() {
           <Button
             type="button"
             variant="outline"
-            className="w-full border-border text-text-primary hover:bg-navy-light rounded-xl py-5"
+            className="w-full border-border text-text-primary hover:bg-navy-light rounded-md py-5"
             onClick={() => handleOAuth("github")}
           >
             <Github className="w-5 h-5 mr-2" />
@@ -156,7 +156,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               placeholder="you@example.com"
-              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-purple-primary focus:ring-1 focus:ring-purple-primary rounded-xl"
+              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/20 rounded-md"
               {...register("email")}
             />
             {errors.email && (
@@ -171,7 +171,7 @@ export default function LoginPage() {
               </Label>
               <Link
                 href="/forgot-password"
-                className="text-purple-primary hover:text-purple-light text-sm transition-colors"
+                className="text-white hover:text-white/80 text-sm transition-colors"
               >
                 Forgot password?
               </Link>
@@ -180,7 +180,7 @@ export default function LoginPage() {
               id="password"
               type="password"
               placeholder="Enter your password"
-              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-purple-primary focus:ring-1 focus:ring-purple-primary rounded-xl"
+              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/20 rounded-md"
               {...register("password")}
             />
             {errors.password && (
@@ -191,7 +191,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="bg-red-error/10 border border-red-error/20 rounded-xl p-3">
+            <div className="bg-red-error/10 border border-red-error/20 rounded-md p-3">
               <p className="text-red-error text-sm">{error}</p>
             </div>
           )}
@@ -199,7 +199,7 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-purple-primary hover:bg-purple-light text-white rounded-xl py-5 font-semibold transition-all active:scale-[0.98]"
+            className="w-full bg-white text-black hover:opacity-85 rounded-md py-5 font-semibold transition-all active:scale-[0.98]"
           >
             {isSubmitting ? (
               "Logging in..."
@@ -216,7 +216,7 @@ export default function LoginPage() {
           Don&apos;t have an account?{" "}
           <Link
             href="/signup"
-            className="text-purple-primary hover:text-purple-light transition-colors"
+            className="text-white hover:text-white/80 transition-colors"
           >
             Sign up
           </Link>
