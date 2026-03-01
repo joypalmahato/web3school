@@ -20,24 +20,22 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get profile
-    const { data: profile } = await db("profiles")
-      .select("*")
-      .eq("user_id", userId)
-      .single();
+    // Parallel fetch: profile, passport, roadmap, discovery
+    const [profileRes, passportRes, roadmapRes, discoveryRes] = await Promise.all([
+      db("profiles").select("*").eq("user_id", userId).single(),
+      db("skill_passports").select("*").eq("user_id", userId).single(),
+      db("roadmaps").select("id, current_week, total_weeks").eq("user_id", userId).eq("status", "active").single(),
+      db("discovery_sessions").select("extracted_traits").eq("user_id", userId).eq("status", "completed").order("completed_at", { ascending: false }).limit(1).single(),
+    ]);
 
+    const profile = profileRes.data;
     if (!profile) {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
 
-    // Get or create passport
-    let { data: passport } = await db("skill_passports")
-      .select("*")
-      .eq("user_id", userId)
-      .single();
-
+    // Create passport if needed
+    let passport = passportRes.data;
     if (!passport) {
-      // Create one
       const { data: newPassport } = await db("skill_passports")
         .insert({
           user_id: userId,
@@ -50,52 +48,38 @@ export async function GET() {
         })
         .select("*")
         .single();
-
       passport = newPassport;
     }
 
-    // Get roadmap progress
-    const { data: roadmap } = await db("roadmaps")
-      .select("id, current_week, total_weeks")
-      .eq("user_id", userId)
-      .eq("status", "active")
-      .single();
+    // Parallel fetch: tasks + role (depend on profile/roadmap)
+    const roadmap = roadmapRes.data;
+    const [tasksRes, roleRes] = await Promise.all([
+      roadmap
+        ? db("daily_tasks").select("title, task_type, status").eq("roadmap_id", roadmap.id)
+        : Promise.resolve({ data: null }),
+      profile.current_role_id
+        ? db("roles").select("name, slug, key_skills").eq("id", profile.current_role_id).single()
+        : Promise.resolve({ data: null }),
+    ]);
 
     let completionPercent = 0;
     let completedProjects: string[] = [];
+    const tasks = tasksRes.data;
 
-    if (roadmap) {
-      const { data: tasks } = await db("daily_tasks")
-        .select("title, task_type, status")
-        .eq("roadmap_id", roadmap.id);
-
-      if (tasks) {
-        const completed = tasks.filter((t: { status: string }) => t.status === "completed");
-        completionPercent = Math.round(
-          (completed.length / Math.max(tasks.length, 1)) * 100
-        );
-        completedProjects = completed
-          .filter((t: { task_type: string }) => t.task_type === "project")
-          .map((t: { title: string }) => t.title);
-      }
+    if (tasks) {
+      const completed = tasks.filter((t: { status: string }) => t.status === "completed");
+      completionPercent = Math.round(
+        (completed.length / Math.max(tasks.length, 1)) * 100
+      );
+      completedProjects = completed
+        .filter((t: { task_type: string }) => t.task_type === "project")
+        .map((t: { title: string }) => t.title);
     }
 
-    let roleName = "Web3 Professional";
-    let roleSkills: string[] = [];
+    const roleName = roleRes.data?.name || "Web3 Professional";
+    const roleSkills: string[] = roleRes.data?.key_skills || [];
 
-    if (profile.current_role_id) {
-      const { data: dbRole } = await db("roles")
-        .select("name, slug, key_skills")
-        .eq("id", profile.current_role_id)
-        .single();
-
-      if (dbRole) {
-        roleName = dbRole.name;
-        roleSkills = dbRole.key_skills || [];
-      }
-    }
-
-    // Build skill nodes from role skills + general skills
+    // Build skill nodes from role skills
     const skillNodes = roleSkills.map((skillName: string, i: number) => {
       const proficiency = Math.min(
         Math.round((completionPercent / 100) * (100 - i * 5)),
@@ -115,8 +99,7 @@ export async function GET() {
       };
     });
 
-    // Add general skills from INITIAL_SKILLS only if role doesn't have enough skills
-    // Skip skills that are already in role skills to avoid duplicates
+    // Add general skills only if role doesn't have enough
     const roleSkillNames = new Set(roleSkills.map((s: string) => s.toLowerCase()));
     const extraSkills = INITIAL_SKILLS
       .filter((s) => !roleSkillNames.has(s.name.toLowerCase()))
@@ -138,16 +121,7 @@ export async function GET() {
           : "locked",
     }));
 
-    // Get discovery traits
-    const { data: discovery } = await db("discovery_sessions")
-      .select("extracted_traits")
-      .eq("user_id", userId)
-      .eq("status", "completed")
-      .order("completed_at", { ascending: false })
-      .limit(1)
-      .single();
-
-    return NextResponse.json({
+    const res = NextResponse.json({
       passport: {
         id: passport?.id,
         is_public: passport?.is_public ?? true,
@@ -167,8 +141,11 @@ export async function GET() {
       skills: [...skillNodes, ...generalSkills],
       projects: completedProjects,
       completion_percent: completionPercent,
-      traits: discovery?.extracted_traits || null,
+      traits: discoveryRes.data?.extracted_traits || null,
     });
+
+    res.headers.set("Cache-Control", "private, max-age=60");
+    return res;
   } catch (err) {
     console.error("Passport fetch error:", err);
     return NextResponse.json(

@@ -1,13 +1,11 @@
 /**
  * @hook useStreak
  * @part-of Web3School — Gamification
- * @data Fetches current streak from InsForge streak_history
- * @flow Returns streak count, longest streak, whether maintained today
+ * @data Returns streak data derived from profile (no extra DB call)
  */
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { getInsforgeClient } from "@/lib/insforge/client";
 import { useUserStore } from "@/lib/stores/user-store";
 
 interface StreakData {
@@ -19,37 +17,32 @@ interface StreakData {
 
 export function useStreak(): StreakData {
   const { profile } = useUserStore();
-  const [currentStreak, setCurrentStreak] = useState(0);
-  const [longestStreak, setLongestStreak] = useState(0);
   const [maintainedToday, setMaintainedToday] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [checked, setChecked] = useState(false);
 
-  const fetchStreak = useCallback(async () => {
+  const checkToday = useCallback(async () => {
     if (!profile) {
-      setIsLoading(false);
+      setChecked(true);
       return;
     }
 
-    const insforge = getInsforgeClient();
-    const today = new Date().toISOString().split("T")[0];
-
-    // Check if user has a streak entry for today
-    const { data: todayEntry } = await insforge.database
-      .from("streak_history")
-      .select("id")
-      .eq("user_id", profile.user_id || profile.id)
-      .eq("date", today)
-      .single();
-
-    setMaintainedToday(!!todayEntry);
-    setCurrentStreak(profile.streak_count || 0);
-    setLongestStreak(profile.longest_streak || 0);
-    setIsLoading(false);
+    // Check last_active_at instead of making a DB query
+    if (profile.last_active_at) {
+      const lastActive = new Date(profile.last_active_at).toISOString().split("T")[0];
+      const today = new Date().toISOString().split("T")[0];
+      setMaintainedToday(lastActive === today);
+    }
+    setChecked(true);
   }, [profile]);
 
   useEffect(() => {
-    fetchStreak();
-  }, [fetchStreak]);
+    checkToday();
+  }, [checkToday]);
 
-  return { currentStreak, longestStreak, maintainedToday, isLoading };
+  return {
+    currentStreak: profile?.streak_count || 0,
+    longestStreak: profile?.longest_streak || 0,
+    maintainedToday,
+    isLoading: !checked,
+  };
 }
