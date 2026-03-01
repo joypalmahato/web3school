@@ -47,7 +47,7 @@ export default async function RootLayout({
   const initialState = await getAuthFromCookies();
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${plusJakartaSans.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
