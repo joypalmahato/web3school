@@ -173,10 +173,10 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
                 >
                   <div
                     className={cn(
-                      "max-w-[85%] rounded-xl px-3 py-2",
+                      "max-w-[85%] px-3 py-2",
                       msg.role === "user"
-                        ? "bg-[#10B981]/10 text-text-primary"
-                        : "bg-[#111111] text-text-primary border border-border"
+                        ? "bg-white/10 text-text-primary rounded-xl rounded-br-sm"
+                        : "text-text-primary"
                     )}
                   >
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -188,7 +188,7 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
 
               {streamingContent && (
                 <div className="flex justify-start">
-                  <div className="max-w-[85%] rounded-xl px-3 py-2 bg-[#111111] text-text-primary border border-border">
+                  <div className="max-w-[85%] px-3 py-2 text-text-primary">
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">
                       {streamingContent}
                     </p>
@@ -198,7 +198,7 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
 
               {isLoading && !streamingContent && (
                 <div className="flex justify-start">
-                  <div className="bg-[#111111] border border-border rounded-xl px-3 py-2">
+                  <div className="px-3 py-2">
                     <div className="flex gap-1">
                       <div className="w-1.5 h-1.5 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]" />
                       <div className="w-1.5 h-1.5 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]" />

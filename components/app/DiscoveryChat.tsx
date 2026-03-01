@@ -10,10 +10,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, ArrowRight } from "lucide-react";
+import { Send, Sparkles, ArrowRight, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Logo } from "@/components/shared/Logo";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -252,16 +251,16 @@ export function DiscoveryChat() {
                 )}
               >
                 {msg.role === "assistant" && (
-                  <div className="flex-shrink-0 w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center mt-1">
-                    <Logo size="sm" className="text-xs" />
+                  <div className="flex-shrink-0 w-7 h-7 bg-white/10 rounded-full flex items-center justify-center mt-1">
+                    <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
                   </div>
                 )}
                 <div
                   className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-3",
+                    "max-w-[80%] px-4 py-3",
                     msg.role === "user"
-                      ? "bg-[#10B981]/10 text-text-primary"
-                      : "bg-[#111111] border border-border text-text-primary"
+                      ? "bg-white/10 text-text-primary rounded-2xl rounded-br-md"
+                      : "bg-transparent text-text-primary"
                   )}
                 >
                   <p className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -279,10 +278,10 @@ export function DiscoveryChat() {
               animate={{ opacity: 1 }}
               className="flex gap-3 justify-start"
             >
-              <div className="flex-shrink-0 w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center mt-1">
-                <Logo size="sm" className="text-xs" />
+              <div className="flex-shrink-0 w-7 h-7 bg-white/10 rounded-full flex items-center justify-center mt-1">
+                <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
               </div>
-              <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-[#111111] border border-border text-text-primary">
+              <div className="max-w-[80%] text-text-primary">
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">
                   {streamingContent}
                 </p>
@@ -297,10 +296,10 @@ export function DiscoveryChat() {
               animate={{ opacity: 1 }}
               className="flex gap-3 justify-start"
             >
-              <div className="flex-shrink-0 w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center mt-1">
-                <Logo size="sm" className="text-xs" />
+              <div className="flex-shrink-0 w-7 h-7 bg-white/10 rounded-full flex items-center justify-center mt-1">
+                <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
               </div>
-              <div className="bg-[#111111] border border-border rounded-2xl px-4 py-3">
+              <div className="px-1 py-3">
                 <div className="flex gap-1.5">
                   <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]" />
                   <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]" />
