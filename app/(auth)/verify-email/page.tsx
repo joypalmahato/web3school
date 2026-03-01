@@ -43,6 +43,23 @@ function VerifyEmailForm() {
         return;
       }
 
+      // Sync the access token to httpOnly cookie BEFORE redirecting
+      const token = result.data?.accessToken;
+      const user = result.data?.user;
+      if (token && user) {
+        await fetch("/api/auth", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: "sync-token",
+            user: { id: user.id, email: user.email, profile: user.profile || null },
+          }),
+        });
+      }
+
       // Create profile row after successful verification
       try {
         await fetch("/api/profile/create", {
