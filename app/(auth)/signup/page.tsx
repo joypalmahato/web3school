@@ -6,9 +6,9 @@
  */
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Github, Mail } from "lucide-react";
@@ -23,7 +23,23 @@ import {
 } from "@/lib/validations/auth";
 
 export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-md text-center">
+          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
+        </div>
+      }
+    >
+      <SignupForm />
+    </Suspense>
+  );
+}
+
+function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const refCode = searchParams.get("ref") || "";
   const [error, setError] = useState<string | null>(null);
   const insforge = getInsforgeClient();
 
@@ -33,6 +49,9 @@ export default function SignupPage() {
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
+    defaultValues: {
+      referral_code: refCode,
+    },
   });
 
   const onSubmit = async (data: SignupFormData) => {
@@ -73,7 +92,7 @@ export default function SignupPage() {
       });
     }
 
-    // Create profile row (InsForge has no auto-trigger)
+    // Create profile row + waitlist entry (InsForge has no auto-trigger)
     try {
       await fetch("/api/profile/create", {
         method: "POST",
@@ -81,13 +100,14 @@ export default function SignupPage() {
         body: JSON.stringify({
           email: data.email,
           full_name: data.full_name,
+          referral_code: data.referral_code || undefined,
         }),
       });
     } catch {
       // Profile creation failure is non-fatal — can retry later
     }
 
-    window.location.href = "/onboarding";
+    window.location.href = "/waitlist";
   };
 
   const handleOAuth = async (provider: "google" | "github") => {
@@ -240,6 +260,19 @@ export default function SignupPage() {
                 {errors.confirm_password.message}
               </p>
             )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="referral_code" className="text-text-primary">
+              Referral code{" "}
+              <span className="text-text-muted font-normal">(optional)</span>
+            </Label>
+            <Input
+              id="referral_code"
+              placeholder="e.g. abc12345"
+              className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/20 rounded-md"
+              {...register("referral_code")}
+            />
           </div>
 
           {error && (

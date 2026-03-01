@@ -32,6 +32,7 @@ export default async function OnboardingPage() {
         discovery_completed: false,
         xp_total: 0,
         level: 1,
+        is_approved: false,
       })
       .select("*")
       .single();
@@ -41,6 +42,11 @@ export default async function OnboardingPage() {
 
   // If insert also failed, show onboarding with empty defaults
   const typedProfile = (profile || {}) as Profile;
+
+  // Unapproved users must wait
+  if (!typedProfile.is_approved) {
+    redirect("/waitlist");
+  }
 
   if (typedProfile.onboarding_completed) {
     redirect("/discover");

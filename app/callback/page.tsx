@@ -115,9 +115,14 @@ export default function CallbackPage() {
       try {
         const { data: profile } = await insforge.database
           .from("profiles")
-          .select("onboarding_completed, discovery_completed")
+          .select("onboarding_completed, discovery_completed, is_approved")
           .eq("user_id", user.id)
           .single();
+
+        if (!profile?.is_approved) {
+          window.location.href = "/waitlist";
+          return;
+        }
 
         if (profile?.discovery_completed) {
           window.location.href = "/learn";
@@ -130,7 +135,7 @@ export default function CallbackPage() {
         // RLS or network error — fall through to default
       }
 
-      window.location.href = "/onboarding";
+      window.location.href = "/waitlist";
     }
 
     handleCallback();

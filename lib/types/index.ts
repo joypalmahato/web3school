@@ -100,6 +100,11 @@ export interface Profile {
   onboarding_step: number;
   onboarding_completed_at: string | null;
   profile_completeness: number;
+  // Waitlist & approval gating
+  is_approved: boolean;
+  approved_at: string | null;
+  waitlist_id: string | null;
+  referral_code: string | null;
 }
 
 export interface Role {
@@ -234,6 +239,11 @@ export interface WaitlistEntry {
   referred_by: string | null;
   waitlist_position: number;
   created_at: string;
+  // Approval & referral tracking
+  status: string;
+  approved_at: string | null;
+  referral_count: number;
+  user_id: string | null;
 }
 
 export interface ResultCard {

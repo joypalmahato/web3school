@@ -12,6 +12,7 @@ export const signupSchema = z
       .min(8, "Password must be at least 8 characters")
       .max(72, "Password is too long"),
     confirm_password: z.string(),
+    referral_code: z.string().max(20).optional(),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: "Passwords don't match",
