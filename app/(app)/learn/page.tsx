@@ -95,7 +95,7 @@ export default function LearnPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-3">
-          <Loader2 className="w-8 h-8 text-purple-primary animate-spin mx-auto" />
+          <Loader2 className="w-8 h-8 text-text-muted animate-spin mx-auto" />
           <p className="text-text-muted text-sm">Preparing your lessons...</p>
         </div>
       </div>
@@ -106,8 +106,8 @@ export default function LearnPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh] px-4">
         <div className="text-center space-y-4 max-w-md">
-          <div className="w-16 h-16 bg-purple-primary/10 rounded-2xl flex items-center justify-center mx-auto">
-            <BookOpen className="w-8 h-8 text-purple-primary" />
+          <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center mx-auto">
+            <BookOpen className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-xl font-heading font-bold text-text-primary">
             No Learning Path Yet
@@ -117,7 +117,7 @@ export default function LearnPage() {
           </p>
           <Button
             onClick={() => router.push("/roadmap")}
-            className="bg-purple-primary hover:bg-purple-light text-white rounded-xl"
+            className="bg-white text-black hover:opacity-85 rounded-md"
           >
             View Roadmap
           </Button>
@@ -136,9 +136,9 @@ export default function LearnPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "rounded-2xl p-4 flex items-center gap-4",
+          "rounded-xl p-4 flex items-center gap-4",
           maintainedToday
-            ? "bg-gradient-to-r from-amber-warning/10 to-amber-warning/5 border border-amber-warning/20"
+            ? "bg-amber-warning/5 border border-amber-warning/20"
             : "bg-navy-mid border border-border"
         )}
       >
@@ -204,7 +204,7 @@ export default function LearnPage() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center py-8 space-y-3"
         >
-          <div className="w-16 h-16 bg-green-success/10 rounded-2xl flex items-center justify-center mx-auto">
+          <div className="w-16 h-16 bg-green-success/10 rounded-xl flex items-center justify-center mx-auto">
             <Check className="w-8 h-8 text-green-success" />
           </div>
           <h3 className="text-xl font-heading font-bold text-text-primary">
@@ -222,18 +222,18 @@ export default function LearnPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-navy-mid border border-purple-primary/30 rounded-2xl p-5 space-y-4"
+          className="bg-navy-mid border border-border rounded-xl p-5 space-y-4"
         >
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-purple-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center flex-shrink-0">
               {(() => {
                 const Icon = TASK_ICONS[current_task.task_type] || BookOpen;
-                return <Icon className="w-6 h-6 text-purple-primary" />;
+                return <Icon className="w-6 h-6 text-white" />;
               })()}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-mono text-purple-primary">
+                <span className="text-xs font-mono text-text-secondary">
                   {TASK_LABELS[current_task.task_type] || "Task"}
                 </span>
                 <span className="text-text-muted text-xs flex items-center gap-1">
@@ -253,7 +253,7 @@ export default function LearnPage() {
           </div>
           <Button
             onClick={() => router.push(`/learn/${current_task.id}`)}
-            className="w-full bg-purple-primary hover:bg-purple-light text-white rounded-xl py-5 font-semibold"
+            className="w-full bg-white text-black hover:opacity-85 rounded-md py-5 font-semibold"
           >
             Start Lesson
             <ArrowRight className="ml-2 w-4 h-4" />
@@ -284,7 +284,7 @@ export default function LearnPage() {
                   "w-full flex items-center gap-3 p-4 rounded-xl text-left transition-colors",
                   isCompleted
                     ? "bg-navy-mid/50"
-                    : "bg-navy-mid border border-border hover:border-purple-primary/20"
+                    : "bg-navy-mid border border-border hover:border-white/20"
                 )}
               >
                 <div

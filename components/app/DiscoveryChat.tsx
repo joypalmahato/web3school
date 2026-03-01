@@ -215,8 +215,8 @@ export function DiscoveryChat() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-16 space-y-4"
             >
-              <div className="w-16 h-16 bg-purple-primary/10 rounded-2xl flex items-center justify-center mx-auto">
-                <Sparkles className="w-8 h-8 text-purple-primary" />
+              <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center mx-auto">
+                <Sparkles className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-2xl font-heading font-bold text-text-primary">
                 Let's find your path
@@ -230,7 +230,7 @@ export function DiscoveryChat() {
                   setInput("Hey! I'm curious about getting into Web3.");
                   setTimeout(() => sendMessage(), 100);
                 }}
-                className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-6 py-3 font-semibold"
+                className="bg-white text-black hover:opacity-85 rounded-md px-6 py-3 font-semibold"
               >
                 Let's go
                 <ArrowRight className="ml-2 w-4 h-4" />
@@ -252,7 +252,7 @@ export function DiscoveryChat() {
                 )}
               >
                 {msg.role === "assistant" && (
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center mt-1">
+                  <div className="flex-shrink-0 w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center mt-1">
                     <Logo size="sm" className="text-xs" />
                   </div>
                 )}
@@ -260,8 +260,8 @@ export function DiscoveryChat() {
                   className={cn(
                     "max-w-[80%] rounded-2xl px-4 py-3",
                     msg.role === "user"
-                      ? "bg-purple-primary text-white"
-                      : "bg-navy-mid border border-border text-text-primary"
+                      ? "bg-[#10B981]/10 text-text-primary"
+                      : "bg-[#111111] border border-border text-text-primary"
                   )}
                 >
                   <p className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -282,7 +282,7 @@ export function DiscoveryChat() {
               <div className="flex-shrink-0 w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center mt-1">
                 <Logo size="sm" className="text-xs" />
               </div>
-              <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-navy-mid border border-border text-text-primary">
+              <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-[#111111] border border-border text-text-primary">
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">
                   {streamingContent}
                 </p>
@@ -300,7 +300,7 @@ export function DiscoveryChat() {
               <div className="flex-shrink-0 w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center mt-1">
                 <Logo size="sm" className="text-xs" />
               </div>
-              <div className="bg-navy-mid border border-border rounded-2xl px-4 py-3">
+              <div className="bg-[#111111] border border-border rounded-2xl px-4 py-3">
                 <div className="flex gap-1.5">
                   <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]" />
                   <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]" />
@@ -345,13 +345,13 @@ export function DiscoveryChat() {
                 placeholder="Type your message..."
                 disabled={isLoading}
                 rows={1}
-                className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-purple-primary focus:ring-1 focus:ring-purple-primary rounded-xl resize-none min-h-[44px] max-h-32"
+                className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/30 rounded-md resize-none min-h-[44px] max-h-32"
               />
               <Button
                 onClick={sendMessage}
                 disabled={!input.trim() || isLoading}
                 size="icon"
-                className="bg-purple-primary hover:bg-purple-light text-white rounded-xl h-11 w-11 flex-shrink-0 transition-all active:scale-[0.95]"
+                className="bg-[#10B981] hover:opacity-85 text-white rounded-md h-11 w-11 flex-shrink-0 transition-all active:scale-[0.95]"
               >
                 <Send className="w-4 h-4" />
               </Button>

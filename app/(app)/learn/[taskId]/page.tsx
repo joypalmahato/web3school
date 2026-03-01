@@ -126,7 +126,7 @@ export default function TaskPage({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-purple-primary animate-spin" />
+        <Loader2 className="w-8 h-8 text-text-muted animate-spin" />
       </div>
     );
   }
@@ -163,9 +163,9 @@ export default function TaskPage({
             exit={{ opacity: 0, y: -50, scale: 0.5 }}
             className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
           >
-            <div className="bg-navy-mid border border-purple-primary/50 rounded-2xl px-8 py-6 shadow-2xl text-center">
+            <div className="bg-navy-mid border border-border rounded-xl px-8 py-6 shadow-2xl text-center">
               <Star className="w-12 h-12 text-amber-warning mx-auto mb-2" />
-              <p className="text-3xl font-heading font-bold text-purple-primary">
+              <p className="text-3xl font-heading font-bold text-white">
                 +{xpAwarded} XP
               </p>
               <p className="text-text-secondary text-sm mt-1">Task Complete!</p>
@@ -186,8 +186,8 @@ export default function TaskPage({
         </Button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <Icon className="w-4 h-4 text-purple-primary" />
-            <span className="text-xs font-mono text-purple-primary capitalize">
+            <Icon className="w-4 h-4 text-text-secondary" />
+            <span className="text-xs font-mono text-text-secondary capitalize">
               {task.task_type}
             </span>
             <span className="text-text-muted text-xs flex items-center gap-1">
@@ -209,9 +209,9 @@ export default function TaskPage({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6"
+          className="bg-navy-mid border border-border rounded-xl p-6"
         >
-          <div className="prose prose-invert prose-sm max-w-none text-text-primary [&_h1]:font-heading [&_h2]:font-heading [&_h3]:font-heading [&_h1]:text-text-primary [&_h2]:text-text-primary [&_h3]:text-text-primary [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_pre]:bg-navy-deep [&_pre]:border [&_pre]:border-border [&_blockquote]:border-purple-primary/30 [&_a]:text-purple-primary whitespace-pre-wrap">
+          <div className="prose prose-invert prose-sm max-w-none text-text-primary [&_h1]:font-heading [&_h2]:font-heading [&_h3]:font-heading [&_h1]:text-text-primary [&_h2]:text-text-primary [&_h3]:text-text-primary [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_pre]:bg-navy-deep [&_pre]:border [&_pre]:border-border [&_blockquote]:border-white/20 [&_a]:text-white whitespace-pre-wrap">
             {content.lesson_text}
           </div>
         </motion.div>
@@ -222,7 +222,7 @@ export default function TaskPage({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6"
+          className="bg-navy-mid border border-border rounded-xl p-6"
         >
           <h3 className="font-heading font-bold text-text-primary mb-3">
             Exercise
@@ -238,7 +238,7 @@ export default function TaskPage({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6"
+          className="bg-navy-mid border border-border rounded-xl p-6"
         >
           <h3 className="font-heading font-bold text-text-primary mb-3">
             Project Brief
@@ -260,7 +260,7 @@ export default function TaskPage({
           {content.quiz_questions.map((q, qi) => (
             <div
               key={qi}
-              className="bg-navy-mid border border-border rounded-2xl p-5 space-y-3"
+              className="bg-navy-mid border border-border rounded-xl p-5 space-y-3"
             >
               <p className="text-text-primary font-medium text-sm">
                 {qi + 1}. {q.question}
@@ -309,7 +309,7 @@ export default function TaskPage({
                 Object.keys(quizAnswers).length !==
                 (content.quiz_questions?.length || 0)
               }
-              className="bg-purple-primary hover:bg-purple-light text-white rounded-xl"
+              className="bg-white text-black hover:opacity-85 rounded-md"
             >
               Check Answers
             </Button>
@@ -330,7 +330,7 @@ export default function TaskPage({
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-purple-primary hover:text-purple-light transition-colors"
+                className="flex items-center gap-2 text-sm text-white hover:opacity-85 transition-colors"
               >
                 <ArrowRight className="w-3 h-3" />
                 {resource.title}
@@ -349,7 +349,7 @@ export default function TaskPage({
           <Button
             onClick={handleComplete}
             disabled={isCompleting}
-            className="flex-1 bg-gradient-to-r from-purple-primary to-cyan-accent text-white rounded-xl py-5 font-semibold"
+            className="flex-1 bg-white text-black hover:opacity-85 rounded-md py-5 font-semibold"
           >
             {isCompleting ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -361,7 +361,7 @@ export default function TaskPage({
         ) : (
           <Button
             onClick={() => router.push("/learn")}
-            className="flex-1 bg-purple-primary hover:bg-purple-light text-white rounded-xl py-5 font-semibold"
+            className="flex-1 bg-white text-black hover:opacity-85 rounded-md py-5 font-semibold"
           >
             Next Task
             <ArrowRight className="ml-2 w-4 h-4" />

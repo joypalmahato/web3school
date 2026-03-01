@@ -124,7 +124,7 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-24 md:bottom-6 right-4 md:right-6 w-14 h-14 bg-purple-primary hover:bg-purple-light text-white rounded-full shadow-lg shadow-purple-primary/30 flex items-center justify-center z-50 transition-colors"
+          className="fixed bottom-24 md:bottom-6 right-4 md:right-6 w-14 h-14 bg-[#10B981] hover:opacity-85 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-colors"
         >
           <MessageCircle className="w-6 h-6" />
         </motion.button>
@@ -137,12 +137,12 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 md:bottom-6 right-4 md:right-6 w-[calc(100vw-2rem)] md:w-96 h-[28rem] bg-navy-mid border border-border rounded-2xl shadow-xl z-50 flex flex-col overflow-hidden"
+            className="fixed bottom-24 md:bottom-6 right-4 md:right-6 w-[calc(100vw-2rem)] md:w-96 h-[28rem] bg-navy-mid border border-border rounded-xl shadow-xl z-50 flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-purple-primary" />
+                <Sparkles className="w-4 h-4 text-[#10B981]" />
                 <span className="font-heading font-semibold text-text-primary text-sm">
                   AI Tutor
                 </span>
@@ -175,8 +175,8 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
                     className={cn(
                       "max-w-[85%] rounded-xl px-3 py-2",
                       msg.role === "user"
-                        ? "bg-purple-primary text-white"
-                        : "bg-navy-deep text-text-primary border border-border"
+                        ? "bg-[#10B981]/10 text-text-primary"
+                        : "bg-[#111111] text-text-primary border border-border"
                     )}
                   >
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -188,7 +188,7 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
 
               {streamingContent && (
                 <div className="flex justify-start">
-                  <div className="max-w-[85%] rounded-xl px-3 py-2 bg-navy-deep text-text-primary border border-border">
+                  <div className="max-w-[85%] rounded-xl px-3 py-2 bg-[#111111] text-text-primary border border-border">
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">
                       {streamingContent}
                     </p>
@@ -198,7 +198,7 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
 
               {isLoading && !streamingContent && (
                 <div className="flex justify-start">
-                  <div className="bg-navy-deep border border-border rounded-xl px-3 py-2">
+                  <div className="bg-[#111111] border border-border rounded-xl px-3 py-2">
                     <div className="flex gap-1">
                       <div className="w-1.5 h-1.5 bg-text-muted rounded-full animate-bounce [animation-delay:-0.3s]" />
                       <div className="w-1.5 h-1.5 bg-text-muted rounded-full animate-bounce [animation-delay:-0.15s]" />
@@ -222,13 +222,13 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
                   placeholder="Ask a question..."
                   disabled={isLoading}
                   rows={1}
-                  className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted text-sm rounded-lg resize-none min-h-[36px] max-h-20"
+                  className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted text-sm rounded-md resize-none min-h-[36px] max-h-20"
                 />
                 <Button
                   onClick={sendMessage}
                   disabled={!input.trim() || isLoading}
                   size="icon"
-                  className="bg-purple-primary hover:bg-purple-light text-white rounded-lg h-9 w-9 flex-shrink-0"
+                  className="bg-[#10B981] hover:opacity-85 text-white rounded-md h-9 w-9 flex-shrink-0"
                 >
                   <Send className="w-3.5 h-3.5" />
                 </Button>

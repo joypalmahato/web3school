@@ -66,20 +66,20 @@ export function RoleMatchCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "border rounded-2xl p-6 transition-all duration-300",
+        "border rounded-xl p-6 transition-all duration-300",
         isPrimary
-          ? "bg-navy-mid border-purple-primary/50 shadow-lg shadow-purple-primary/10"
-          : "bg-navy-mid border-border hover:border-purple-primary/30"
+          ? "bg-navy-mid border-white/20 shadow-lg"
+          : "bg-navy-mid border-border hover:border-white/20"
       )}
     >
       <div className="flex items-start gap-4">
         <div
           className={cn(
             "flex-shrink-0 rounded-xl flex items-center justify-center",
-            isPrimary ? "w-16 h-16 bg-purple-primary/15" : "w-12 h-12 bg-purple-primary/10"
+            isPrimary ? "w-16 h-16 bg-white/10" : "w-12 h-12 bg-white/5"
           )}
         >
-          <Icon className={cn("text-purple-primary", isPrimary ? "w-8 h-8" : "w-6 h-6")} />
+          <Icon className={cn("text-white", isPrimary ? "w-8 h-8" : "w-6 h-6")} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -100,7 +100,7 @@ export function RoleMatchCard({
                 transition={{ duration: 0.8, delay: 0.3 }}
               />
             </div>
-            <span className="text-purple-primary font-heading font-bold text-sm">
+            <span className="text-[#10B981] font-heading font-bold text-sm">
               {matchScore}% match
             </span>
           </div>
@@ -116,8 +116,8 @@ export function RoleMatchCard({
           className={cn(
             "w-full mt-4 rounded-xl font-semibold transition-all active:scale-[0.98]",
             isPrimary
-              ? "bg-purple-primary hover:bg-purple-light text-white py-5"
-              : "border border-purple-primary text-purple-primary hover:bg-purple-primary/10 bg-transparent py-4"
+              ? "bg-white text-black hover:opacity-85 py-5"
+              : "border border-white/20 text-white hover:bg-white/5 bg-transparent py-4"
           )}
         >
           {isPrimary ? "Choose This Path" : "Select Instead"}

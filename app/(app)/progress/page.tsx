@@ -120,7 +120,7 @@ export default function ProgressPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-purple-primary animate-spin" />
+        <Loader2 className="w-8 h-8 text-text-muted animate-spin" />
       </div>
     );
   }
@@ -147,10 +147,10 @@ export default function ProgressPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6"
+          className="bg-navy-mid border border-border rounded-xl p-6"
         >
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-amber-warning/10 rounded-2xl flex items-center justify-center">
+            <div className="w-16 h-16 bg-amber-warning/10 rounded-xl flex items-center justify-center">
               <Flame
                 className={cn(
                   "w-8 h-8",
@@ -193,7 +193,7 @@ export default function ProgressPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6"
+          className="bg-navy-mid border border-border rounded-xl p-6"
         >
           <div className="flex items-center gap-4">
             <ProgressRing
@@ -224,7 +224,7 @@ export default function ProgressPage() {
                   <span className="text-text-secondary truncate">
                     {xp.description}
                   </span>
-                  <span className="text-purple-primary font-semibold flex-shrink-0 ml-2">
+                  <span className="text-[#10B981] font-semibold flex-shrink-0 ml-2">
                     +{xp.amount}
                   </span>
                 </div>
@@ -269,10 +269,10 @@ export default function ProgressPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-navy-mid border border-border rounded-2xl p-6"
+        className="bg-navy-mid border border-border rounded-xl p-6"
       >
         <h3 className="font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-purple-primary" />
+          <TrendingUp className="w-4 h-4 text-text-muted" />
           Activity
         </h3>
         <CalendarHeatmap data={heatmap} />
@@ -286,7 +286,7 @@ export default function ProgressPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35 }}
-            className="bg-navy-mid border border-border rounded-2xl p-6"
+            className="bg-navy-mid border border-border rounded-xl p-6"
           >
             <h3 className="font-heading font-bold text-text-primary mb-2">
               Skill Profile
@@ -300,10 +300,10 @@ export default function ProgressPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6"
+          className="bg-navy-mid border border-border rounded-xl p-6"
         >
           <h3 className="font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Trophy className="w-4 h-4 text-purple-primary" />
+            <Trophy className="w-4 h-4 text-text-muted" />
             Achievements
           </h3>
           {milestones.length > 0 ? (
@@ -313,10 +313,10 @@ export default function ProgressPage() {
                 return (
                   <div
                     key={m.id}
-                    className="flex items-center gap-3 p-3 bg-purple-primary/5 border border-purple-primary/10 rounded-xl"
+                    className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl"
                   >
-                    <div className="w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-purple-primary" />
+                    <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                      <Icon className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-text-primary text-sm font-medium">
                       {m.label}

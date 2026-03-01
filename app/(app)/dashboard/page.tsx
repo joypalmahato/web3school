@@ -84,7 +84,7 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-purple-primary animate-spin" />
+        <Loader2 className="w-8 h-8 text-text-muted animate-spin" />
       </div>
     );
   }
@@ -151,7 +151,7 @@ export default function DashboardPage() {
 
         {/* XP */}
         <div className="bg-navy-mid border border-border rounded-xl p-4 text-center">
-          <Target className="w-6 h-6 text-purple-primary mx-auto mb-1" />
+          <Target className="w-6 h-6 text-text-muted mx-auto mb-1" />
           <p className="text-xl font-heading font-bold text-text-primary">
             {totalXP.toLocaleString()}
           </p>
@@ -165,7 +165,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-navy-mid border border-purple-primary/30 rounded-2xl p-5"
+          className="bg-navy-mid border border-border rounded-xl p-5"
         >
           <p className="text-text-muted text-xs font-mono mb-2">
             TODAY&apos;S LESSON
@@ -181,7 +181,7 @@ export default function DashboardPage() {
           </p>
           <Button
             onClick={() => router.push(`/learn/${data.current_task!.id}`)}
-            className="w-full bg-purple-primary hover:bg-purple-light text-white rounded-xl py-4 font-semibold"
+            className="w-full bg-white text-black hover:opacity-85 rounded-md py-4 font-semibold"
           >
             Start Learning
             <ArrowRight className="ml-2 w-4 h-4" />
@@ -194,7 +194,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6 text-center space-y-3"
+          className="bg-navy-mid border border-border rounded-xl p-6 text-center space-y-3"
         >
           <BookOpen className="w-8 h-8 text-text-muted mx-auto" />
           <p className="text-text-secondary text-sm">
@@ -228,9 +228,9 @@ export default function DashboardPage() {
             <button
               key={href}
               onClick={() => router.push(href)}
-              className="flex items-center gap-3 p-4 bg-navy-mid border border-border rounded-xl hover:border-purple-primary/20 transition-colors text-left"
+              className="flex items-center gap-3 p-4 bg-navy-mid border border-border rounded-xl hover:border-white/20 transition-colors text-left"
             >
-              <Icon className="w-5 h-5 text-purple-primary flex-shrink-0" />
+              <Icon className="w-5 h-5 text-white flex-shrink-0" />
               <span className="text-text-primary text-sm font-medium">
                 {label}
               </span>

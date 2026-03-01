@@ -117,7 +117,7 @@ export default function SettingsPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-purple-primary animate-spin" />
+        <Loader2 className="w-8 h-8 text-text-muted animate-spin" />
       </div>
     );
   }
@@ -131,11 +131,11 @@ export default function SettingsPage() {
         className="space-y-4"
       >
         <div className="flex items-center gap-2">
-          <User className="w-4 h-4 text-purple-primary" />
+          <User className="w-4 h-4 text-text-muted" />
           <h2 className="font-heading font-bold text-text-primary">Profile</h2>
         </div>
 
-        <div className="bg-navy-mid border border-border rounded-2xl p-6 space-y-4">
+        <div className="bg-navy-mid border border-border rounded-xl p-6 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="full_name" className="text-text-secondary text-sm">
               Full Name
@@ -146,7 +146,7 @@ export default function SettingsPage() {
               onChange={(e) =>
                 setSettings((s) => ({ ...s, full_name: e.target.value }))
               }
-              className="bg-navy-deep border-border text-text-primary rounded-xl"
+              className="bg-navy-deep border-border text-text-primary rounded-md"
             />
           </div>
 
@@ -158,7 +158,7 @@ export default function SettingsPage() {
               id="email"
               value={settings.email}
               disabled
-              className="bg-navy-deep border-border text-text-muted rounded-xl"
+              className="bg-navy-deep border-border text-text-muted rounded-md"
             />
             <p className="text-text-muted text-xs">
               Email cannot be changed here.
@@ -175,7 +175,7 @@ export default function SettingsPage() {
                 setSettings((s) => ({ ...s, timezone: value }))
               }
             >
-              <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-xl">
+              <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-navy-mid border-border">
@@ -200,13 +200,13 @@ export default function SettingsPage() {
         className="space-y-4"
       >
         <div className="flex items-center gap-2">
-          <Bell className="w-4 h-4 text-purple-primary" />
+          <Bell className="w-4 h-4 text-text-muted" />
           <h2 className="font-heading font-bold text-text-primary">
             Notifications
           </h2>
         </div>
 
-        <div className="bg-navy-mid border border-border rounded-2xl p-6 space-y-4">
+        <div className="bg-navy-mid border border-border rounded-xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-text-primary text-sm font-medium">
@@ -252,7 +252,7 @@ export default function SettingsPage() {
                 setSettings((s) => ({ ...s, reminder_frequency: value }))
               }
             >
-              <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-xl">
+              <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-navy-mid border-border">
@@ -284,13 +284,13 @@ export default function SettingsPage() {
         className="space-y-4"
       >
         <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-purple-primary" />
+          <BookOpen className="w-4 h-4 text-text-muted" />
           <h2 className="font-heading font-bold text-text-primary">
             Learning Preferences
           </h2>
         </div>
 
-        <div className="bg-navy-mid border border-border rounded-2xl p-6 space-y-4">
+        <div className="bg-navy-mid border border-border rounded-xl p-6 space-y-4">
           <div className="space-y-2">
             <Label className="text-text-secondary text-sm">
               Daily Goal (minutes)
@@ -301,7 +301,7 @@ export default function SettingsPage() {
                 setSettings((s) => ({ ...s, daily_goal: Number(value) }))
               }
             >
-              <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-xl">
+              <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-navy-mid border-border">
@@ -331,7 +331,7 @@ export default function SettingsPage() {
                 setSettings((s) => ({ ...s, preferred_difficulty: value }))
               }
             >
-              <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-xl">
+              <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-navy-mid border-border">
@@ -360,13 +360,13 @@ export default function SettingsPage() {
         className="space-y-4"
       >
         <div className="flex items-center gap-2">
-          <Moon className="w-4 h-4 text-purple-primary" />
+          <Moon className="w-4 h-4 text-text-muted" />
           <h2 className="font-heading font-bold text-text-primary">
             Appearance
           </h2>
         </div>
 
-        <div className="bg-navy-mid border border-border rounded-2xl p-6">
+        <div className="bg-navy-mid border border-border rounded-xl p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-text-primary text-sm font-medium">Dark Mode</p>
@@ -389,11 +389,11 @@ export default function SettingsPage() {
         className="space-y-4"
       >
         <div className="flex items-center gap-2">
-          <Shield className="w-4 h-4 text-purple-primary" />
+          <Shield className="w-4 h-4 text-text-muted" />
           <h2 className="font-heading font-bold text-text-primary">Account</h2>
         </div>
 
-        <div className="bg-navy-mid border border-border rounded-2xl p-6 space-y-4">
+        <div className="bg-navy-mid border border-border rounded-xl p-6 space-y-4">
           <Button
             variant="outline"
             className="w-full border-border text-text-primary rounded-xl"
@@ -426,10 +426,10 @@ export default function SettingsPage() {
           onClick={handleSave}
           disabled={isSaving}
           className={cn(
-            "w-full rounded-xl py-5 font-semibold shadow-lg transition-all",
+            "w-full rounded-md py-5 font-semibold shadow-lg transition-all",
             saved
               ? "bg-green-success hover:bg-green-success text-white"
-              : "bg-purple-primary hover:bg-purple-light text-white"
+              : "bg-white text-black hover:opacity-85"
           )}
         >
           {isSaving ? (
