@@ -61,7 +61,7 @@ export function Solution() {
         <div className="text-center max-w-heading mx-auto mb-16">
           <h2 className="text-heading-2 text-text-primary">
             Your AI-Powered Career{" "}
-            <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
+            <span className="text-white">
               Compass, Tutor, and Launchpad
             </span>
           </h2>
@@ -71,7 +71,7 @@ export function Solution() {
         <div className="hidden md:block">
           <div className="relative">
             {/* Connecting line */}
-            <div className="absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-primary via-cyan-accent to-green-success" />
+            <div className="absolute top-16 left-0 right-0 h-0.5 bg-[#10B981]" />
 
             <div className="grid grid-cols-5 gap-4">
               {STEPS.map((step, index) => (

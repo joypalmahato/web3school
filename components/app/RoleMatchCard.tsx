@@ -94,7 +94,7 @@ export function RoleMatchCard({
           <div className="flex items-center gap-2 mb-3">
             <div className="flex-1 h-2 bg-navy-deep rounded-full overflow-hidden max-w-32">
               <motion.div
-                className="h-full bg-gradient-to-r from-purple-primary to-cyan-accent rounded-full"
+                className="h-full bg-[#10B981] rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${matchScore}%` }}
                 transition={{ duration: 0.8, delay: 0.3 }}

@@ -82,8 +82,8 @@ export function ShareableCard({
   return (
     <div className="space-y-4">
       {/* Preview card */}
-      <div className="bg-gradient-to-br from-navy-mid to-navy-deep border border-border rounded-2xl p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-purple-primary/10 rounded-full blur-3xl" />
+      <div className="bg-[#111111] border border-border rounded-2xl p-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
         <div className="relative z-10">
           <p className="text-text-muted text-xs font-mono mb-2">
             WEB3SCHOOL CAREER MATCH

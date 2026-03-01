@@ -30,7 +30,7 @@ export function Mission() {
           <p className="text-heading-2 text-text-primary max-w-heading mx-auto">
             &ldquo;Build a future where every person learns with ease and
             thrives with confidence in the{" "}
-            <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
+            <span className="text-white">
               age of AI
             </span>
             .&rdquo;
@@ -51,7 +51,7 @@ export function Mission() {
               transition={{ duration: 0.5, delay: index * 0.08, ease: [0, 0, 0.2, 1] }}
               className="bg-navy-deep border border-border rounded-2xl p-8 text-center card-interactive hover:glow-purple-sm"
             >
-              <p className="text-4xl md:text-5xl font-heading font-bold bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
+              <p className="text-4xl md:text-5xl font-heading font-bold text-white">
                 {stat.value}
               </p>
               <p className="text-text-secondary mt-2 text-sm">

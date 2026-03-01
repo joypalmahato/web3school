@@ -57,7 +57,7 @@ export function XPBar({ compact = false }: XPBarProps) {
             )}
           >
             <motion.div
-              className="h-full bg-gradient-to-r from-purple-primary to-cyan-accent rounded-full"
+              className="h-full bg-[#10B981] rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${Math.min(progress * 100, 100)}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}

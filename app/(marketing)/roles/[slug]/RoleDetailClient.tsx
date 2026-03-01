@@ -24,19 +24,10 @@ import type { RoleSeedData } from "@/data/roles";
 import type { RoleCategory } from "@/lib/types";
 
 const CATEGORY_COLORS: Record<RoleCategory, string> = {
-  technical: "bg-cyan-accent/10 text-cyan-accent border-cyan-accent/20",
-  "semi-technical":
-    "bg-purple-primary/10 text-purple-primary border-purple-primary/20",
-  "non-technical":
-    "bg-green-success/10 text-green-success border-green-success/20",
-  creative: "bg-amber-warning/10 text-amber-warning border-amber-warning/20",
-};
-
-const CATEGORY_GRADIENTS: Record<RoleCategory, string> = {
-  technical: "from-cyan-accent/20 to-purple-primary/10",
-  "semi-technical": "from-purple-primary/20 to-cyan-accent/10",
-  "non-technical": "from-green-success/20 to-cyan-accent/10",
-  creative: "from-amber-warning/20 to-purple-primary/10",
+  technical: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  "semi-technical": "bg-violet-500/10 text-violet-400 border-violet-500/20",
+  "non-technical": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  creative: "bg-amber-500/10 text-amber-400 border-amber-500/20",
 };
 
 const DEMAND_LABELS: Record<string, { label: string; color: string }> = {
@@ -76,11 +67,11 @@ function Section({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay }}
-      className="bg-navy-mid border border-border rounded-2xl p-6 sm:p-8"
+      className="bg-[#111111] border border-white/10 rounded-2xl p-6 sm:p-8"
     >
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-10 h-10 rounded-xl bg-purple-primary/10 flex items-center justify-center">
-          <Icon className="w-5 h-5 text-purple-primary" />
+        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+          <Icon className="w-5 h-5 text-white" />
         </div>
         <h2 className="text-xl font-heading font-bold text-text-primary">
           {title}
@@ -122,7 +113,7 @@ export function RoleDetailClient({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`bg-gradient-to-br ${CATEGORY_GRADIENTS[role.category]} border border-border rounded-2xl p-6 sm:p-10`}
+          className="bg-[#111111] border border-white/10 rounded-2xl p-6 sm:p-10"
         >
           <span
             className={`inline-block text-xs font-semibold px-3 py-1 rounded-full border ${CATEGORY_COLORS[role.category]}`}
@@ -170,7 +161,7 @@ export function RoleDetailClient({
                 if (parts) {
                   return (
                     <div key={i} className="flex gap-3">
-                      <span className="text-purple-primary font-semibold text-sm min-w-[80px]">
+                      <span className="text-white font-semibold text-sm min-w-[80px]">
                         {parts[1]}
                       </span>
                       <span className="text-text-secondary text-sm">
@@ -213,7 +204,7 @@ export function RoleDetailClient({
                         whileInView={{ width: `${importance}%` }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: i * 0.1 }}
-                        className="h-full rounded-full bg-gradient-to-r from-purple-primary to-cyan-accent"
+                        className="h-full rounded-full bg-[#10B981]"
                       />
                     </div>
                   </div>
@@ -230,10 +221,8 @@ export function RoleDetailClient({
                   <div
                     className={`px-4 py-2 rounded-xl text-sm font-medium border ${
                       i === 0
-                        ? "bg-purple-primary/10 border-purple-primary/30 text-purple-primary"
-                        : i === growthSteps.length - 1
-                          ? "bg-cyan-accent/10 border-cyan-accent/30 text-cyan-accent"
-                          : "bg-navy-deep border-border text-text-secondary"
+                        ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                        : "bg-white/5 border-white/10 text-white"
                     }`}
                   >
                     {step}
@@ -269,14 +258,14 @@ export function RoleDetailClient({
                   <Link
                     key={related.slug}
                     href={`/roles/${related.slug}`}
-                    className="group block bg-navy-deep border border-border rounded-xl p-4 hover:border-purple-primary/50 transition-all"
+                    className="group block bg-[#0A0A0A] border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all"
                   >
                     <span
                       className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${CATEGORY_COLORS[related.category]}`}
                     >
                       {related.category.replace("-", " ")}
                     </span>
-                    <h3 className="text-sm font-heading font-bold text-text-primary mt-2 group-hover:text-purple-primary transition-colors">
+                    <h3 className="text-sm font-heading font-bold text-text-primary mt-2 group-hover:text-white transition-colors">
                       {related.name}
                     </h3>
                     <p className="text-text-muted text-xs mt-1 line-clamp-2">
@@ -296,7 +285,7 @@ export function RoleDetailClient({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center p-8 sm:p-12 bg-gradient-to-br from-purple-primary/10 to-cyan-accent/10 border border-border rounded-2xl"
+          className="text-center p-8 sm:p-12 bg-[#111111] border border-white/10 rounded-2xl"
         >
           <h2 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary">
             Is {role.name} Your Path?
@@ -309,7 +298,7 @@ export function RoleDetailClient({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
             <Button
               asChild
-              className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-8 py-3 font-semibold"
+              className="bg-white hover:bg-white/90 text-black rounded-xl px-8 py-3 font-semibold"
             >
               <Link href="/signup">
                 Discover Your Match <ArrowRight className="w-4 h-4 ml-2" />

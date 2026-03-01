@@ -49,7 +49,7 @@ export function WhoIsThisFor() {
         <div className="text-center max-w-heading mx-auto mb-16">
           <h2 className="text-heading-2 text-text-primary">
             Built for People Who Are{" "}
-            <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
+            <span className="text-white">
               Ready to Change Their Lives
             </span>
           </h2>

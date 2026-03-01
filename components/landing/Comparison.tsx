@@ -115,7 +115,7 @@ export function Comparison() {
         >
           ChatGPT gives you <span className="text-text-secondary">information</span>.{" "}
           Web3School gives you{" "}
-          <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
+          <span className="text-white">
             transformation
           </span>
           .
