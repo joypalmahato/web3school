@@ -115,8 +115,14 @@ export async function GET() {
       };
     });
 
-    // Add general skills from INITIAL_SKILLS
-    const generalSkills = INITIAL_SKILLS.slice(0, 8).map((s, i) => ({
+    // Add general skills from INITIAL_SKILLS only if role doesn't have enough skills
+    // Skip skills that are already in role skills to avoid duplicates
+    const roleSkillNames = new Set(roleSkills.map((s: string) => s.toLowerCase()));
+    const extraSkills = INITIAL_SKILLS
+      .filter((s) => !roleSkillNames.has(s.name.toLowerCase()))
+      .slice(0, Math.max(0, 8 - roleSkills.length));
+
+    const generalSkills = extraSkills.map((s, i) => ({
       id: `general-${i}`,
       name: s.name,
       category: s.category,
