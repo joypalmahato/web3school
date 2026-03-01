@@ -16,13 +16,13 @@ export default async function WaitlistPage() {
   }
 
   const { data: profile } = await db("profiles")
-    .select("is_approved, onboarding_completed, discovery_completed")
+    .select("is_approved, onboarding_completed, discovery_completed, referral_code")
     .eq("user_id", userId)
     .single();
 
   const typedProfile = profile as Pick<
     Profile,
-    "is_approved" | "onboarding_completed" | "discovery_completed"
+    "is_approved" | "onboarding_completed" | "discovery_completed" | "referral_code"
   > | null;
 
   // Approved users skip waitlist
@@ -49,10 +49,13 @@ export default async function WaitlistPage() {
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://web3school.io";
 
+  // Use referral code from profile or waitlist (profile takes priority)
+  const referralCode = typedProfile?.referral_code || typedEntry?.referral_code || "";
+
   return (
     <WaitlistStatus
       position={typedEntry?.waitlist_position ?? 0}
-      referralCode={typedEntry?.referral_code ?? ""}
+      referralCode={referralCode}
       referralCount={typedEntry?.referral_count ?? 0}
       appUrl={appUrl}
     />
