@@ -65,20 +65,28 @@ export default function LoginPage() {
       });
     }
 
-    // Three-tier redirect based on progress
-    const { data: profile } = await insforge.database
-      .from("profiles")
-      .select("onboarding_completed, discovery_completed")
-      .eq("user_id", user?.id)
-      .single();
+    // Three-tier redirect based on progress.
+    // The client-side DB query may fail (RLS blocks browser clients),
+    // so default to /onboarding and let server pages handle cascading redirects.
+    try {
+      const { data: profile } = await insforge.database
+        .from("profiles")
+        .select("onboarding_completed, discovery_completed")
+        .eq("user_id", user?.id)
+        .single();
 
-    if (profile?.discovery_completed) {
-      window.location.href = "/learn";
-    } else if (profile?.onboarding_completed) {
-      window.location.href = "/discover";
-    } else {
-      window.location.href = "/onboarding";
+      if (profile?.discovery_completed) {
+        window.location.href = "/learn";
+        return;
+      } else if (profile?.onboarding_completed) {
+        window.location.href = "/discover";
+        return;
+      }
+    } catch {
+      // RLS or network error — fall through to default
     }
+
+    window.location.href = "/onboarding";
   };
 
   const handleOAuth = async (provider: "google" | "github") => {

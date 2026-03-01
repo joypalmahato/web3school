@@ -22,7 +22,7 @@ export default async function DiscoverPage() {
       .eq("user_id", userId)
       .single();
 
-    if (profile && !profile.onboarding_completed) {
+    if (!profile || !profile.onboarding_completed) {
       redirect("/onboarding");
     }
   }

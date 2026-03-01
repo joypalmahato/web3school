@@ -112,19 +112,25 @@ export default function CallbackPage() {
         // Non-fatal
       }
 
-      const { data: profile } = await insforge.database
-        .from("profiles")
-        .select("onboarding_completed, discovery_completed")
-        .eq("user_id", user.id)
-        .single();
+      try {
+        const { data: profile } = await insforge.database
+          .from("profiles")
+          .select("onboarding_completed, discovery_completed")
+          .eq("user_id", user.id)
+          .single();
 
-      if (profile?.discovery_completed) {
-        window.location.href = "/learn";
-      } else if (profile?.onboarding_completed) {
-        window.location.href = "/discover";
-      } else {
-        window.location.href = "/onboarding";
+        if (profile?.discovery_completed) {
+          window.location.href = "/learn";
+          return;
+        } else if (profile?.onboarding_completed) {
+          window.location.href = "/discover";
+          return;
+        }
+      } catch {
+        // RLS or network error — fall through to default
       }
+
+      window.location.href = "/onboarding";
     }
 
     handleCallback();
