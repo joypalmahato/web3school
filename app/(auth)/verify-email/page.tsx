@@ -71,7 +71,7 @@ function VerifyEmailForm() {
         // Non-fatal
       }
 
-      window.location.href = "/onboarding";
+      window.location.href = "/waitlist";
     } catch {
       setError("Verification failed. Please try again.");
       setLoading(false);

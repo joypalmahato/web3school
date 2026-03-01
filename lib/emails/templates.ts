@@ -111,6 +111,37 @@ export function welcomeEmail(params: {
   };
 }
 
+export function approvalEmail(params: {
+  name: string;
+  appUrl: string;
+}): { subject: string; html: string } {
+  return {
+    subject: "You're in! Your Web3School account is active",
+    html: wrapper(`
+      <div style="text-align:center;margin-bottom:20px;">
+        <span style="font-size:48px;">&#127881;</span>
+      </div>
+      <h1 style="color:${BRAND.text};font-size:22px;margin:0 0 16px;text-align:center;">
+        You're in!
+      </h1>
+      <p style="color:${BRAND.text};font-size:15px;line-height:1.6;margin:0 0 12px;">
+        Hey ${params.name},
+      </p>
+      <p style="color:${BRAND.text};font-size:15px;line-height:1.6;margin:0 0 24px;">
+        Your Web3School account has been approved. You can now complete your profile and start discovering your ideal Web3 career path.
+      </p>
+      <div style="text-align:center;margin-bottom:16px;">
+        <a href="${params.appUrl}/onboarding" style="display:inline-block;background:${BRAND.purple};color:white;padding:12px 32px;border-radius:12px;text-decoration:none;font-weight:600;font-size:15px;">
+          Start your journey &rarr;
+        </a>
+      </div>
+      <p style="color:${BRAND.muted};font-size:13px;text-align:center;margin:0;">
+        Welcome to the future of Web3 education.
+      </p>
+    `),
+  };
+}
+
 export function streakReminderEmail(params: {
   name: string;
   streakCount: number;

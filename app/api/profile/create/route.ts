@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 
 /**
  * POST /api/profile/create
- * Creates a profile row after InsForge signup.
+ * Creates a profile row + waitlist entry after InsForge signup.
  * InsForge has no handle_new_user trigger, so we do it explicitly.
  */
 export async function POST(request: Request) {
@@ -26,15 +26,19 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json().catch(() => ({}));
+    const email = user?.email || body.email || "";
+    const fullName = user?.profile?.name || body.full_name || "";
+    const referralCode: string | undefined = body.referral_code;
 
     const { error } = await db("profiles").insert({
       user_id: userId,
-      email: user?.email || body.email || "",
-      full_name: user?.profile?.name || body.full_name || "",
+      email,
+      full_name: fullName,
       discovery_completed: false,
       onboarding_completed: false,
       xp_total: 0,
       level: 1,
+      is_approved: false,
     });
 
     if (error) {
@@ -43,6 +47,46 @@ export async function POST(request: Request) {
         { error: "Failed to create profile" },
         { status: 500 }
       );
+    }
+
+    // Auto-create waitlist entry for the new user
+    try {
+      const { data: existingWaitlist } = await db("waitlist")
+        .select("id")
+        .eq("email", email)
+        .single();
+
+      if (existingWaitlist) {
+        // Link existing waitlist entry to this user
+        await db("waitlist")
+          .update({ user_id: userId, status: "signed_up" })
+          .eq("id", existingWaitlist.id);
+      } else {
+        await db("waitlist").insert({
+          name: fullName,
+          email,
+          status: "signed_up",
+          user_id: userId,
+          referred_by: referralCode || null,
+        });
+      }
+
+      // If a referral code was provided, increment the referrer's count
+      if (referralCode) {
+        const { data: referrer } = await db("waitlist")
+          .select("id, referral_count")
+          .eq("referral_code", referralCode)
+          .single();
+
+        if (referrer) {
+          await db("waitlist")
+            .update({ referral_count: (referrer.referral_count || 0) + 1 })
+            .eq("id", referrer.id);
+        }
+      }
+    } catch (waitlistErr) {
+      // Waitlist creation is non-fatal
+      console.error("Waitlist entry error:", waitlistErr);
     }
 
     return NextResponse.json({ success: true });

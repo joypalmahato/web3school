@@ -60,11 +60,11 @@ export async function GET(request: NextRequest) {
     const userId = tokenData.user.id;
     const email = tokenData.user.email || "";
     const fullName = tokenData.user.profile?.name || "";
-    let redirectPath = "/discover";
+    let redirectPath = "/waitlist";
 
     try {
       const { data: existing } = await db("profiles")
-        .select("user_id, onboarding_completed, discovery_completed")
+        .select("user_id, onboarding_completed, discovery_completed, is_approved")
         .eq("user_id", userId)
         .single();
 
@@ -77,8 +77,35 @@ export async function GET(request: NextRequest) {
           onboarding_completed: false,
           xp_total: 0,
           level: 1,
+          is_approved: false,
         });
-        redirectPath = "/onboarding";
+
+        // Auto-create waitlist entry for OAuth users
+        try {
+          const { data: existingWaitlist } = await db("waitlist")
+            .select("id")
+            .eq("email", email)
+            .single();
+
+          if (!existingWaitlist) {
+            await db("waitlist").insert({
+              name: fullName,
+              email,
+              status: "signed_up",
+              user_id: userId,
+            });
+          } else {
+            await db("waitlist")
+              .update({ user_id: userId, status: "signed_up" })
+              .eq("id", existingWaitlist.id);
+          }
+        } catch {
+          // Non-fatal
+        }
+
+        redirectPath = "/waitlist";
+      } else if (!existing.is_approved) {
+        redirectPath = "/waitlist";
       } else if (existing.discovery_completed) {
         redirectPath = "/learn";
       } else if (existing.onboarding_completed) {
