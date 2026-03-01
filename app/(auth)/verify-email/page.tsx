@@ -54,8 +54,7 @@ function VerifyEmailForm() {
         // Non-fatal
       }
 
-      router.push("/discover");
-      router.refresh();
+      window.location.href = "/discover";
     } catch {
       setError("Verification failed. Please try again.");
       setLoading(false);
