@@ -11,7 +11,7 @@ export async function GET() {
     }
 
     const { data: profile, error } = await db("profiles")
-      .select("current_role_id")
+      .select("current_role_id, full_name")
       .eq("user_id", userId)
       .single();
 
@@ -30,7 +30,7 @@ export async function GET() {
       roleSlug = role?.slug || null;
     }
 
-    return NextResponse.json({ role_slug: roleSlug });
+    return NextResponse.json({ role_slug: roleSlug, full_name: profile.full_name || null });
   } catch (err) {
     console.error("Profile fetch error:", err);
     return NextResponse.json(

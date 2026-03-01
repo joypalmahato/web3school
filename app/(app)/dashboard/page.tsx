@@ -45,14 +45,20 @@ export default function DashboardPage() {
   const { currentStreak, maintainedToday } = useStreak();
   const { level, totalXP, progress: xpProgress } = useXP();
   const [data, setData] = useState<DashboardData | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await fetch("/api/tasks/today");
-        if (res.ok) {
-          const json = await res.json();
+        // Fetch tasks and profile name in parallel
+        const [tasksRes, profileRes] = await Promise.all([
+          fetch("/api/tasks/today"),
+          fetch("/api/profile"),
+        ]);
+
+        if (tasksRes.ok) {
+          const json = await tasksRes.json();
           setData({
             current_task: json.current_task,
             tasks_today: json.total_today,
@@ -63,6 +69,13 @@ export default function DashboardPage() {
             current_week: json.current_week || 1,
             total_weeks: 12,
           });
+        }
+
+        if (profileRes.ok) {
+          const profileJson = await profileRes.json();
+          if (profileJson.full_name) {
+            setUserName(profileJson.full_name.split(" ")[0]);
+          }
         }
       } catch (err) {
         console.error("Dashboard fetch error:", err);
@@ -97,7 +110,7 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
       >
         <h2 className="text-2xl font-heading font-bold text-text-primary">
-          {greeting}, {profile?.full_name?.split(" ")[0] || "Learner"}
+          {greeting}, {userName || profile?.full_name?.split(" ")[0] || "Learner"}
         </h2>
         <p className="text-text-muted text-sm mt-1">
           {maintainedToday
