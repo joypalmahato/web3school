@@ -27,9 +27,33 @@ export default async function DiscoverPage() {
     }
   }
 
+  // Load the latest in-progress session so the chat resumes where they left off
+  let existingSession: {
+    id: string;
+    conversation_history: { role: "user" | "assistant"; content: string; timestamp: string }[];
+    status: string;
+  } | null = null;
+
+  if (userId) {
+    const { data } = await db("discovery_sessions")
+      .select("id, conversation_history, status")
+      .eq("user_id", userId)
+      .eq("status", "in_progress")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (data) {
+      existingSession = data;
+    }
+  }
+
   return (
     <div className="min-h-screen bg-navy-deep">
-      <DiscoveryChat />
+      <DiscoveryChat
+        existingSessionId={existingSession?.id ?? null}
+        existingMessages={existingSession?.conversation_history ?? []}
+      />
     </div>
   );
 }
