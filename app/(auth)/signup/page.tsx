@@ -70,8 +70,7 @@ export default function SignupPage() {
       // Profile creation failure is non-fatal — can retry later
     }
 
-    router.push("/discover");
-    router.refresh();
+    window.location.href = "/discover";
   };
 
   const handleOAuth = async (provider: "google" | "github") => {

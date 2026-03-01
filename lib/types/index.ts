@@ -1,6 +1,6 @@
 // lib/types/index.ts — SINGLE SOURCE OF TRUTH FOR ALL TYPES
-// This file is generated from the Supabase schema.
-// Do not modify manually. Run `supabase gen types typescript` to regenerate.
+// Database types for the InsForge PostgreSQL schema.
+// Update manually or regenerate when schema changes.
 // All components, API routes, and hooks must import types from here.
 
 export type UserType = "seeker" | "expert" | "employer";

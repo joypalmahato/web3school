@@ -5,7 +5,6 @@ export default InsforgeMiddleware({
   publicRoutes: ["/", "/login", "/signup", "/verify-email", "/callback", "/waitlist", "/share", "/passport"],
   signInUrl: "/login",
   signUpUrl: "/signup",
-  afterSignInUrl: "/discover",
   useBuiltInAuth: false,
 });
 

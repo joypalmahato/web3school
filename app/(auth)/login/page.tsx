@@ -56,15 +56,13 @@ export default function LoginPage() {
         .single();
 
       if (profile?.discovery_completed) {
-        router.push("/learn");
+        window.location.href = "/learn";
       } else {
-        router.push("/discover");
+        window.location.href = "/discover";
       }
     } else {
-      router.push("/discover");
+      window.location.href = "/discover";
     }
-
-    router.refresh();
   };
 
   const handleOAuth = async (provider: "google" | "github") => {
