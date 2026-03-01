@@ -20,7 +20,6 @@ export function Providers({
     <ThemeProvider>
       <InsforgeBrowserProvider
         client={client}
-        afterSignInUrl="/discover"
         initialState={initialState}
       >
         <PostHogProvider>

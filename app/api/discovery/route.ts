@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       { role: "user" as const, content: message.trim() },
     ];
 
-    // Create or update discovery session in Supabase
+    // Create or update discovery session in database
     let currentSessionId = session_id;
     if (!currentSessionId) {
       const { data: session, error: sessionError } = await db("discovery_sessions")
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
           .replace(/\[CONVERSATION_COMPLETE\]/g, "")
           .trim();
 
-        // Save updated conversation to Supabase
+        // Save updated conversation to database
         const updatedHistory = [
           ...conversation_history,
           { role: "user", content: message.trim(), timestamp: new Date().toISOString() },

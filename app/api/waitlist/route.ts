@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
-      console.error("Supabase error:", error);
+      console.error("Database error:", error);
       return NextResponse.json(
         { error: "Failed to join waitlist" },
         { status: 500 }
