@@ -11,7 +11,7 @@ export async function GET() {
     }
 
     const { data: profile } = await db("profiles")
-      .select("full_name, email, avatar_url, timezone, preferred_language")
+      .select("full_name, email, avatar_url, timezone, preferred_language, display_name, location, headline, employment_status, current_role_title, years_experience, education_level, tech_comfort, existing_skills, tools_used, interest_areas, career_goals, time_commitment, target_timeline, social_links")
       .eq("user_id", userId)
       .single();
 
@@ -44,6 +44,21 @@ export async function PATCH(request: Request) {
       "avatar_url",
       "timezone",
       "preferred_language",
+      "display_name",
+      "location",
+      "headline",
+      "employment_status",
+      "current_role_title",
+      "years_experience",
+      "education_level",
+      "tech_comfort",
+      "existing_skills",
+      "tools_used",
+      "interest_areas",
+      "career_goals",
+      "time_commitment",
+      "target_timeline",
+      "social_links",
     ];
     const safeUpdates: Record<string, unknown> = {};
     for (const key of allowedFields) {
