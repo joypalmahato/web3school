@@ -35,31 +35,45 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     setError(null);
 
-    const { error: loginError } = await insforge.auth.signInWithPassword({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: any = await insforge.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
 
-    if (loginError) {
-      setError(loginError.message);
+    if (result.error) {
+      setError(result.error.message);
       return;
     }
 
+    // Sync the access token to httpOnly cookie BEFORE redirecting.
+    // The InsforgeBrowserProvider does this via onSignIn, but it's async
+    // and may not complete before our redirect fires.
+    const token = result.data?.accessToken;
+    const user = result.data?.user;
+    if (token && user) {
+      await fetch("/api/auth", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "sync-token",
+          user: { id: user.id, email: user.email, profile: user.profile || null },
+        }),
+      });
+    }
+
     // Check if user has completed onboarding
-    const { data: userData } = await insforge.auth.getCurrentUser();
+    const { data: profile } = await insforge.database
+      .from("profiles")
+      .select("onboarding_completed, discovery_completed")
+      .eq("user_id", user?.id)
+      .single();
 
-    if (userData?.user) {
-      const { data: profile } = await insforge.database
-        .from("profiles")
-        .select("onboarding_completed, discovery_completed")
-        .eq("user_id", userData.user.id)
-        .single();
-
-      if (profile?.discovery_completed) {
-        window.location.href = "/learn";
-      } else {
-        window.location.href = "/discover";
-      }
+    if (profile?.discovery_completed) {
+      window.location.href = "/learn";
     } else {
       window.location.href = "/discover";
     }
