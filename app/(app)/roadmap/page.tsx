@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, ArrowDown, Map } from "lucide-react";
@@ -56,32 +56,68 @@ export default function RoadmapPage() {
   const [roadmap, setRoadmap] = useState<RoadmapData | null>(null);
   const [tasks, setTasks] = useState<DailyTaskData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchRoadmap = async () => {
-      try {
-        const res = await fetch("/api/roadmap");
-        if (!res.ok) {
-          if (res.status === 404) {
-            setError("no_roadmap");
-            return;
-          }
-          throw new Error("Failed to fetch roadmap");
+  const fetchRoadmap = useCallback(async () => {
+    try {
+      const res = await fetch("/api/roadmap");
+      if (!res.ok) {
+        if (res.status === 404) {
+          setError("no_roadmap");
+          return;
         }
-        const data = await res.json();
-        setRoadmap(data.roadmap);
-        setTasks(data.tasks || []);
-      } catch (err) {
-        console.error("Roadmap fetch error:", err);
-        setError("Failed to load your roadmap.");
-      } finally {
-        setIsLoading(false);
+        throw new Error("Failed to fetch roadmap");
       }
-    };
-
-    fetchRoadmap();
+      const data = await res.json();
+      setRoadmap(data.roadmap);
+      setTasks(data.tasks || []);
+      setError(null);
+    } catch (err) {
+      console.error("Roadmap fetch error:", err);
+      setError("Failed to load your roadmap.");
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchRoadmap();
+  }, [fetchRoadmap]);
+
+  const handleGenerateRoadmap = async () => {
+    setIsGenerating(true);
+    try {
+      // Fetch the user's current role slug from their profile
+      const profileRes = await fetch("/api/profile");
+      if (!profileRes.ok) throw new Error("Failed to fetch profile");
+      const profileData = await profileRes.json();
+      const roleSlug = profileData.role_slug;
+
+      if (!roleSlug) {
+        // No role chosen yet — send them to discovery
+        router.push("/discover");
+        return;
+      }
+
+      const res = await fetch("/api/roadmap/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role_slug: roleSlug }),
+      });
+
+      if (!res.ok) throw new Error("Roadmap generation failed");
+
+      // Re-fetch roadmap data
+      setIsLoading(true);
+      await fetchRoadmap();
+    } catch (err) {
+      console.error("Generate roadmap error:", err);
+      setError("Failed to generate roadmap. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleTaskSelect = (task: TimelineTask) => {
     if (task.id) {
@@ -113,14 +149,22 @@ export default function RoadmapPage() {
             No Roadmap Yet
           </h2>
           <p className="text-text-secondary">
-            Complete the career discovery to get your personalized learning
-            roadmap.
+            Generate your personalized 12-week learning roadmap based on your
+            chosen career path.
           </p>
           <Button
-            onClick={() => router.push("/discover")}
+            onClick={handleGenerateRoadmap}
+            disabled={isGenerating}
             className="bg-white text-black hover:opacity-85 rounded-md"
           >
-            Start Discovery
+            {isGenerating ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Generating roadmap...
+              </>
+            ) : (
+              "Generate My Roadmap"
+            )}
           </Button>
         </div>
       </div>

@@ -67,29 +67,61 @@ export default function LearnPage() {
   const { currentStreak, maintainedToday } = useStreak();
   const [todayData, setTodayData] = useState<TodayData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const fetchToday = async () => {
+    try {
+      const res = await fetch("/api/tasks/today");
+      if (!res.ok) {
+        if (res.status === 404) {
+          setTodayData(null);
+          return;
+        }
+        throw new Error("Failed to fetch today's tasks");
+      }
+      const data = await res.json();
+      setTodayData(data);
+    } catch (err) {
+      console.error("Today fetch error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchToday = async () => {
-      try {
-        const res = await fetch("/api/tasks/today");
-        if (!res.ok) {
-          if (res.status === 404) {
-            setTodayData(null);
-            return;
-          }
-          throw new Error("Failed to fetch today's tasks");
-        }
-        const data = await res.json();
-        setTodayData(data);
-      } catch (err) {
-        console.error("Today fetch error:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchToday();
   }, []);
+
+  const handleGenerateRoadmap = async () => {
+    setIsGenerating(true);
+    try {
+      const profileRes = await fetch("/api/profile");
+      if (!profileRes.ok) throw new Error("Failed to fetch profile");
+      const profileData = await profileRes.json();
+      const roleSlug = profileData.role_slug;
+
+      if (!roleSlug) {
+        router.push("/discover");
+        return;
+      }
+
+      const res = await fetch("/api/roadmap/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role_slug: roleSlug }),
+      });
+
+      if (!res.ok) throw new Error("Roadmap generation failed");
+
+      // Re-fetch today's tasks now that a roadmap exists
+      setIsLoading(true);
+      await fetchToday();
+    } catch (err) {
+      console.error("Generate roadmap error:", err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -113,13 +145,21 @@ export default function LearnPage() {
             No Learning Path Yet
           </h2>
           <p className="text-text-secondary">
-            Generate your personalized roadmap to start learning.
+            Generate your personalized 12-week roadmap to start learning.
           </p>
           <Button
-            onClick={() => router.push("/roadmap")}
+            onClick={handleGenerateRoadmap}
+            disabled={isGenerating}
             className="bg-white text-black hover:opacity-85 rounded-md"
           >
-            View Roadmap
+            {isGenerating ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Generating roadmap...
+              </>
+            ) : (
+              "Generate My Roadmap"
+            )}
           </Button>
         </div>
       </div>
