@@ -10,24 +10,27 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get profile
-    const { data: profile } = await db("profiles")
-      .select("*")
-      .eq("user_id", userId)
-      .single();
+    const ninetyDaysAgo = new Date();
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+    const ninetyDaysAgoStr = ninetyDaysAgo.toISOString().split("T")[0];
 
+    // Parallel fetch: profile, roadmap, streak history, recent XP, discovery
+    const [profileRes, roadmapRes, streakRes, xpRes, discoveryRes] = await Promise.all([
+      db("profiles").select("xp_total, level, streak_count, longest_streak").eq("user_id", userId).single(),
+      db("roadmaps").select("id, current_week, total_weeks, title").eq("user_id", userId).eq("status", "active").single(),
+      db("streak_history").select("date, tasks_completed").eq("user_id", userId).gte("date", ninetyDaysAgoStr).order("date", { ascending: true }),
+      db("xp_log").select("xp_amount, action, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(10),
+      db("discovery_sessions").select("extracted_traits").eq("user_id", userId).eq("status", "completed").order("completed_at", { ascending: false }).limit(1).single(),
+    ]);
+
+    const profile = profileRes.data;
     if (!profile) {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
 
-    // Get active roadmap
-    const { data: roadmap } = await db("roadmaps")
-      .select("id, current_week, total_weeks, title")
-      .eq("user_id", userId)
-      .eq("status", "active")
-      .single();
+    const roadmap = roadmapRes.data;
 
-    // Get completed tasks count and total
+    // Fetch tasks only if roadmap exists (depends on roadmap.id)
     let tasksCompleted = 0;
     let totalTasks = 0;
     let totalMinutes = 0;
@@ -48,33 +51,6 @@ export async function GET() {
       }
     }
 
-    // Get streak history (last 90 days)
-    const ninetyDaysAgo = new Date();
-    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-    const ninetyDaysAgoStr = ninetyDaysAgo.toISOString().split("T")[0];
-
-    const { data: streakHistory } = await db("streak_history")
-      .select("date, tasks_completed")
-      .eq("user_id", userId)
-      .gte("date", ninetyDaysAgoStr)
-      .order("date", { ascending: true });
-
-    // Get recent XP log
-    const { data: recentXP } = await db("xp_log")
-      .select("xp_amount, action, created_at")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false })
-      .limit(10);
-
-    // Get discovery traits
-    const { data: discovery } = await db("discovery_sessions")
-      .select("extracted_traits")
-      .eq("user_id", userId)
-      .eq("status", "completed")
-      .order("completed_at", { ascending: false })
-      .limit(1)
-      .single();
-
     // Calculate milestones
     const milestones = [];
     if (tasksCompleted >= 1)
@@ -90,7 +66,7 @@ export async function GET() {
     if (roadmap && roadmap.current_week > 12)
       milestones.push({ id: "completed", label: "Roadmap Complete", icon: "trophy" });
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       profile: {
         xp_total: profile.xp_total,
         level: profile.level,
@@ -113,14 +89,17 @@ export async function GET() {
             ? Math.round((tasksCompleted / totalTasks) * 100)
             : 0,
       },
-      heatmap: (streakHistory || []).map((s: { date: string; tasks_completed?: number }) => ({
+      heatmap: (streakRes.data || []).map((s: { date: string; tasks_completed?: number }) => ({
         date: s.date,
         count: s.tasks_completed || 0,
       })),
-      recent_xp: recentXP || [],
-      traits: discovery?.extracted_traits || null,
+      recent_xp: xpRes.data || [],
+      traits: discoveryRes.data?.extracted_traits || null,
       milestones,
     });
+
+    res.headers.set("Cache-Control", "private, max-age=60");
+    return res;
   } catch (err) {
     console.error("Progress fetch error:", err);
     return NextResponse.json(

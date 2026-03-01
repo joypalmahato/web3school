@@ -30,7 +30,9 @@ export async function GET() {
       roleSlug = role?.slug || null;
     }
 
-    return NextResponse.json({ role_slug: roleSlug, full_name: profile.full_name || null });
+    const res = NextResponse.json({ role_slug: roleSlug, full_name: profile.full_name || null });
+    res.headers.set("Cache-Control", "private, max-age=300");
+    return res;
   } catch (err) {
     console.error("Profile fetch error:", err);
     return NextResponse.json(

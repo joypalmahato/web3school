@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  compress: true,
+  productionBrowserSourceMaps: false,
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "recharts", "framer-motion"],
+  },
 };
 
 export default nextConfig;

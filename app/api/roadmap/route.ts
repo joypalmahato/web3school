@@ -31,10 +31,12 @@ export async function GET() {
       .order("week_number", { ascending: true })
       .order("day_number", { ascending: true });
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       roadmap,
       tasks: tasks || [],
     });
+    res.headers.set("Cache-Control", "private, max-age=120");
+    return res;
   } catch (err) {
     console.error("Roadmap fetch error:", err);
     return NextResponse.json(

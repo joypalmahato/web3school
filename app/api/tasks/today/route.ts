@@ -88,7 +88,7 @@ export async function GET() {
     const currentTask = pendingTasks[0] || null;
 
     // Return immediately — content is generated when user opens the task
-    return NextResponse.json({
+    const res = NextResponse.json({
       roadmap_id: roadmap.id,
       current_week: roadmap.current_week,
       tasks: tasks || [],
@@ -96,6 +96,8 @@ export async function GET() {
       completed_today: completedTasks.length,
       total_today: (tasks || []).length,
     });
+    res.headers.set("Cache-Control", "private, max-age=30");
+    return res;
   } catch (err) {
     console.error("Today tasks error:", err);
     return NextResponse.json(
