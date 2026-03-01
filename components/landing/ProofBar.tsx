@@ -9,7 +9,7 @@
 import { motion } from "framer-motion";
 
 const STATS = [
-  { value: "5,000+", label: "Active Learners" },
+  { value: "5,200+", label: "Active Learners" },
   { value: "50+", label: "Web3 Roles" },
   { value: "90-Day", label: "Personalized Roadmaps" },
 ];
