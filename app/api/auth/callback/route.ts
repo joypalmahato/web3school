@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
 
     try {
       const { data: existing } = await db("profiles")
-        .select("user_id, discovery_completed")
+        .select("user_id, onboarding_completed, discovery_completed")
         .eq("user_id", userId)
         .single();
 
@@ -78,8 +78,13 @@ export async function GET(request: NextRequest) {
           xp_total: 0,
           level: 1,
         });
+        redirectPath = "/onboarding";
       } else if (existing.discovery_completed) {
-        redirectPath = "/roadmap";
+        redirectPath = "/learn";
+      } else if (existing.onboarding_completed) {
+        redirectPath = "/discover";
+      } else {
+        redirectPath = "/onboarding";
       }
     } catch (dbErr) {
       console.error("Profile check/create error:", dbErr);

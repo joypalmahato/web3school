@@ -1,7 +1,11 @@
 import { anthropic, AI_MODEL } from "@/lib/ai/client";
-import { DISCOVERY_SYSTEM_PROMPT } from "@/lib/ai/prompts/discovery";
+import {
+  DISCOVERY_SYSTEM_PROMPT,
+  buildDiscoveryPromptWithProfile,
+} from "@/lib/ai/prompts/discovery";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
+import type { Profile } from "@/lib/types";
 
 export async function POST(request: Request) {
   try {
@@ -53,11 +57,25 @@ export async function POST(request: Request) {
       currentSessionId = session.id;
     }
 
+    // Fetch profile for personalized prompt
+    let systemPrompt = DISCOVERY_SYSTEM_PROMPT;
+    try {
+      const { data: profile } = await db("profiles")
+        .select("*")
+        .eq("user_id", userId)
+        .single();
+      if (profile) {
+        systemPrompt = buildDiscoveryPromptWithProfile(profile as Profile);
+      }
+    } catch {
+      // Fall back to default prompt
+    }
+
     // Stream response from Claude
     const stream = await anthropic.messages.stream({
       model: AI_MODEL,
       max_tokens: 500,
-      system: DISCOVERY_SYSTEM_PROMPT,
+      system: systemPrompt,
       messages,
     });
 

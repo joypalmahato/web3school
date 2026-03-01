@@ -1,3 +1,81 @@
+import type { Profile } from "@/lib/types";
+import {
+  EMPLOYMENT_OPTIONS,
+  TECH_COMFORT_OPTIONS,
+  INTEREST_OPTIONS,
+  CAREER_GOAL_OPTIONS,
+  TIME_COMMITMENT_OPTIONS,
+  TIMELINE_OPTIONS,
+  SKILL_OPTIONS,
+} from "@/lib/constants/onboarding";
+
+function labelFor(options: readonly { value: string; label: string }[], value: string): string {
+  return options.find((o) => o.value === value)?.label || value;
+}
+
+export function buildDiscoveryPromptWithProfile(profile: Profile): string {
+  const sections: string[] = [];
+
+  if (profile.full_name) {
+    sections.push(`Their name is ${profile.display_name || profile.full_name}.`);
+  }
+  if (profile.employment_status) {
+    sections.push(
+      `Current status: ${labelFor(EMPLOYMENT_OPTIONS, profile.employment_status)}${
+        profile.current_role_title ? ` — ${profile.current_role_title}` : ""
+      }${profile.years_experience ? ` (${profile.years_experience} years experience)` : ""}.`
+    );
+  }
+  if (profile.education_level) {
+    sections.push(
+      `Education: ${profile.education_level}${profile.education_field ? ` in ${profile.education_field}` : ""}.`
+    );
+  }
+  if (profile.tech_comfort) {
+    sections.push(`Tech comfort level: ${labelFor(TECH_COMFORT_OPTIONS, profile.tech_comfort)}.`);
+  }
+  if (profile.existing_skills?.length) {
+    const skillLabels = profile.existing_skills.map((s) => labelFor(SKILL_OPTIONS, s));
+    sections.push(`Skills they already have: ${skillLabels.join(", ")}.`);
+  }
+  if (profile.interest_areas?.length) {
+    const interestLabels = profile.interest_areas.map((i) => labelFor(INTEREST_OPTIONS, i));
+    sections.push(`Areas they're interested in: ${interestLabels.join(", ")}.`);
+  }
+  if (profile.career_goals?.length) {
+    const goalLabels = profile.career_goals.map((g) => labelFor(CAREER_GOAL_OPTIONS, g));
+    sections.push(`Their goals: ${goalLabels.join(", ")}.`);
+  }
+  if (profile.time_commitment) {
+    sections.push(`Time commitment: ${labelFor(TIME_COMMITMENT_OPTIONS, profile.time_commitment)}.`);
+  }
+  if (profile.target_timeline) {
+    sections.push(`Target timeline: ${labelFor(TIMELINE_OPTIONS, profile.target_timeline)}.`);
+  }
+  if (profile.headline) {
+    sections.push(`They describe themselves as: "${profile.headline}".`);
+  }
+  if (profile.ai_profile_summary) {
+    sections.push(`AI-generated profile summary: ${profile.ai_profile_summary}`);
+  }
+
+  if (sections.length === 0) {
+    return DISCOVERY_SYSTEM_PROMPT;
+  }
+
+  return `${DISCOVERY_SYSTEM_PROMPT}
+
+## What you already know about this person
+${sections.join("\n")}
+
+## How to use this information
+- Greet them by name if you have it.
+- Do NOT re-ask questions you already have answers to. Skip those topics.
+- Acknowledge what you know briefly ("I see you're already working in X — that's great") and dig deeper into areas you DON'T know about.
+- Focus on the gaps: their work style preferences, what they enjoy vs hate, specific domains within their interests, and anything that helps differentiate between similar roles.
+- You still need ~10 messages total, so use the extra time to ask more nuanced questions.`;
+}
+
 export const DISCOVERY_SYSTEM_PROMPT = `You're chatting with someone who's curious about finding a digital career that fits them. Your job is to have a quick, genuine conversation — like two people grabbing coffee — and figure out what kind of role would actually suit them.
 
 ## How you talk

@@ -114,14 +114,16 @@ export default function CallbackPage() {
 
       const { data: profile } = await insforge.database
         .from("profiles")
-        .select("discovery_completed")
+        .select("onboarding_completed, discovery_completed")
         .eq("user_id", user.id)
         .single();
 
       if (profile?.discovery_completed) {
-        window.location.href = "/roadmap";
-      } else {
+        window.location.href = "/learn";
+      } else if (profile?.onboarding_completed) {
         window.location.href = "/discover";
+      } else {
+        window.location.href = "/onboarding";
       }
     }
 
