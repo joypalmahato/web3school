@@ -21,13 +21,26 @@ interface Message {
   timestamp: string;
 }
 
-export function DiscoveryChat() {
+interface DiscoveryChatProps {
+  existingSessionId?: string | null;
+  existingMessages?: Message[];
+}
+
+export function DiscoveryChat({
+  existingSessionId = null,
+  existingMessages = [],
+}: DiscoveryChatProps) {
   const router = useRouter();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(existingMessages);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [progress, setProgress] = useState(0);
+  const [sessionId, setSessionId] = useState<string | null>(existingSessionId);
+  const [progress, setProgress] = useState(() => {
+    // Estimate progress from existing conversation (each pair = ~1 step)
+    if (existingMessages.length === 0) return 0;
+    const assistantCount = existingMessages.filter((m) => m.role === "assistant").length;
+    return Math.min(assistantCount, 10);
+  });
   const [isComplete, setIsComplete] = useState(false);
   const [streamingContent, setStreamingContent] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
