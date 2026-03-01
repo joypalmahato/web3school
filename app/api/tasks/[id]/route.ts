@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { anthropic, AI_MODEL } from "@/lib/ai/client";
+import { TASK_CONTENT_GENERATION_PROMPT } from "@/lib/ai/prompts/roadmap";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
 import { XP_REWARDS } from "@/lib/types";
@@ -24,6 +26,66 @@ export async function GET(_request: Request, { params }: RouteParams) {
 
     if (error || !task) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
+    }
+
+    // Lazily generate content when user opens a task with empty content
+    if (!task.content || Object.keys(task.content as object).length === 0) {
+      try {
+        const { data: roadmap } = await db("roadmaps")
+          .select("role_id")
+          .eq("id", task.roadmap_id)
+          .single();
+
+        const { data: role } = await db("roles")
+          .select("name, category")
+          .eq("id", roadmap?.role_id)
+          .single();
+
+        const contentResponse = await anthropic.messages.create({
+          model: AI_MODEL,
+          max_tokens: 2000,
+          system: TASK_CONTENT_GENERATION_PROMPT,
+          messages: [
+            {
+              role: "user",
+              content: `Generate lesson content for this task:
+
+Role: ${role?.name || "Web3 Professional"}
+Category: ${role?.category || "technical"}
+Task Title: ${task.title}
+Task Type: ${task.task_type}
+Task Description: ${task.description || task.title}
+Difficulty: ${task.difficulty}
+Week: ${task.week_number} of 12
+Day: ${task.day_number} of 5
+
+Generate the content in the specified JSON format.`,
+            },
+          ],
+        });
+
+        const contentText =
+          contentResponse.content[0].type === "text"
+            ? contentResponse.content[0].text
+            : "";
+
+        let content;
+        try {
+          const jsonMatch = contentText.match(/```(?:json)?\s*([\s\S]*?)```/);
+          const jsonStr = jsonMatch ? jsonMatch[1].trim() : contentText.trim();
+          content = JSON.parse(jsonStr);
+        } catch {
+          content = { lesson_text: contentText };
+        }
+
+        await db("daily_tasks")
+          .update({ content })
+          .eq("id", task.id);
+
+        task.content = content;
+      } catch (err) {
+        console.error("Content generation error:", err);
+      }
     }
 
     return NextResponse.json(task);
