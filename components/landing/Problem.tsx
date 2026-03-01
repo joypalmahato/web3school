@@ -1,115 +1,82 @@
 /**
  * @component Problem
  * @part-of Web3School — Landing Page
- * @design 3 problem cards + stats bar, dark theme
- * @flow Establishes the problem before presenting the solution
+ * @design 3 problem cards in clean grid. No stats bar. No bold statement.
+ * @spec docs/04-page-build-spec.md — Problem Section
  */
 "use client";
 
 import { motion } from "framer-motion";
-import { Compass, RotateCcw, Award } from "lucide-react";
+import { Compass, RotateCcw, FileQuestion } from "lucide-react";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
 const PROBLEMS = [
   {
     icon: Compass,
-    title: "Too Many Options, Zero Direction",
+    title: "Too Many Options",
     description:
-      "You open YouTube — 10,000 tutorials. You open Twitter — everyone's selling a course. You don't even know WHAT to learn. You're not lazy. You're lost.",
+      "Thousands of resources, zero structure. You jump between YouTube, Twitter threads, and free courses without knowing what actually matters for your goals.",
   },
   {
     icon: RotateCcw,
     title: "Start, Stop, Repeat",
     description:
-      "You've started 5 courses and finished none. It's not a motivation problem — it's a structure problem. Nobody is holding you accountable.",
+      "You've started three courses this year and finished none. Without a clear career target, motivation dies. The 5.5% course completion rate proves it.",
   },
   {
-    icon: Award,
+    icon: FileQuestion,
     title: "Skills Without Proof",
     description:
-      "Even if you learn something, how do you prove it? Certificates are worthless. Employers want evidence.",
+      "Even when you learn something, you can't prove it. No portfolio. No credentials. No way to show employers what you actually know.",
   },
 ];
 
-const STATS = [
-  { value: "48%", label: "of graduates feel unprepared" },
-  { value: "5.5%", label: "course completion rate" },
-  { value: "87%", label: "of companies report talent shortages" },
-];
+const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Problem() {
   return (
-    <AnimatedSection className="section-padding bg-navy-deep">
-      <div className="container-ds">
-        {/* Title */}
-        <div className="text-center max-w-heading mx-auto mb-16">
-          <h2 className="text-heading-2 text-text-primary">
-            The World Has More Learning Resources Than Ever.{" "}
-            <span className="text-text-secondary">
-              People Are More Confused Than Ever.
-            </span>
+    <AnimatedSection className="py-16 md:py-24 lg:py-32 bg-[#0A0A0A]">
+      <div className="max-w-[1200px] mx-auto px-6">
+        {/* Header */}
+        <div className="text-center max-w-[800px] mx-auto mb-16">
+          <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-4">
+            The Problem
+          </p>
+          <h2 className="text-[28px] md:text-[40px] lg:text-[48px] font-bold text-white leading-[1.1] tracking-[-0.02em] font-heading">
+            Everyone Wants to Break Into Web3.
+            <br />
+            <span className="text-[#A0A0A0]">Almost No One Does.</span>
           </h2>
+          <p className="mt-4 text-lg text-[#A0A0A0]">
+            It&apos;s not a lack of motivation. It&apos;s a lack of direction.
+          </p>
         </div>
 
-        {/* Problem cards */}
-        <div className="grid gap-8 md:grid-cols-3 mb-16">
+        {/* Cards */}
+        <div className="grid gap-6 md:grid-cols-3 max-w-[1000px] mx-auto">
           {PROBLEMS.map((problem, index) => (
             <motion.div
               key={problem.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.08, ease: [0, 0, 0.2, 1] }}
-              className="bg-navy-mid border border-border rounded-2xl p-8 card-interactive"
+              transition={{
+                duration: 0.5,
+                delay: index * 0.1,
+                ease,
+              }}
+              className="bg-[#111111] border border-white/[0.08] rounded-xl p-8 hover:border-white/[0.16] transition-colors duration-200"
             >
-              <div className="w-12 h-12 bg-purple-primary/10 rounded-xl flex items-center justify-center mb-5">
-                <problem.icon className="w-6 h-6 text-purple-primary" />
-              </div>
-              <h3 className="text-heading-4 text-text-primary mb-3">
+              <problem.icon className="w-6 h-6 text-[#A0A0A0] mb-5" />
+              <h3 className="text-xl font-semibold text-white mb-3 font-heading">
                 {problem.title}
               </h3>
-              <p className="text-text-secondary leading-relaxed">
+              <p className="text-base text-[#A0A0A0] leading-relaxed">
                 {problem.description}
               </p>
             </motion.div>
           ))}
         </div>
-
-        {/* Stats bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ ease: [0, 0, 0.2, 1] }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16"
-        >
-          {STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center py-6 bg-navy-mid rounded-2xl border border-border"
-            >
-              <p className="text-3xl md:text-4xl font-heading font-bold text-purple-primary">
-                {stat.value}
-              </p>
-              <p className="text-text-muted text-sm mt-1">{stat.label}</p>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Bold statement */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ ease: [0, 0, 0.2, 1] }}
-          className="text-center text-heading-3 text-text-primary max-w-heading mx-auto"
-        >
-          No platform today solves the complete journey from{" "}
-          <span className="text-purple-primary">confused</span> →{" "}
-          <span className="text-cyan-accent">skilled</span> →{" "}
-          <span className="text-green-success">employed</span>.{" "}
-          <span className="text-text-secondary">Until now.</span>
-        </motion.p>
       </div>
     </AnimatedSection>
   );
