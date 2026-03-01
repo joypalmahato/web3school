@@ -29,17 +29,17 @@ interface SkillTreeProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  technical: "border-cyan-accent",
-  domain: "border-purple-primary",
-  soft: "border-green-success",
-  tool: "border-amber-warning",
+  technical: "border-[#10B981]",
+  domain: "border-[#3B82F6]",
+  soft: "border-[#F59E0B]",
+  tool: "border-[#8B5CF6]",
 };
 
 const CATEGORY_BG: Record<string, string> = {
-  technical: "bg-cyan-accent",
-  domain: "bg-purple-primary",
-  soft: "bg-green-success",
-  tool: "bg-amber-warning",
+  technical: "bg-[#10B981]",
+  domain: "bg-[#3B82F6]",
+  soft: "bg-[#F59E0B]",
+  tool: "bg-[#8B5CF6]",
 };
 
 export function SkillTree({ skills, className }: SkillTreeProps) {

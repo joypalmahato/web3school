@@ -114,7 +114,7 @@ export default function PassportPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-purple-primary animate-spin" />
+        <Loader2 className="w-8 h-8 text-text-muted animate-spin" />
       </div>
     );
   }
@@ -144,10 +144,8 @@ export default function PassportPage() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#111111] border border-border rounded-2xl p-6 relative overflow-hidden"
+        className="bg-[#111111] border border-border rounded-xl p-6 relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
 
         <div className="relative z-10">
           {/* Header with badge */}
@@ -155,9 +153,9 @@ export default function PassportPage() {
             <p className="text-text-muted text-xs font-mono tracking-wider">
               WEB3SCHOOL SKILL PASSPORT
             </p>
-            <div className="flex items-center gap-1.5 bg-purple-primary/10 px-2.5 py-1 rounded-full">
-              <Star className="w-3 h-3 text-purple-primary" />
-              <span className="text-purple-primary text-xs font-semibold">
+            <div className="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-full">
+              <Star className="w-3 h-3 text-white" />
+              <span className="text-white text-xs font-semibold">
                 Level {profile.level}
               </span>
             </div>
@@ -165,15 +163,15 @@ export default function PassportPage() {
 
           {/* User info */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-purple-primary/10 flex items-center justify-center border border-purple-primary/20">
+            <div className="w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
               {profile.avatar_url ? (
                 <img
                   src={profile.avatar_url}
                   alt={profile.full_name || "User"}
-                  className="w-full h-full rounded-2xl object-cover"
+                  className="w-full h-full rounded-xl object-cover"
                 />
               ) : (
-                <span className="text-xl font-heading font-bold text-purple-primary">
+                <span className="text-xl font-heading font-bold text-white">
                   {initials}
                 </span>
               )}
@@ -182,7 +180,7 @@ export default function PassportPage() {
               <h2 className="text-xl font-heading font-bold text-text-primary">
                 {profile.full_name || "Web3 Learner"}
               </h2>
-              <p className="text-purple-primary font-medium text-sm">
+              <p className="text-text-secondary font-medium text-sm">
                 {role_name}
               </p>
             </div>
@@ -300,10 +298,10 @@ export default function PassportPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="bg-navy-mid border border-border rounded-2xl p-6"
+        className="bg-navy-mid border border-border rounded-xl p-6"
       >
         <h3 className="font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
-          <Award className="w-4 h-4 text-purple-primary" />
+          <Award className="w-4 h-4 text-text-muted" />
           Skills
         </h3>
         <SkillTree
@@ -320,7 +318,7 @@ export default function PassportPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6"
+          className="bg-navy-mid border border-border rounded-xl p-6"
         >
           <h3 className="font-heading font-bold text-text-primary mb-2">
             Trait Profile
@@ -335,7 +333,7 @@ export default function PassportPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="bg-navy-mid border border-border rounded-2xl p-6"
+          className="bg-navy-mid border border-border rounded-xl p-6"
         >
           <h3 className="font-heading font-bold text-text-primary mb-4">
             Completed Projects

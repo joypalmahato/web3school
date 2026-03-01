@@ -82,7 +82,7 @@ function WeekNode({
       {/* Phase label */}
       {phaseLabel && (
         <div className="mb-2 ml-10">
-          <span className="text-xs font-mono text-purple-primary uppercase tracking-wider">
+          <span className="text-xs font-mono text-text-secondary uppercase tracking-wider">
             {phaseLabel}
           </span>
         </div>
@@ -97,7 +97,7 @@ function WeekNode({
               isCompleted
                 ? "bg-green-success border-green-success text-white"
                 : isCurrent
-                  ? "bg-purple-primary border-purple-primary text-white shadow-lg shadow-purple-primary/30"
+                  ? "bg-white border-white text-black shadow-lg"
                   : "bg-navy-deep border-border text-text-muted"
             )}
           >
@@ -128,7 +128,7 @@ function WeekNode({
               isLocked
                 ? "bg-navy-mid/30 cursor-not-allowed"
                 : isCurrent
-                  ? "bg-navy-mid border border-purple-primary/30 hover:border-purple-primary/50"
+                  ? "bg-navy-mid border border-white/30 hover:border-white/50"
                   : "bg-navy-mid border border-border hover:border-border/80"
             )}
           >
@@ -144,7 +144,7 @@ function WeekNode({
                     Week {week.week}: {week.theme}
                   </h3>
                   {isCurrent && (
-                    <span className="text-[10px] font-mono bg-purple-primary/10 text-purple-primary px-2 py-0.5 rounded-full flex-shrink-0">
+                    <span className="text-[10px] font-mono bg-white/10 text-white px-2 py-0.5 rounded-full flex-shrink-0">
                       CURRENT
                     </span>
                   )}

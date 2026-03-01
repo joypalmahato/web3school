@@ -42,7 +42,7 @@ export function SkillRadar({ traits, className }: SkillRadarProps) {
       <ResponsiveContainer width="100%" height={280}>
         <RadarChart data={data} cx="50%" cy="50%" outerRadius="75%">
           <PolarGrid
-            stroke="rgba(108, 99, 255, 0.15)"
+            stroke="rgba(16, 185, 129, 0.15)"
             strokeDasharray="3 3"
           />
           <PolarAngleAxis
@@ -55,8 +55,8 @@ export function SkillRadar({ traits, className }: SkillRadarProps) {
           <Radar
             name="Skills"
             dataKey="value"
-            stroke="#6C63FF"
-            fill="#6C63FF"
+            stroke="#10B981"
+            fill="#10B981"
             fillOpacity={0.2}
             strokeWidth={2}
             animationBegin={200}

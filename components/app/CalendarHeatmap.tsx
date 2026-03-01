@@ -24,10 +24,10 @@ interface CalendarHeatmapProps {
 
 function getIntensity(count: number): string {
   if (count === 0) return "bg-navy-deep";
-  if (count === 1) return "bg-purple-primary/20";
-  if (count <= 3) return "bg-purple-primary/40";
-  if (count <= 5) return "bg-purple-primary/70";
-  return "bg-purple-primary";
+  if (count === 1) return "bg-[#10B981]/20";
+  if (count <= 3) return "bg-[#10B981]/40";
+  if (count <= 5) return "bg-[#10B981]/70";
+  return "bg-[#10B981]";
 }
 
 function formatDate(dateStr: string): string {
@@ -69,10 +69,10 @@ export function CalendarHeatmap({ data, className }: CalendarHeatmapProps) {
         <div className="flex items-center gap-1 text-[10px] text-text-muted">
           <span>Less</span>
           <div className="w-2.5 h-2.5 rounded-sm bg-navy-deep" />
-          <div className="w-2.5 h-2.5 rounded-sm bg-purple-primary/20" />
-          <div className="w-2.5 h-2.5 rounded-sm bg-purple-primary/40" />
-          <div className="w-2.5 h-2.5 rounded-sm bg-purple-primary/70" />
-          <div className="w-2.5 h-2.5 rounded-sm bg-purple-primary" />
+          <div className="w-2.5 h-2.5 rounded-sm bg-[#10B981]/20" />
+          <div className="w-2.5 h-2.5 rounded-sm bg-[#10B981]/40" />
+          <div className="w-2.5 h-2.5 rounded-sm bg-[#10B981]/70" />
+          <div className="w-2.5 h-2.5 rounded-sm bg-[#10B981]" />
           <span>More</span>
         </div>
       </div>

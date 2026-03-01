@@ -24,10 +24,10 @@ const CATEGORIES: { label: string; value: RoleCategory | "all" }[] = [
 ];
 
 const CATEGORY_COLORS: Record<RoleCategory, string> = {
-  technical: "bg-cyan-accent/10 text-cyan-accent",
-  "semi-technical": "bg-purple-primary/10 text-purple-primary",
-  "non-technical": "bg-green-success/10 text-green-success",
-  creative: "bg-amber-warning/10 text-amber-warning",
+  technical: "bg-blue-500/10 text-blue-400",
+  "semi-technical": "bg-violet-500/10 text-violet-400",
+  "non-technical": "bg-emerald-500/10 text-emerald-400",
+  creative: "bg-amber-500/10 text-amber-400",
 };
 
 const DEMAND_LABELS: Record<string, string> = {
@@ -52,7 +52,7 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
     >
       <Link
         href={`/roles/${role.slug}`}
-        className="group block h-full bg-navy-mid border border-border rounded-2xl p-6 hover:border-purple-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-primary/5"
+        className="group block h-full bg-[#111111] border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300"
       >
         {/* Category badge */}
         <span
@@ -62,7 +62,7 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
         </span>
 
         {/* Role name */}
-        <h3 className="text-lg font-heading font-bold text-text-primary mt-4 group-hover:text-purple-primary transition-colors">
+        <h3 className="text-lg font-heading font-bold text-white mt-4 group-hover:text-white transition-colors">
           {role.name}
         </h3>
 
@@ -101,7 +101,7 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
         </div>
 
         {/* Arrow */}
-        <div className="flex items-center gap-1 mt-4 text-sm text-purple-primary opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 mt-4 text-sm text-white opacity-0 group-hover:opacity-100 transition-opacity">
           Learn more <ArrowRight className="w-4 h-4" />
         </div>
       </Link>
@@ -166,8 +166,8 @@ export default function RolesPage() {
                 onClick={() => setActiveCategory(cat.value)}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                   activeCategory === cat.value
-                    ? "bg-purple-primary text-white"
-                    : "bg-navy-mid text-text-secondary hover:text-text-primary border border-border"
+                    ? "bg-white text-black"
+                    : "bg-[#111111] text-[#A0A0A0] hover:text-white border border-white/10"
                 }`}
               >
                 {cat.label}
@@ -202,7 +202,7 @@ export default function RolesPage() {
                 setSearch("");
                 setActiveCategory("all");
               }}
-              className="text-purple-primary hover:underline mt-2 text-sm"
+              className="text-white hover:underline mt-2 text-sm"
             >
               Clear filters
             </button>
@@ -214,7 +214,7 @@ export default function RolesPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-center mt-16 p-8 bg-gradient-to-br from-purple-primary/10 to-cyan-accent/10 border border-border rounded-2xl"
+          className="text-center mt-16 p-8 bg-[#111111] border border-white/10 rounded-2xl"
         >
           <h2 className="text-xl font-heading font-bold text-text-primary">
             Not sure which role fits you?
@@ -225,7 +225,7 @@ export default function RolesPage() {
           </p>
           <Button
             asChild
-            className="mt-4 bg-purple-primary hover:bg-purple-light text-white rounded-xl px-8 py-3 font-semibold"
+            className="mt-4 bg-white hover:bg-white/90 text-black rounded-xl px-8 py-3 font-semibold"
           >
             <Link href="/signup">Discover Your Path</Link>
           </Button>
