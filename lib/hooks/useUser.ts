@@ -11,11 +11,17 @@ import { getInsforgeClient } from "@/lib/insforge/client";
 import { useUserStore } from "@/lib/stores/user-store";
 import type { Profile } from "@/lib/types";
 
+const CACHE_TTL = 300_000; // 5 minutes
+
 export function useUser() {
-  const { profile, isLoading, isAuthenticated, setProfile, setLoading, reset } =
+  const { profile, isLoading, isAuthenticated, lastFetched, setProfile, setLoading, reset } =
     useUserStore();
 
-  const fetchProfile = useCallback(async () => {
+  const fetchProfile = useCallback(async (force = false) => {
+    if (!force && profile && lastFetched && Date.now() - lastFetched < CACHE_TTL) {
+      return;
+    }
+
     const insforge = getInsforgeClient();
     setLoading(true);
 
@@ -38,7 +44,7 @@ export function useUser() {
     }
 
     setProfile(data as Profile);
-  }, [setProfile, setLoading, reset]);
+  }, [profile, lastFetched, setProfile, setLoading, reset]);
 
   useEffect(() => {
     fetchProfile();
@@ -55,6 +61,6 @@ export function useUser() {
     isLoading,
     isAuthenticated,
     signOut,
-    refreshProfile: fetchProfile,
+    refreshProfile: () => fetchProfile(true),
   };
 }
