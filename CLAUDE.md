@@ -14,11 +14,12 @@ One-liner: "Duolingo for Web3 careers."
 - All animations use Framer Motion.
 - Never use inline styles. Always Tailwind.
 - Mobile-first: design for 375px, then md: and lg: breakpoints.
-- Dark theme ONLY. No light mode toggle.
+- Dark theme default. Light mode supported via next-themes toggle.
 - Commit after every chunk with message format: "chunk-N: description"
 
 ## DESIGN TOKENS
-Primary: #6C63FF | Cyan: #00D4FF | BG: #0A0A1A | Card: #0F0F23
+Primary: #10B981 (green) | BG: #0A0A0A | Card: #111111 | Text: #FFFFFF
+Borders: rgba(255,255,255,0.10) | CTAs: bg-white text-black
 Heading font: Plus Jakarta Sans | Body: Inter | Code: JetBrains Mono
 
 ## DATABASE
