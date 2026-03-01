@@ -55,11 +55,11 @@ const STEPS = [
 
 export function Solution() {
   return (
-    <AnimatedSection id="solution" className="py-20 md:py-32 bg-navy-mid">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <AnimatedSection id="solution" className="section-padding bg-navy-subtle">
+      <div className="container-ds">
         {/* Title */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-primary leading-tight">
+        <div className="text-center max-w-heading mx-auto mb-16">
+          <h2 className="text-heading-2 text-text-primary">
             Your AI-Powered Career{" "}
             <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
               Compass, Tutor, and Launchpad
@@ -77,10 +77,10 @@ export function Solution() {
               {STEPS.map((step, index) => (
                 <motion.div
                   key={step.title}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.12 }}
+                  transition={{ duration: 0.5, delay: index * 0.08, ease: [0, 0, 0.2, 1] }}
                   className="flex flex-col items-center text-center"
                 >
                   {/* Icon circle */}
@@ -90,7 +90,7 @@ export function Solution() {
                     <step.icon className={`w-10 h-10 ${step.color}`} />
                   </div>
                   {/* Step number */}
-                  <span className="text-xs text-text-muted font-mono mb-1">
+                  <span className="text-eyebrow mb-1">
                     STEP {index + 1}
                   </span>
                   <h3
@@ -115,7 +115,7 @@ export function Solution() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.08, ease: [0, 0, 0.2, 1] }}
               className="flex gap-4 items-start"
             >
               <div
@@ -124,7 +124,7 @@ export function Solution() {
                 <step.icon className={`w-7 h-7 ${step.color}`} />
               </div>
               <div>
-                <span className="text-xs text-text-muted font-mono">
+                <span className="text-eyebrow">
                   STEP {index + 1}
                 </span>
                 <h3

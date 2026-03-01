@@ -45,11 +45,11 @@ const COMPARISONS = [
 
 export function Comparison() {
   return (
-    <AnimatedSection className="py-20 md:py-32 bg-navy-mid">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <AnimatedSection className="section-padding bg-navy-subtle">
+      <div className="container-ds">
         {/* Title */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-primary leading-tight">
+        <div className="text-center max-w-heading mx-auto mb-16">
+          <h2 className="text-heading-2 text-text-primary">
             This Is Not Another{" "}
             <span className="text-text-secondary">Course Platform</span>
           </h2>
@@ -83,7 +83,7 @@ export function Comparison() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
+              transition={{ duration: 0.3, delay: index * 0.05, ease: [0, 0, 0.2, 1] }}
               className="grid grid-cols-3 border-b border-border last:border-b-0"
             >
               <div className="p-4 md:p-6 flex items-center">
@@ -110,7 +110,8 @@ export function Comparison() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center text-xl md:text-2xl font-heading font-semibold text-text-primary mt-12 max-w-3xl mx-auto"
+          transition={{ ease: [0, 0, 0.2, 1] }}
+          className="text-center text-heading-3 text-text-primary mt-12 max-w-heading mx-auto"
         >
           ChatGPT gives you <span className="text-text-secondary">information</span>.{" "}
           Web3School gives you{" "}

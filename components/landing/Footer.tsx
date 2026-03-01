@@ -12,7 +12,7 @@ export function Footer() {
 
   return (
     <footer className="bg-navy-mid border-t border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="container-ds py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Logo + tagline */}
           <div className="text-center md:text-left">
@@ -29,7 +29,7 @@ export function Footer() {
               href={SOCIAL_LINKS.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-muted hover:text-purple-primary transition-colors"
+              className="text-text-muted hover:text-purple-primary transition-fast"
             >
               Twitter
             </a>
@@ -37,7 +37,7 @@ export function Footer() {
               href={SOCIAL_LINKS.discord}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-muted hover:text-purple-primary transition-colors"
+              className="text-text-muted hover:text-purple-primary transition-fast"
             >
               Discord
             </a>
@@ -45,7 +45,7 @@ export function Footer() {
               href={SOCIAL_LINKS.telegram}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-muted hover:text-purple-primary transition-colors"
+              className="text-text-muted hover:text-purple-primary transition-fast"
             >
               Telegram
             </a>

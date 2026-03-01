@@ -59,18 +59,18 @@ const FEATURED_ROLES = FEATURED_SLUGS
 
 export function RolesPreview() {
   return (
-    <AnimatedSection id="roles" className="py-20 md:py-32 bg-navy-deep">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <AnimatedSection id="roles" className="section-padding bg-navy-deep">
+      <div className="container-ds">
         {/* Title */}
-        <div className="text-center max-w-3xl mx-auto mb-4">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-text-primary leading-tight">
+        <div className="text-center max-w-heading mx-auto mb-4">
+          <h2 className="text-heading-2 text-text-primary">
             Explore{" "}
             <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
               Web3 Career Paths
             </span>
           </h2>
         </div>
-        <p className="text-text-secondary text-center mb-16 text-lg">
+        <p className="text-body-lg text-text-secondary text-center mb-16">
           20 roles across technical, creative, and non-technical tracks.
         </p>
 
@@ -88,10 +88,10 @@ export function RolesPreview() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="bg-navy-mid border border-border rounded-2xl p-6 hover:border-purple-primary/30 transition-all duration-300 hover:translate-y-[-2px] group cursor-pointer"
+                transition={{ duration: 0.5, delay: index * 0.08, ease: [0, 0, 0.2, 1] }}
+                className="bg-navy-mid border border-border rounded-2xl p-6 card-interactive group cursor-pointer"
               >
-                <div className="w-12 h-12 bg-purple-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-purple-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-smooth">
                   <Icon className="w-6 h-6 text-purple-primary" />
                 </div>
                 <span
@@ -111,7 +111,7 @@ export function RolesPreview() {
         </div>
 
         {/* Mobile: Horizontal scroll */}
-        <div className="md:hidden flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
+        <div className="md:hidden scroll-carousel -mx-6 px-6">
           {FEATURED_ROLES.map((role) => {
             if (!role) return null;
             const Icon = ROLE_ICONS[role.slug] || Code;
@@ -121,7 +121,7 @@ export function RolesPreview() {
             return (
               <div
                 key={role.slug}
-                className="flex-shrink-0 w-72 snap-center bg-navy-mid border border-border rounded-2xl p-6"
+                className="w-72 bg-navy-mid border border-border rounded-2xl p-6"
               >
                 <div className="w-12 h-12 bg-purple-primary/10 rounded-xl flex items-center justify-center mb-4">
                   <Icon className="w-6 h-6 text-purple-primary" />
@@ -147,12 +147,12 @@ export function RolesPreview() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.4, ease: [0, 0, 0.2, 1] }}
           className="text-center mt-10"
         >
           <Link
             href="/roles"
-            className="inline-flex items-center gap-2 text-purple-primary hover:text-purple-light font-semibold transition-colors"
+            className="inline-flex items-center gap-2 text-purple-primary hover:text-purple-light font-semibold transition-fast"
           >
             View all {INITIAL_ROLES.length} roles
             <ArrowRight className="w-4 h-4" />
