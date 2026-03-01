@@ -67,8 +67,8 @@ export function Hero() {
           className="mt-6 text-base md:text-lg text-[#A0A0A0] max-w-[560px] mx-auto leading-relaxed"
         >
           Web3School&apos;s AI assesses your skills in 10 minutes, matches you
-          to one of 50+ Web3 roles, and builds a personalized 90-day roadmap to
-          get you job-ready.
+          to one of 89+ digital career paths, and builds a personalized 90-day
+          roadmap to get you job-ready.
         </motion.p>
 
         {/* CTAs */}

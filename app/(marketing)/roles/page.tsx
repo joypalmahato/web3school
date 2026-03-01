@@ -1,7 +1,7 @@
 /**
  * @component RolesIndexPage
  * @part-of Web3School — Public Role Exploration
- * @design Grid of all 8 Web3 roles with category filter and search
+ * @design Grid of all roles with category + thematic filters and search
  * @seo Static page, high priority for organic traffic
  */
 "use client";
@@ -13,6 +13,10 @@ import { Search, ArrowRight, TrendingUp, Users, Briefcase } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { INITIAL_ROLES, type RoleSeedData } from "@/data/roles";
+import {
+  SLUG_TO_THEMATIC,
+  type ThematicGroup,
+} from "@/components/landing/RolesPreview";
 import type { RoleCategory } from "@/lib/types";
 
 const CATEGORIES: { label: string; value: RoleCategory | "all" }[] = [
@@ -21,6 +25,18 @@ const CATEGORIES: { label: string; value: RoleCategory | "all" }[] = [
   { label: "Semi-Technical", value: "semi-technical" },
   { label: "Non-Technical", value: "non-technical" },
   { label: "Creative", value: "creative" },
+];
+
+const THEMATIC_FILTERS: { label: string; value: ThematicGroup | "all" }[] = [
+  { label: "All", value: "all" },
+  { label: "Web3", value: "web3" },
+  { label: "AI/ML", value: "ai-ml" },
+  { label: "Development", value: "development" },
+  { label: "Design", value: "design" },
+  { label: "Data", value: "data" },
+  { label: "Marketing", value: "marketing" },
+  { label: "Product", value: "product" },
+  { label: "Creator", value: "creator" },
 ];
 
 const CATEGORY_COLORS: Record<RoleCategory, string> = {
@@ -48,7 +64,7 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
+      transition={{ duration: 0.4, delay: Math.min(index * 0.03, 0.5) }}
     >
       <Link
         href={`/roles/${role.slug}`}
@@ -112,18 +128,25 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
 export default function RolesPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<RoleCategory | "all">("all");
+  const [activeThematic, setActiveThematic] = useState<ThematicGroup | "all">("all");
 
   const filtered = useMemo(() => {
     return INITIAL_ROLES.filter((role) => {
       const matchesCategory =
         activeCategory === "all" || role.category === activeCategory;
+      const matchesThematic =
+        activeThematic === "all" ||
+        (SLUG_TO_THEMATIC[role.slug] ?? "web3") === activeThematic;
       const matchesSearch =
         search.trim() === "" ||
         role.name.toLowerCase().includes(search.toLowerCase()) ||
-        role.short_description.toLowerCase().includes(search.toLowerCase());
-      return matchesCategory && matchesSearch;
+        role.short_description.toLowerCase().includes(search.toLowerCase()) ||
+        role.key_skills.some((s) =>
+          s.toLowerCase().includes(search.toLowerCase())
+        );
+      return matchesCategory && matchesThematic && matchesSearch;
     });
-  }, [search, activeCategory]);
+  }, [search, activeCategory, activeThematic]);
 
   return (
     <div className="min-h-screen bg-navy-deep pt-24 pb-16">
@@ -135,7 +158,7 @@ export default function RolesPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-text-primary"
           >
-            Explore Web3 Career Paths
+            Explore Digital Career Paths
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -143,31 +166,51 @@ export default function RolesPage() {
             transition={{ delay: 0.1 }}
             className="text-text-secondary mt-4 text-lg"
           >
-            Discover 20 in-demand Web3 roles — from community builders to
-            smart contract auditors to game designers. Find the one that fits you.
+            Discover {INITIAL_ROLES.length} in-demand roles across Web3, AI,
+            development, design, data, marketing, and more. Find the one that
+            fits you.
           </motion.p>
         </div>
 
-        {/* Search + Filters */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+        {/* Search */}
+        <div className="mt-10 flex flex-col items-center gap-6">
           <div className="relative w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             <Input
-              placeholder="Search roles..."
+              placeholder="Search roles or skills..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10 bg-navy-mid border-border text-text-primary rounded-xl"
             />
           </div>
-          <div className="flex flex-wrap gap-2">
+
+          {/* Thematic filters */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {THEMATIC_FILTERS.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setActiveThematic(tab.value)}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                  activeThematic === tab.value
+                    ? "bg-white text-black"
+                    : "bg-[#111111] text-[#A0A0A0] hover:text-white border border-white/10"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Category filters */}
+          <div className="flex flex-wrap justify-center gap-2">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.value}
                 onClick={() => setActiveCategory(cat.value)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   activeCategory === cat.value
-                    ? "bg-white text-black"
-                    : "bg-[#111111] text-[#A0A0A0] hover:text-white border border-white/10"
+                    ? "bg-white/10 text-white border border-white/20"
+                    : "text-[#666666] hover:text-[#A0A0A0] border border-transparent"
                 }`}
               >
                 {cat.label}
@@ -201,6 +244,7 @@ export default function RolesPage() {
               onClick={() => {
                 setSearch("");
                 setActiveCategory("all");
+                setActiveThematic("all");
               }}
               className="text-white hover:underline mt-2 text-sm"
             >
@@ -220,8 +264,8 @@ export default function RolesPage() {
             Not sure which role fits you?
           </h2>
           <p className="text-text-secondary mt-2 text-sm max-w-md mx-auto">
-            Take our AI-powered career discovery quiz — answer a few questions
-            and we&apos;ll match you with your ideal Web3 role.
+            Take our AI-powered career discovery chat — answer a few questions
+            and we&apos;ll match you with your ideal role from {INITIAL_ROLES.length}+ paths.
           </p>
           <Button
             asChild
