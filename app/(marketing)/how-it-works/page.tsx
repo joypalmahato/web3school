@@ -26,7 +26,7 @@ const STEPS = [
     title: "Match",
     icon: Target,
     description:
-      "Our AI analyzes your profile against 76+ Web3 career paths and matches you with the roles where you have the highest chance of success. No guesswork, just data.",
+      "Our AI analyzes your profile against 89+ digital career paths and matches you with the roles where you have the highest chance of success. No guesswork, just data.",
   },
   {
     number: "03",
