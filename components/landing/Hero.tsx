@@ -1,105 +1,105 @@
 /**
  * @component Hero
  * @part-of Web3School — Landing Page
- * @design Animated gradient mesh background, grid overlay, dark theme
- * @flow Two CTAs: "Start Your Discovery" (primary) → /signup, "See How It Works" → #solution
+ * @design Centered, typography-dominant. White CTA on dark. No gradient text.
+ * @spec docs/04-page-build-spec.md — Hero Section
  */
 "use client";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+
+const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated gradient mesh background */}
-      <div className="absolute inset-0 bg-navy-deep">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-primary/20 via-navy-deep to-cyan-accent/10 animate-pulse-glow" />
-        <div className="absolute inset-0 opacity-[0.03] bg-grid-overlay" />
-        {/* Gradient orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-accent/10 rounded-full blur-3xl" />
-      </div>
+      {/* Subtle dot grid background */}
+      <div
+        className="absolute inset-0 bg-[#0A0A0A]"
+        style={{
+          backgroundImage:
+            "radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
 
       {/* Content */}
-      <div className="relative z-10 container-ds text-center hero-padding">
-        {/* Badge */}
-        <motion.div
+      <div className="relative z-10 max-w-[800px] mx-auto px-6 pt-40 pb-24 lg:pt-44 lg:pb-32 text-center">
+        {/* Overline */}
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
-          className="inline-flex items-center gap-2 bg-purple-primary/10 border border-purple-primary/20 rounded-full px-4 py-1.5 mb-8"
+          transition={{ duration: 0.6, ease }}
+          className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-4"
         >
-          <Sparkles className="w-4 h-4 text-purple-primary" />
-          <span className="text-eyebrow">
-            AI-Powered Career Discovery
-          </span>
-        </motion.div>
+          AI-Powered Career Discovery
+        </motion.p>
 
         {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: [0, 0, 0.2, 1] }}
-          className="text-display text-text-primary max-w-heading mx-auto"
+          transition={{ duration: 0.6, delay: 0.1, ease }}
+          className="text-[40px] md:text-[56px] lg:text-[72px] font-bold text-white leading-[1.05] tracking-[-0.03em] font-heading"
         >
-          Don&apos;t Know What to Learn?{" "}
-          <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
-            Let AI Figure It Out for You.
-          </span>
+          Stop Guessing.
+          <br />
+          Start Building.
         </motion.h1>
 
         {/* Subheadline */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2, ease: [0, 0, 0.2, 1] }}
-          className="mt-6 text-body-lg text-text-secondary max-w-subtitle mx-auto"
+          transition={{ duration: 0.6, delay: 0.2, ease }}
+          className="mt-6 text-lg md:text-xl text-[#A0A0A0] max-w-[600px] mx-auto"
         >
-          Web3School is your AI career counselor, tutor, and accountability
-          partner. Go from confused to skilled to hired — in 90 days.
+          You don&apos;t need another course. You need a career path that
+          actually fits your skills.
+        </motion.p>
+
+        {/* Body */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3, ease }}
+          className="mt-6 text-base md:text-lg text-[#A0A0A0] max-w-[560px] mx-auto leading-relaxed"
+        >
+          Web3School&apos;s AI assesses your skills in 10 minutes, matches you
+          to one of 50+ Web3 roles, and builds a personalized 90-day roadmap to
+          get you job-ready.
         </motion.p>
 
         {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3, ease: [0, 0, 0.2, 1] }}
+          transition={{ duration: 0.6, delay: 0.4, ease }}
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Button
-            asChild
-            size="lg"
-            className="bg-purple-primary hover:bg-purple-light text-white rounded-lg px-8 py-6 text-lg font-semibold transition-smooth active:scale-[0.98] hover:glow-purple-md shadow-lg shadow-purple-primary/25"
+          <Link
+            href="/signup"
+            className="inline-flex items-center justify-center bg-white text-black font-semibold text-base px-8 py-4 rounded-md hover:opacity-85 transition-opacity duration-200 w-full sm:w-auto"
           >
-            <Link href="/signup">
-              Start Your Discovery — Free
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="border-purple-primary text-purple-primary hover:bg-purple-primary/10 rounded-lg px-8 py-6 text-lg font-semibold transition-smooth"
+            Start Discovery — Free
+          </Link>
+          <a
+            href="#how-it-works"
+            className="inline-flex items-center justify-center bg-transparent text-white font-medium text-base px-8 py-4 rounded-md border border-white/20 hover:border-white/40 hover:bg-white/[0.05] transition-all duration-200 w-full sm:w-auto"
           >
-            <a href="#solution">See How It Works</a>
-          </Button>
+            See How It Works
+          </a>
         </motion.div>
 
-        {/* Login hint */}
+        {/* Microcopy */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5, ease: [0, 0, 0.2, 1] }}
-          className="mt-12 text-text-muted text-sm"
+          transition={{ duration: 0.6, delay: 0.5, ease }}
+          className="mt-4 text-sm text-[#666666]"
         >
-          Already have an account?{" "}
-          <Link href="/login" className="text-purple-primary hover:underline">
-            Log in
-          </Link>
+          Free forever. No credit card. 10 minutes to your career match.
         </motion.p>
       </div>
     </section>
