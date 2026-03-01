@@ -71,11 +71,33 @@ Generate the content in the specified JSON format.`,
 
         let content;
         try {
+          // Strip outer code fences if present
           const jsonMatch = contentText.match(/```(?:json)?\s*([\s\S]*?)```/);
           const jsonStr = jsonMatch ? jsonMatch[1].trim() : contentText.trim();
-          content = JSON.parse(jsonStr);
+          const parsed = JSON.parse(jsonStr);
+
+          // If parsed.lesson_text itself contains a JSON string (double-wrapped),
+          // try to unwrap it
+          if (typeof parsed.lesson_text === "string" && parsed.lesson_text.startsWith("```")) {
+            const innerMatch = parsed.lesson_text.match(/```(?:json)?\s*([\s\S]*?)```/);
+            if (innerMatch) {
+              try {
+                const innerParsed = JSON.parse(innerMatch[1].trim());
+                content = innerParsed;
+              } catch {
+                content = parsed;
+              }
+            } else {
+              content = parsed;
+            }
+          } else {
+            content = parsed;
+          }
         } catch {
-          content = { lesson_text: contentText };
+          // If JSON parsing fails entirely, use raw text as lesson
+          // but still strip any code fence wrapper
+          const stripped = contentText.replace(/^```(?:json)?\s*/m, "").replace(/\s*```\s*$/m, "");
+          content = { lesson_text: stripped };
         }
 
         await db("daily_tasks")

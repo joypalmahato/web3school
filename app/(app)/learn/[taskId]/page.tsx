@@ -21,6 +21,8 @@ import {
   HelpCircle,
   PenLine,
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { AITutorChat } from "@/components/app/AITutorChat";
 import { cn } from "@/lib/utils";
@@ -214,8 +216,10 @@ export default function TaskPage({
           animate={{ opacity: 1, y: 0 }}
           className="bg-navy-mid border border-border rounded-xl p-6"
         >
-          <div className="prose prose-invert prose-sm max-w-none text-text-primary [&_h1]:font-heading [&_h2]:font-heading [&_h3]:font-heading [&_h1]:text-text-primary [&_h2]:text-text-primary [&_h3]:text-text-primary [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_pre]:bg-navy-deep [&_pre]:border [&_pre]:border-border [&_blockquote]:border-white/20 [&_a]:text-white whitespace-pre-wrap">
-            {content.lesson_text}
+          <div className="prose prose-invert prose-sm max-w-none text-text-primary [&_h1]:font-heading [&_h2]:font-heading [&_h3]:font-heading [&_h1]:text-text-primary [&_h2]:text-text-primary [&_h3]:text-text-primary [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_pre]:bg-navy-deep [&_pre]:border [&_pre]:border-border [&_blockquote]:border-white/20 [&_a]:text-white">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {content.lesson_text}
+            </ReactMarkdown>
           </div>
         </motion.div>
       )}
@@ -230,8 +234,10 @@ export default function TaskPage({
           <h3 className="font-heading font-bold text-text-primary mb-3">
             Exercise
           </h3>
-          <div className="text-text-secondary text-sm whitespace-pre-wrap leading-relaxed">
-            {content.exercise_prompt}
+          <div className="prose prose-invert prose-sm max-w-none [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {content.exercise_prompt}
+            </ReactMarkdown>
           </div>
         </motion.div>
       )}
@@ -246,8 +252,10 @@ export default function TaskPage({
           <h3 className="font-heading font-bold text-text-primary mb-3">
             Project Brief
           </h3>
-          <div className="text-text-secondary text-sm whitespace-pre-wrap leading-relaxed">
-            {content.project_brief}
+          <div className="prose prose-invert prose-sm max-w-none [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {content.project_brief}
+            </ReactMarkdown>
           </div>
         </motion.div>
       )}
