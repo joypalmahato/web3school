@@ -29,9 +29,9 @@ export function SharePageClient({
         className="w-full max-w-lg space-y-6"
       >
         {/* Card */}
-        <div className="bg-gradient-to-br from-navy-mid to-navy-deep border border-border rounded-2xl p-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-40 h-40 bg-purple-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-cyan-accent/5 rounded-full blur-3xl" />
+        <div className="bg-[#111111] border border-border rounded-2xl p-8 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
 
           <div className="relative z-10 space-y-6">
             {/* Branding */}

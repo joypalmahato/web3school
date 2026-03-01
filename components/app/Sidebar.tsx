@@ -51,9 +51,9 @@ export function Sidebar() {
         ) : (
           <Link
             href="/dashboard"
-            className="w-8 h-8 bg-purple-primary/10 rounded-lg flex items-center justify-center mx-auto"
+            className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center mx-auto"
           >
-            <span className="font-heading font-bold text-purple-primary text-sm">
+            <span className="font-heading font-bold text-white text-sm">
               W3
             </span>
           </Link>
@@ -71,7 +71,7 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group",
                 isActive
-                  ? "bg-purple-primary/10 text-purple-primary"
+                  ? "bg-white/5 text-white"
                   : "text-text-secondary hover:bg-navy-deep hover:text-text-primary"
               )}
             >
@@ -79,7 +79,7 @@ export function Sidebar() {
                 className={cn(
                   "flex-shrink-0 transition-colors",
                   sidebarOpen ? "w-5 h-5" : "w-5 h-5 mx-auto",
-                  isActive ? "text-purple-primary" : "text-text-muted group-hover:text-text-primary"
+                  isActive ? "text-white" : "text-text-muted group-hover:text-text-primary"
                 )}
               />
               {sidebarOpen && (

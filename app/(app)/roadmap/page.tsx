@@ -97,7 +97,7 @@ export default function RoadmapPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-purple-primary animate-spin" />
+        <Loader2 className="w-8 h-8 text-text-muted animate-spin" />
       </div>
     );
   }
@@ -106,8 +106,8 @@ export default function RoadmapPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh] px-4">
         <div className="text-center space-y-4 max-w-md">
-          <div className="w-16 h-16 bg-purple-primary/10 rounded-2xl flex items-center justify-center mx-auto">
-            <Map className="w-8 h-8 text-purple-primary" />
+          <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center mx-auto">
+            <Map className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-xl font-heading font-bold text-text-primary">
             No Roadmap Yet
@@ -118,7 +118,7 @@ export default function RoadmapPage() {
           </p>
           <Button
             onClick={() => router.push("/discover")}
-            className="bg-purple-primary hover:bg-purple-light text-white rounded-xl"
+            className="bg-white text-black hover:opacity-85 rounded-md"
           >
             Start Discovery
           </Button>
@@ -182,7 +182,7 @@ export default function RoadmapPage() {
         <div className="flex items-center gap-3">
           <div className="flex-1 h-2.5 bg-navy-mid rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-purple-primary to-cyan-accent rounded-full"
+              className="h-full bg-[#10B981] rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progressPercent}%` }}
               transition={{ duration: 0.8 }}
@@ -202,7 +202,7 @@ export default function RoadmapPage() {
             variant="ghost"
             size="sm"
             onClick={scrollToCurrentWeek}
-            className="text-purple-primary text-xs"
+            className="text-white text-xs"
           >
             <ArrowDown className="w-3 h-3 mr-1" />
             Jump to Current

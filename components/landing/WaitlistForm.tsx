@@ -14,7 +14,7 @@ export function WaitlistForm() {
       <div className="container-ds text-center">
         <h2 className="text-heading-2 text-text-primary max-w-heading mx-auto">
           Ready to Find Your{" "}
-          <span className="bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent">
+          <span className="text-white">
             Web3 Career?
           </span>
         </h2>

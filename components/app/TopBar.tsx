@@ -19,6 +19,7 @@ import { StreakCounter } from "@/components/app/StreakCounter";
 import { XPBar } from "@/components/app/XPBar";
 import { useUser } from "@/lib/hooks/useUser";
 import { useAppStore } from "@/lib/stores/app-store";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 const PAGE_TITLES: Record<string, string> = {
@@ -74,6 +75,9 @@ export function TopBar() {
           <XPBar compact />
         </div>
 
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         {/* Notifications */}
         <Button
           variant="ghost"
@@ -95,7 +99,7 @@ export function TopBar() {
             <button
               className={cn(
                 "w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-all",
-                "bg-purple-primary/10 text-purple-primary hover:bg-purple-primary/20 border border-purple-primary/20"
+                "bg-white/10 text-white hover:bg-white/15 border border-white/10"
               )}
             >
               {profile?.avatar_url ? (

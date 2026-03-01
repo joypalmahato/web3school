@@ -196,7 +196,7 @@ export function DiscoveryChat() {
           </div>
           <div className="h-1.5 bg-navy-deep rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-purple-primary to-cyan-accent rounded-full"
+              className="h-full bg-[#10B981] rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progressPercentage}%` }}
               transition={{ duration: 0.5 }}
@@ -329,7 +329,7 @@ export function DiscoveryChat() {
               <Button
                 onClick={handleCompleteDiscovery}
                 disabled={isLoading}
-                className="bg-gradient-to-r from-purple-primary to-cyan-accent text-white rounded-xl px-8 py-5 text-lg font-semibold transition-all active:scale-[0.98] shadow-lg"
+                className="bg-white text-black hover:opacity-85 rounded-xl px-8 py-5 text-lg font-semibold transition-all active:scale-[0.98] shadow-lg"
               >
                 {isLoading ? "Analyzing..." : "See My Results"}
                 <ArrowRight className="ml-2 w-5 h-5" />

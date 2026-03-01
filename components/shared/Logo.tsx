@@ -1,7 +1,7 @@
 /**
  * @component Logo
  * @part-of Web3School — Shared Components
- * @design Purple gradient text logo
+ * @design Plain white bold text logo
  */
 import { cn } from "@/lib/utils/cn";
 
@@ -20,7 +20,7 @@ export function Logo({ size = "md", className }: LogoProps) {
   return (
     <span
       className={cn(
-        "font-heading font-bold bg-gradient-to-r from-purple-primary to-cyan-accent bg-clip-text text-transparent",
+        "font-heading font-bold text-white",
         sizeClasses[size],
         className
       )}

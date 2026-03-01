@@ -49,7 +49,7 @@ function TraitBar({
       </div>
       <div className="h-2 bg-navy-deep rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-gradient-to-r from-purple-primary to-cyan-accent rounded-full"
+          className="h-full bg-[#10B981] rounded-full"
           initial={{ width: 0 }}
           animate={{ width: `${value}%` }}
           transition={{ duration: 0.8, delay }}
