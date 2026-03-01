@@ -30,6 +30,11 @@ export async function POST(request: Request) {
     const fullName = user?.profile?.name || body.full_name || "";
     const referralCode: string | undefined = body.referral_code;
 
+    // Generate name-based referral code: firstname-xxxx
+    const firstName = fullName.split(" ")[0]?.toLowerCase().replace(/[^a-z0-9]/g, "") || "user";
+    const suffix = Math.random().toString(36).substring(2, 6);
+    const myReferralCode = `${firstName}-${suffix}`;
+
     const { error } = await db("profiles").insert({
       user_id: userId,
       email,
@@ -39,6 +44,7 @@ export async function POST(request: Request) {
       xp_total: 0,
       level: 1,
       is_approved: false,
+      referral_code: myReferralCode,
     });
 
     if (error) {
@@ -59,7 +65,7 @@ export async function POST(request: Request) {
       if (existingWaitlist) {
         // Link existing waitlist entry to this user
         await db("waitlist")
-          .update({ user_id: userId, status: "signed_up" })
+          .update({ user_id: userId, status: "signed_up", referral_code: myReferralCode })
           .eq("id", existingWaitlist.id);
       } else {
         await db("waitlist").insert({
@@ -68,6 +74,7 @@ export async function POST(request: Request) {
           status: "signed_up",
           user_id: userId,
           referred_by: referralCode || null,
+          referral_code: myReferralCode,
         });
       }
 

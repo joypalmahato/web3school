@@ -69,6 +69,11 @@ export async function GET(request: NextRequest) {
         .single();
 
       if (!existing) {
+        // Generate name-based referral code: firstname-xxxx
+        const firstName = fullName.split(" ")[0]?.toLowerCase().replace(/[^a-z0-9]/g, "") || "user";
+        const suffix = Math.random().toString(36).substring(2, 6);
+        const oauthReferralCode = `${firstName}-${suffix}`;
+
         await db("profiles").insert({
           user_id: userId,
           email,
@@ -78,6 +83,7 @@ export async function GET(request: NextRequest) {
           xp_total: 0,
           level: 1,
           is_approved: false,
+          referral_code: oauthReferralCode,
         });
 
         // Auto-create waitlist entry for OAuth users
@@ -93,10 +99,11 @@ export async function GET(request: NextRequest) {
               email,
               status: "signed_up",
               user_id: userId,
+              referral_code: oauthReferralCode,
             });
           } else {
             await db("waitlist")
-              .update({ user_id: userId, status: "signed_up" })
+              .update({ user_id: userId, status: "signed_up", referral_code: oauthReferralCode })
               .eq("id", existingWaitlist.id);
           }
         } catch {
