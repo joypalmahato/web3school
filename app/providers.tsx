@@ -4,6 +4,7 @@ import { InsforgeBrowserProvider, type InitialAuthState } from "@insforge/nextjs
 import { getInsforgeClient } from "@/lib/insforge/client";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PostHogProvider } from "@/components/shared/PostHogProvider";
+import { ThemeProvider } from "@/components/shared/ThemeProvider";
 
 export function Providers({
   children,
@@ -16,14 +17,16 @@ export function Providers({
   const client = getInsforgeClient() as any;
 
   return (
-    <InsforgeBrowserProvider
-      client={client}
-      afterSignInUrl="/discover"
-      initialState={initialState}
-    >
-      <PostHogProvider>
-        <TooltipProvider>{children}</TooltipProvider>
-      </PostHogProvider>
-    </InsforgeBrowserProvider>
+    <ThemeProvider>
+      <InsforgeBrowserProvider
+        client={client}
+        afterSignInUrl="/discover"
+        initialState={initialState}
+      >
+        <PostHogProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </PostHogProvider>
+      </InsforgeBrowserProvider>
+    </ThemeProvider>
   );
 }
