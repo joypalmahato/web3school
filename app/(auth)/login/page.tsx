@@ -65,7 +65,7 @@ export default function LoginPage() {
       });
     }
 
-    // Check if user has completed onboarding
+    // Three-tier redirect based on progress
     const { data: profile } = await insforge.database
       .from("profiles")
       .select("onboarding_completed, discovery_completed")
@@ -74,8 +74,10 @@ export default function LoginPage() {
 
     if (profile?.discovery_completed) {
       window.location.href = "/learn";
-    } else {
+    } else if (profile?.onboarding_completed) {
       window.location.href = "/discover";
+    } else {
+      window.location.href = "/onboarding";
     }
   };
 

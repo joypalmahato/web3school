@@ -14,6 +14,48 @@ export type RoleCategory =
   | "creative";
 export type DemandLevel = "low" | "medium" | "high" | "very_high";
 
+export type EmploymentStatus =
+  | "employed_fulltime"
+  | "employed_parttime"
+  | "freelancer"
+  | "student"
+  | "career_changer"
+  | "unemployed"
+  | "entrepreneur";
+
+export type TechComfort = "beginner" | "familiar" | "comfortable" | "advanced";
+
+export type TimeCommitment =
+  | "casual"
+  | "part_time"
+  | "half_time"
+  | "full_time";
+
+export type TargetTimeline =
+  | "1_month"
+  | "3_months"
+  | "6_months"
+  | "12_months"
+  | "no_rush";
+
+export type Budget = "free_only" | "low" | "medium" | "high" | "no_limit";
+
+export type EducationLevel =
+  | "high_school"
+  | "some_college"
+  | "bachelors"
+  | "masters"
+  | "phd"
+  | "bootcamp"
+  | "self_taught";
+
+export interface SocialLinks {
+  twitter?: string;
+  linkedin?: string;
+  github?: string;
+  portfolio?: string;
+}
+
 export interface Profile {
   id: string;
   user_id?: string;
@@ -34,6 +76,30 @@ export interface Profile {
   preferred_language: string;
   created_at: string;
   updated_at: string;
+  // Onboarding profile fields
+  display_name: string | null;
+  headline: string | null;
+  location: string | null;
+  current_role_title: string | null;
+  employment_status: EmploymentStatus | null;
+  years_experience: number;
+  education_level: EducationLevel | null;
+  education_field: string | null;
+  tech_comfort: TechComfort | null;
+  existing_skills: string[];
+  tools_used: string[];
+  interest_areas: string[];
+  career_goals: string[];
+  time_commitment: TimeCommitment | null;
+  target_timeline: TargetTimeline | null;
+  budget: Budget | null;
+  social_links: SocialLinks;
+  resume_url: string | null;
+  resume_text: string | null;
+  ai_profile_summary: string | null;
+  onboarding_step: number;
+  onboarding_completed_at: string | null;
+  profile_completeness: number;
 }
 
 export interface Role {

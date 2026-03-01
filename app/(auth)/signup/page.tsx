@@ -87,7 +87,7 @@ export default function SignupPage() {
       // Profile creation failure is non-fatal — can retry later
     }
 
-    window.location.href = "/discover";
+    window.location.href = "/onboarding";
   };
 
   const handleOAuth = async (provider: "google" | "github") => {
