@@ -154,7 +154,22 @@ export default function TaskPage({
   }
 
   const Icon = TASK_ICONS[task.task_type] || BookOpen;
-  const content = task.content || {};
+
+  // Guard against double-wrapped content (lesson_text is itself a JSON blob)
+  let rawContent = task.content || {};
+  if (typeof rawContent === "object" && "lesson_text" in rawContent) {
+    const lt = (rawContent as TaskContent).lesson_text ?? "";
+    const trimmed = lt.trim();
+    if (trimmed.startsWith("{")) {
+      try {
+        const inner = JSON.parse(trimmed) as TaskContent;
+        if (inner.lesson_text || inner.exercise_prompt) rawContent = inner;
+      } catch {
+        // not JSON — leave as-is
+      }
+    }
+  }
+  const content = rawContent as TaskContent;
   const isCompleted = task.status === "completed";
 
   return (
