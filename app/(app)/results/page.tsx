@@ -195,7 +195,7 @@ export default function ResultsPage() {
               <div className="flex items-center justify-center gap-2 mt-3">
                 <Loader2 className="w-4 h-4 text-text-muted animate-spin" />
                 <p className="text-text-muted text-sm">
-                  Generating your personalized roadmap...
+                  Generating your roadmap and preparing Week 1 lessons...
                 </p>
               </div>
             )}

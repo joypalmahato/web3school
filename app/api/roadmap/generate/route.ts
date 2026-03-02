@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { anthropic, AI_MODEL } from "@/lib/ai/client";
-import { ROADMAP_GENERATION_PROMPT } from "@/lib/ai/prompts/roadmap";
+import { ROADMAP_GENERATION_PROMPT, TASK_CONTENT_GENERATION_PROMPT } from "@/lib/ai/prompts/roadmap";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
 import { INITIAL_ROLES } from "@/data/roles";
@@ -160,7 +160,7 @@ Please generate the full roadmap in the specified JSON format.`,
       );
     }
 
-    // Create daily tasks for week 1 (generate content lazily for later weeks)
+    // Create daily tasks for week 1 and immediately pre-generate their content
     const week1 = roadmapData.weeks[0];
     if (week1?.tasks) {
       const taskInserts = week1.tasks.map((task) => ({
@@ -178,7 +178,67 @@ Please generate the full roadmap in the specified JSON format.`,
         xp_reward: task.type === "quiz" ? 20 : task.type === "project" ? 50 : 10,
       }));
 
-      await db("daily_tasks").insert(taskInserts);
+      // Insert tasks and get back their IDs
+      const { data: insertedTasks } = await db("daily_tasks")
+        .insert(taskInserts)
+        .select("id, day_number, task_type, title, description, difficulty");
+
+      // Pre-generate content for all week 1 tasks in parallel
+      // so users don't wait when they open a task for the first time
+      if (insertedTasks && insertedTasks.length > 0) {
+        await Promise.all(
+          (insertedTasks as Array<{
+            id: string;
+            day_number: number;
+            task_type: string;
+            title: string;
+            description: string;
+            difficulty: string;
+          }>).map(async (dbTask) => {
+            try {
+              const contentRes = await anthropic.messages.create({
+                model: AI_MODEL,
+                max_tokens: 2000,
+                system: TASK_CONTENT_GENERATION_PROMPT,
+                messages: [{
+                  role: "user",
+                  content: `Generate lesson content for this task:
+
+Role: ${roleData.name}
+Category: ${roleData.category}
+Task Title: ${dbTask.title}
+Task Type: ${dbTask.task_type}
+Task Description: ${dbTask.description || dbTask.title}
+Difficulty: ${dbTask.difficulty}
+Week: 1 of 12
+Day: ${dbTask.day_number} of 5
+
+Generate the content in the specified JSON format.`,
+                }],
+              });
+
+              const contentText =
+                contentRes.content[0].type === "text"
+                  ? contentRes.content[0].text
+                  : "";
+
+              let content: object;
+              try {
+                const jsonMatch = contentText.match(/```(?:json)?\s*([\s\S]*?)```/);
+                const jsonStr = jsonMatch ? jsonMatch[1].trim() : contentText.trim();
+                content = JSON.parse(jsonStr);
+              } catch {
+                content = { lesson_text: contentText };
+              }
+
+              await db("daily_tasks").update({ content }).eq("id", dbTask.id);
+            } catch (err) {
+              console.error(`Content pre-gen failed for day ${dbTask.day_number}:`, err);
+              // Non-fatal — content will be generated lazily when user opens the task
+            }
+          })
+        );
+      }
     }
 
     return NextResponse.json({
