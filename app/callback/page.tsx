@@ -119,7 +119,7 @@ export default function CallbackPage() {
           .eq("user_id", user.id)
           .single();
 
-        if (!profile?.is_approved) {
+        if (profile?.is_approved === false) {
           window.location.href = "/waitlist";
           return;
         }
@@ -135,7 +135,7 @@ export default function CallbackPage() {
         // RLS or network error — fall through to default
       }
 
-      window.location.href = "/waitlist";
+      window.location.href = "/onboarding";
     }
 
     handleCallback();

@@ -35,6 +35,14 @@ export async function POST(request: Request) {
     const suffix = Math.random().toString(36).substring(2, 6);
     const myReferralCode = `${firstName}-${suffix}`;
 
+    // Auto-approve if below the configured ceiling
+    const autoApproveUntil = parseInt(process.env.AUTO_APPROVE_UNTIL || "0", 10);
+    let autoApproved = false;
+    if (autoApproveUntil > 0) {
+      const { count } = await db("profiles").select("*", { count: "exact", head: true });
+      autoApproved = (count ?? 0) < autoApproveUntil;
+    }
+
     const { error } = await db("profiles").insert({
       user_id: userId,
       email,
@@ -43,7 +51,8 @@ export async function POST(request: Request) {
       onboarding_completed: false,
       xp_total: 0,
       level: 1,
-      is_approved: false,
+      is_approved: autoApproved,
+      approved_at: autoApproved ? new Date().toISOString() : null,
       referral_code: myReferralCode,
     });
 
