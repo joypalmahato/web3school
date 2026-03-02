@@ -358,7 +358,7 @@ export function DiscoveryChat({
                 className="bg-navy-deep border-border text-text-primary placeholder:text-text-muted focus:border-white/30 focus:ring-1 focus:ring-white/30 rounded-md resize-none min-h-[44px] max-h-32"
               />
               <Button
-                onClick={sendMessage}
+                onClick={() => sendMessage()}
                 disabled={!input.trim() || isLoading}
                 size="icon"
                 className="bg-[#10B981] hover:opacity-85 text-white rounded-md h-11 w-11 flex-shrink-0 transition-all active:scale-[0.95]"
