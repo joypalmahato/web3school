@@ -6,6 +6,8 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -17,6 +19,7 @@ import {
   ChevronRight,
   Star,
   Target,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -85,13 +88,36 @@ function Section({
 export function RoleDetailClient({
   role,
   relatedRoles,
+  isAuthenticated,
 }: {
   role: RoleSeedData;
   relatedRoles: RoleSeedData[];
+  isAuthenticated: boolean;
 }) {
+  const router = useRouter();
+  const [isStarting, setIsStarting] = useState(false);
   const demand = DEMAND_LABELS[role.demand_level];
   const competition = COMPETITION_LABELS[role.competition_level];
   const growthSteps = role.growth_path.split("→").map((s) => s.trim());
+
+  const handleStartRoadmap = async () => {
+    setIsStarting(true);
+    try {
+      await fetch("/api/discovery/choose", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role_slug: role.slug }),
+      });
+      await fetch("/api/roadmap/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role_slug: role.slug }),
+      });
+      router.push("/roadmap");
+    } catch {
+      setIsStarting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-navy-deep pt-24 pb-16">
@@ -288,29 +314,59 @@ export function RoleDetailClient({
           className="text-center p-8 sm:p-12 bg-[#111111] border border-white/10 rounded-2xl"
         >
           <h2 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary">
-            Is {role.name} Your Path?
+            {isAuthenticated ? `Start Learning ${role.name}` : `Is ${role.name} Your Path?`}
           </h2>
           <p className="text-text-secondary mt-3 text-sm max-w-md mx-auto">
-            Take our AI-powered career discovery quiz to find out if{" "}
-            {role.name} is the right fit for you — or discover an even better
-            match.
+            {isAuthenticated
+              ? `Generate your personalized 12-week roadmap for ${role.name}. Your previous roadmap will be archived.`
+              : `Take our AI-powered career discovery quiz to find out if ${role.name} is the right fit for you — or discover an even better match.`}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
-            <Button
-              asChild
-              className="bg-white hover:bg-white/90 text-black rounded-xl px-8 py-3 font-semibold"
-            >
-              <Link href="/signup">
-                Discover Your Match <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="border-border text-text-primary rounded-xl px-8 py-3"
-            >
-              <Link href="/roles">View All Roles</Link>
-            </Button>
+            {isAuthenticated ? (
+              <>
+                <Button
+                  onClick={handleStartRoadmap}
+                  disabled={isStarting}
+                  className="bg-white hover:bg-white/90 text-black rounded-xl px-8 py-3 font-semibold"
+                >
+                  {isStarting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Generating roadmap...
+                    </>
+                  ) : (
+                    <>
+                      Start My Roadmap <ArrowRight className="w-4 h-4 ml-2" />
+                    </>
+                  )}
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-border text-text-primary rounded-xl px-8 py-3"
+                >
+                  <Link href="/discover">Not sure? Try Discovery</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  asChild
+                  className="bg-white hover:bg-white/90 text-black rounded-xl px-8 py-3 font-semibold"
+                >
+                  <Link href="/signup">
+                    Discover Your Match <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-border text-text-primary rounded-xl px-8 py-3"
+                >
+                  <Link href="/roles">View All Roles</Link>
+                </Button>
+              </>
+            )}
           </div>
         </motion.div>
       </div>

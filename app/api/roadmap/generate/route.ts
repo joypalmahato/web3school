@@ -36,7 +36,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Role not found" }, { status: 404 });
     }
 
-    // Check if roadmap already exists
+    // Archive any active roadmaps for a DIFFERENT role before generating
+    await db("roadmaps")
+      .update({ status: "archived" })
+      .eq("user_id", userId)
+      .eq("status", "active")
+      .neq("role_id", dbRole.id);
+
+    // Check if roadmap already exists for this exact role
     const { data: existingRoadmap } = await db("roadmaps")
       .select("id")
       .eq("user_id", userId)

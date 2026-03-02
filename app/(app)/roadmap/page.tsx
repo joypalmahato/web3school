@@ -8,7 +8,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Loader2, ArrowDown, Map } from "lucide-react";
+import { Loader2, ArrowDown, Map, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RoadmapTimeline } from "@/components/app/RoadmapTimeline";
 
@@ -89,7 +89,7 @@ export default function RoadmapPage() {
     setIsGenerating(true);
     try {
       // Fetch the user's current role slug from their profile
-      const profileRes = await fetch("/api/profile");
+      const profileRes = await fetch("/api/profile", { cache: "no-cache" });
       if (!profileRes.ok) throw new Error("Failed to fetch profile");
       const profileData = await profileRes.json();
       const roleSlug = profileData.role_slug;
@@ -215,9 +215,20 @@ export default function RoadmapPage() {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-3"
       >
-        <h2 className="text-2xl font-heading font-bold text-text-primary">
-          {roadmap.title}
-        </h2>
+        <div className="flex items-start justify-between gap-4">
+          <h2 className="text-2xl font-heading font-bold text-text-primary">
+            {roadmap.title}
+          </h2>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/roles")}
+            className="text-text-muted hover:text-text-primary text-xs flex-shrink-0"
+          >
+            <RotateCcw className="w-3 h-3 mr-1" />
+            Learn a New Role
+          </Button>
+        </div>
         {roadmap.description && (
           <p className="text-text-secondary text-sm">{roadmap.description}</p>
         )}
