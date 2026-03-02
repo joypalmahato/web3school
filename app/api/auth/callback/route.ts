@@ -74,6 +74,14 @@ export async function GET(request: NextRequest) {
         const suffix = Math.random().toString(36).substring(2, 6);
         const oauthReferralCode = `${firstName}-${suffix}`;
 
+        // Auto-approve the next N signups (no waitlist) if below the configured ceiling
+        const autoApproveUntil = parseInt(process.env.AUTO_APPROVE_UNTIL || "0", 10);
+        let autoApproved = false;
+        if (autoApproveUntil > 0) {
+          const { count } = await db("profiles").select("*", { count: "exact", head: true });
+          autoApproved = (count ?? 0) < autoApproveUntil;
+        }
+
         await db("profiles").insert({
           user_id: userId,
           email,
@@ -82,7 +90,8 @@ export async function GET(request: NextRequest) {
           onboarding_completed: false,
           xp_total: 0,
           level: 1,
-          is_approved: false,
+          is_approved: autoApproved,
+          approved_at: autoApproved ? new Date().toISOString() : null,
           referral_code: oauthReferralCode,
         });
 
@@ -110,7 +119,7 @@ export async function GET(request: NextRequest) {
           // Non-fatal
         }
 
-        redirectPath = "/waitlist";
+        redirectPath = autoApproved ? "/onboarding" : "/waitlist";
       } else if (!existing.is_approved) {
         redirectPath = "/waitlist";
       } else if (existing.discovery_completed) {
