@@ -28,6 +28,25 @@ export async function GET(_request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
 
+    // Fix double-wrapped content: lesson_text is itself a JSON string
+    if (task.content && typeof task.content === "object") {
+      const c = task.content as Record<string, unknown>;
+      if (typeof c.lesson_text === "string") {
+        const trimmed = c.lesson_text.trim();
+        if (trimmed.startsWith("{")) {
+          try {
+            const inner = JSON.parse(trimmed);
+            if (inner && typeof inner === "object" && ("lesson_text" in inner || "exercise_prompt" in inner)) {
+              task.content = inner;
+              await db("daily_tasks").update({ content: inner }).eq("id", task.id);
+            }
+          } catch {
+            // not valid JSON — leave as-is
+          }
+        }
+      }
+    }
+
     // Lazily generate content when user opens a task with empty content
     if (!task.content || Object.keys(task.content as object).length === 0) {
       try {
