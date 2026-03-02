@@ -59,19 +59,20 @@ export async function POST(request: Request) {
       });
     }
 
-    // Get discovery session traits
-    const { data: session } = await db("discovery_sessions")
+    // Get discovery session traits (use array to avoid .single() error when none exist)
+    const { data: sessions } = await db("discovery_sessions")
       .select("extracted_traits")
       .eq("user_id", userId)
       .eq("status", "completed")
       .order("completed_at", { ascending: false })
-      .limit(1)
-      .single();
+      .limit(1);
+
+    const session = sessions?.[0] ?? null;
 
     // Generate roadmap with Claude
     const response = await anthropic.messages.create({
       model: AI_MODEL,
-      max_tokens: 4000,
+      max_tokens: 8000,
       system: ROADMAP_GENERATION_PROMPT,
       messages: [
         {
