@@ -9,6 +9,7 @@ import Link from "next/link";
 import { INITIAL_ROLES } from "@/data/roles";
 import { APP_NAME, APP_URL } from "@/lib/utils/constants";
 import { RoleDetailClient } from "./RoleDetailClient";
+import { auth } from "@insforge/nextjs";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -58,6 +59,9 @@ export default async function RoleDetailPage({ params }: Props) {
     notFound();
   }
 
+  const { userId } = await auth();
+  const isAuthenticated = !!userId;
+
   const relatedRoles = INITIAL_ROLES.filter(
     (r) => r.slug !== slug && r.category === role.category
   ).slice(0, 3);
@@ -102,7 +106,7 @@ export default async function RoleDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <RoleDetailClient role={role} relatedRoles={relatedRoles} />
+      <RoleDetailClient role={role} relatedRoles={relatedRoles} isAuthenticated={isAuthenticated} />
     </>
   );
 }

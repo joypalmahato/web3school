@@ -10,12 +10,16 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Get active roadmap
-    const { data: roadmap, error } = await db("roadmaps")
+    // Get active roadmap — use limit(1) ordered by newest to avoid
+    // .single() errors if multiple active rows exist (legacy data)
+    const { data: roadmaps, error } = await db("roadmaps")
       .select("*")
       .eq("user_id", userId)
       .eq("status", "active")
-      .single();
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    const roadmap = roadmaps?.[0] ?? null;
 
     if (error || !roadmap) {
       return NextResponse.json(

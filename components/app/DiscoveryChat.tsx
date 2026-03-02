@@ -54,17 +54,18 @@ export function DiscoveryChat({
     scrollToBottom();
   }, [messages, streamingContent, scrollToBottom]);
 
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+  const sendMessage = async (overrideMessage?: string) => {
+    const messageContent = overrideMessage ?? input;
+    if (!messageContent.trim() || isLoading) return;
 
     const userMessage: Message = {
       role: "user",
-      content: input.trim(),
+      content: messageContent.trim(),
       timestamp: new Date().toISOString(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
+    if (!overrideMessage) setInput("");
     setIsLoading(true);
     setStreamingContent("");
 
@@ -238,10 +239,7 @@ export function DiscoveryChat({
                 actually fits you — not what sounds cool on paper.
               </p>
               <Button
-                onClick={() => {
-                  setInput("Hey! I'm curious about getting into Web3.");
-                  setTimeout(() => sendMessage(), 100);
-                }}
+                onClick={() => sendMessage("Hey! I'm curious about getting into Web3.")}
                 className="bg-white text-black hover:opacity-85 rounded-md px-6 py-3 font-semibold"
               >
                 Let's go
