@@ -106,7 +106,7 @@ export default function ResultsPage() {
         console.error("Roadmap generation failed, continuing anyway");
       }
 
-      router.push("/learn");
+      router.push("/roadmap");
     } catch (err) {
       console.error("Choose path error:", err);
       setIsChoosing(false);
