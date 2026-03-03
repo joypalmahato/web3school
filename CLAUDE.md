@@ -8,14 +8,14 @@ One-liner: "Duolingo for Web3 careers."
 - TypeScript strict mode everywhere. No `any` types.
 - All components must be React Server Components by default. Use 'use client' only when needed.
 - All API routes validate input with Zod schemas.
-- All database queries use the Supabase typed client.
+- All database queries use the InsForge typed client (`db()` helper from `@/lib/db`).
 - All pages must have loading.tsx and error.tsx siblings.
 - All forms use React Hook Form + Zod.
 - All animations use Framer Motion.
 - Never use inline styles. Always Tailwind.
 - Mobile-first: design for 375px, then md: and lg: breakpoints.
 - Dark theme default. Light mode supported via next-themes toggle.
-- Commit after every chunk with message format: "chunk-N: description"
+- Commit message format: "type: description" (e.g. fix: ..., feat: ...)
 
 ## DESIGN TOKENS
 Primary: #10B981 (green) | BG: #0A0A0A | Card: #111111 | Text: #FFFFFF
@@ -23,15 +23,17 @@ Borders: rgba(255,255,255,0.10) | CTAs: bg-white text-black
 Heading font: Plus Jakarta Sans | Body: Inter | Code: JetBrains Mono
 
 ## DATABASE
-Supabase PostgreSQL. RLS on all user tables. Service role key for API routes only.
+InsForge (Postgres). RLS on all user tables. Use `db()` from `@/lib/db` in API routes.
+Auth via `@insforge/nextjs` — `auth()` server-side, `getInsforgeClient()` client-side.
 
 ## AI
-Claude API via Vercel AI SDK. Model: claude-sonnet-4-5-20250929. Stream all responses.
+Groq SDK. Model: llama-3.3-70b-versatile. Stream all responses via ReadableStream + SSE.
+Client at `@/lib/ai/client.ts`. Prompts in `@/lib/ai/prompts/`.
 
 ## DEPENDENCIES (locked versions — do not upgrade without reason)
-next@14 | react@18 | @supabase/supabase-js@2 | @supabase/ssr@0 | zustand@4
-framer-motion@11 | ai@3 | @anthropic-ai/sdk@0 | zod@3 | react-hook-form@7
-recharts@2 | lucide-react@0 | resend@3 | posthog-js@1
+next@16 | react@19 | groq-sdk@0 | @insforge/nextjs@1 | @insforge/sdk@1 | zustand@5
+framer-motion@12 | ai@6 | zod@4 | react-hook-form@7
+recharts@3 | lucide-react@0 | resend@6 | posthog-js@1
 
 ## FILE NAMING
 - Components: PascalCase (Hero.tsx, DiscoveryChat.tsx)
