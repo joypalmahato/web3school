@@ -86,6 +86,9 @@ export default function LoginPage() {
       } else if (profile?.onboarding_completed) {
         window.location.href = "/discover";
         return;
+      } else {
+        window.location.href = "/onboarding";
+        return;
       }
     } catch {
       // RLS or network error — fall through to default
