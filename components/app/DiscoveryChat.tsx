@@ -10,7 +10,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, ArrowRight, Bot } from "lucide-react";
+import { Send, Sparkles, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -43,6 +43,10 @@ export function DiscoveryChat({
   });
   const [isComplete, setIsComplete] = useState(false);
   const [streamingContent, setStreamingContent] = useState("");
+  const [pendingChoices, setPendingChoices] = useState<string[] | null>(null);
+  const [selectedChoices, setSelectedChoices] = useState<string[]>([]);
+  const [showSomethingElse, setShowSomethingElse] = useState(false);
+  const [somethingElseText, setSomethingElseText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -52,11 +56,35 @@ export function DiscoveryChat({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, streamingContent, scrollToBottom]);
+  }, [messages, streamingContent, pendingChoices, scrollToBottom]);
+
+  const toggleChoice = (choice: string) => {
+    setSelectedChoices((prev) =>
+      prev.includes(choice) ? prev.filter((c) => c !== choice) : [...prev, choice]
+    );
+  };
+
+  const handleChoiceSubmit = () => {
+    const parts = [...selectedChoices];
+    if (showSomethingElse && somethingElseText.trim()) {
+      parts.push(somethingElseText.trim());
+    }
+    if (parts.length === 0) return;
+    sendMessage(parts.join(", "));
+  };
+
+  const clearChoiceState = () => {
+    setPendingChoices(null);
+    setSelectedChoices([]);
+    setShowSomethingElse(false);
+    setSomethingElseText("");
+  };
 
   const sendMessage = async (overrideMessage?: string) => {
     const messageContent = overrideMessage ?? input;
     if (!messageContent.trim() || isLoading) return;
+
+    clearChoiceState();
 
     const userMessage: Message = {
       role: "user",
@@ -116,6 +144,10 @@ export function DiscoveryChat({
             } else if (data.type === "done") {
               setProgress(data.progress || 0);
               setIsComplete(data.is_complete || false);
+              setPendingChoices(data.choices ?? null);
+              setSelectedChoices([]);
+              setShowSomethingElse(false);
+              setSomethingElseText("");
 
               const assistantMessage: Message = {
                 role: "assistant",
@@ -319,6 +351,83 @@ export function DiscoveryChat({
                   <div className="w-2 h-2 bg-text-muted rounded-full animate-bounce" />
                 </div>
               </div>
+            </motion.div>
+          )}
+
+          {/* Multi-select choice chips */}
+          {pendingChoices && !isLoading && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="ml-10 space-y-3"
+            >
+              <div className="flex flex-wrap gap-2">
+                {pendingChoices.map((choice) => {
+                  const selected = selectedChoices.includes(choice);
+                  return (
+                    <button
+                      key={choice}
+                      onClick={() => toggleChoice(choice)}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full border transition-all",
+                        selected
+                          ? "bg-[#10B981]/15 border-[#10B981] text-[#10B981]"
+                          : "bg-transparent border-white/20 text-text-secondary hover:border-white/40 hover:text-text-primary"
+                      )}
+                    >
+                      {selected && <Check className="w-3 h-3" />}
+                      {choice}
+                    </button>
+                  );
+                })}
+                <button
+                  onClick={() => setShowSomethingElse((v) => !v)}
+                  className={cn(
+                    "px-3 py-1.5 text-sm rounded-full border transition-all",
+                    showSomethingElse
+                      ? "bg-white/10 border-white/30 text-text-primary"
+                      : "bg-transparent border-white/20 text-text-muted hover:border-white/40 hover:text-text-secondary"
+                  )}
+                >
+                  Something else...
+                </button>
+              </div>
+
+              <AnimatePresence>
+                {showSomethingElse && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <input
+                      autoFocus
+                      value={somethingElseText}
+                      onChange={(e) => setSomethingElseText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleChoiceSubmit();
+                      }}
+                      placeholder="Type your answer..."
+                      className="w-full bg-white/5 border border-white/20 rounded-full px-4 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-white/30"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {(selectedChoices.length > 0 ||
+                (showSomethingElse && somethingElseText.trim())) && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <Button
+                    onClick={handleChoiceSubmit}
+                    size="sm"
+                    className="bg-[#10B981] hover:opacity-85 text-white rounded-full px-4 h-8 text-sm"
+                  >
+                    Send
+                    <ArrowRight className="ml-1.5 w-3 h-3" />
+                  </Button>
+                </motion.div>
+              )}
             </motion.div>
           )}
 

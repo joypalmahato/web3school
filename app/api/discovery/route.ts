@@ -118,10 +118,22 @@ export async function POST(request: Request) {
               ? 10
               : 0;
 
-          // Clean response text (remove progress markers)
+          // Extract choices if present
+          const choicesMatch = fullResponse.match(/\[CHOICES: (\[.*?\])\]/);
+          let choices: string[] | null = null;
+          if (choicesMatch) {
+            try {
+              choices = JSON.parse(choicesMatch[1]);
+            } catch {
+              choices = null;
+            }
+          }
+
+          // Clean response text (remove all hidden markers)
           const cleanResponse = fullResponse
             .replace(/\[PROGRESS: \d+\/10\]/g, "")
             .replace(/\[CONVERSATION_COMPLETE\]/g, "")
+            .replace(/\[CHOICES: \[.*?\]\]/g, "")
             .trim();
 
           // Save updated conversation to database (non-blocking — don't fail the stream if this errors)
@@ -152,6 +164,7 @@ export async function POST(request: Request) {
                 progress,
                 is_complete: isComplete,
                 clean_response: cleanResponse,
+                choices,
               })}\n\n`
             )
           );
