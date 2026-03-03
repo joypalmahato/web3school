@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { groq, AI_MODEL } from "@/lib/ai/client";
+
+export const maxDuration = 60;
 import { TUTOR_SYSTEM_PROMPT } from "@/lib/ai/prompts/tutor";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
@@ -87,18 +89,29 @@ Lesson Content Summary: ${taskContent?.lesson_text?.slice(0, 500) || "No content
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
-        for await (const chunk of stream) {
-          const text = chunk.choices[0]?.delta?.content ?? "";
-          if (text) {
-            const data = JSON.stringify({ type: "text", content: text });
-            controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+        try {
+          for await (const chunk of stream) {
+            const text = chunk.choices[0]?.delta?.content ?? "";
+            if (text) {
+              const data = JSON.stringify({ type: "text", content: text });
+              controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+            }
+          }
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify({ type: "done" })}\n\n`)
+          );
+          controller.close();
+        } catch (streamErr) {
+          console.error("Tutor stream error:", streamErr);
+          try {
+            controller.enqueue(
+              encoder.encode(`data: ${JSON.stringify({ type: "error" })}\n\n`)
+            );
+            controller.close();
+          } catch {
+            controller.error(streamErr);
           }
         }
-
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({ type: "done" })}\n\n`)
-        );
-        controller.close();
       },
     });
 
