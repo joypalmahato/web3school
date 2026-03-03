@@ -7,7 +7,46 @@
       "Bash(npm install:*)",
       "Bash(npx shadcn@latest:*)",
       "Bash(mkdir:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(ls:*)",
+      "Bash(npm ls:*)",
+      "Bash(find C:\\\\Users\\\\Avocado\\\\Desktop\\\\Web3School\\\\app\\\\\\(marketing\\):*)",
+      "Bash(gh auth:*)",
+      "Bash(npx vercel:*)",
+      "Bash(supabase:*)",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "WebFetch(domain:web3school-lime.vercel.app)",
+      "Bash(rm:*)",
+      "Bash(xargs grep:*)",
+      "Bash(head:*)",
+      "Bash(claude mcp:*)",
+      "Bash(npx:*)",
+      "WebFetch(domain:docs.insforge.dev)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(# Get metadata\ncurl -s \"https://8qxi7g9f.us-east.insforge.app/api/metadata\" \\\\\n  -H \"X-API-Key: ik_1d7dbba35789d433df6c5e03c634e4a7\" 2>&1 | python -m json.tool 2>/dev/null)",
+      "Bash(# Get anon key\ncurl -s \"https://8qxi7g9f.us-east.insforge.app/api/metadata/api-key\" \\\\\n  -H \"X-API-Key: ik_1d7dbba35789d433df6c5e03c634e4a7\" 2>&1 | python -m json.tool 2>/dev/null)",
+      "Bash(# List existing tables\ncurl -s \"https://8qxi7g9f.us-east.insforge.app/api/database/tables\" \\\\\n  -H \"X-API-Key: ik_1d7dbba35789d433df6c5e03c634e4a7\" 2>&1 | python -m json.tool 2>/dev/null)",
+      "Bash(# Generate anon token for client-side usage\ncurl -s -X POST \"https://8qxi7g9f.us-east.insforge.app/api/auth/tokens/anon\" \\\\\n  -H \"X-API-Key: ik_1d7dbba35789d433df6c5e03c634e4a7\" 2>&1 | python -m json.tool 2>/dev/null)",
+      "Bash(# Test with Supabase \\(default — no NEXT_PUBLIC_BACKEND set\\)\ncurl -s \"https://web3school-lime.vercel.app/api/test-insforge\" | python -m json.tool 2>/dev/null)",
+      "Bash(# Test with InsForge backend\ncurl -s \"https://web3school-lime.vercel.app/api/test-insforge\" | python -m json.tool 2>/dev/null)",
+      "Bash(echo === $chunk ===:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:www.kled.ai)",
+      "WebFetch(domain:localhost)",
+      "mcp__insforge__run-raw-sql",
+      "WebFetch(domain:www.vercel-status.com)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel env:*)",
+      "Bash(vercel:*)",
+      "mcp__insforge__get-container-logs",
+      "mcp__insforge__get-table-schema",
+      "Bash(npm uninstall:*)"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "insforge",
+    "supabase"
+  ]
 }

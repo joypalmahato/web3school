@@ -1,7 +1,8 @@
 /**
  * @component Hero
  * @part-of Web3School — Landing Page
- * @design Manifesto-style. Live social proof ticker. Rotating match card.
+ * @moto v2: From confusion to irreplaceable.
+ * @design Manifesto-style. Live proof. Rotating match card. Adaptive learning angle.
  */
 "use client";
 
@@ -11,12 +12,12 @@ import { useEffect, useState } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-const RECENT_MATCHES = [
-  { name: "Priya S.", role: "DeFi Analyst", fit: 94 },
-  { name: "Marcus T.", role: "Smart Contract Dev", fit: 91 },
-  { name: "Aiko R.", role: "Community Manager", fit: 97 },
-  { name: "Jordan K.", role: "NFT Artist", fit: 88 },
-  { name: "Fatima A.", role: "Protocol Researcher", fit: 93 },
+const LIVE_MATCHES = [
+  { name: "Priya S.", sector: "Healthcare", milestone: "AI + Web3 literacy unlocked", fit: 96 },
+  { name: "Marcus T.", sector: "Finance", milestone: "DeFi fundamentals — week 3", fit: 91 },
+  { name: "Aiko R.", sector: "Legal", milestone: "Smart contract basics complete", fit: 94 },
+  { name: "Jordan K.", sector: "Creative", milestone: "NFT + IP rights roadmap started", fit: 88 },
+  { name: "Fatima A.", sector: "Engineering", milestone: "Protocol research path matched", fit: 97 },
 ];
 
 export function Hero() {
@@ -24,16 +25,16 @@ export function Hero() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMatchIndex((i) => (i + 1) % RECENT_MATCHES.length);
+      setMatchIndex((i) => (i + 1) % LIVE_MATCHES.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  const current = RECENT_MATCHES[matchIndex];
+  const current = LIVE_MATCHES[matchIndex];
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Dot grid background */}
+      {/* Dot grid */}
       <div
         className="absolute inset-0 bg-[#0A0A0A]"
         style={{
@@ -43,10 +44,9 @@ export function Hero() {
         }}
       />
 
-      {/* Content */}
       <div className="relative z-10 max-w-[900px] mx-auto px-6 pt-40 pb-24 lg:pt-44 lg:pb-32 text-center">
 
-        {/* Live counter pill */}
+        {/* Live pill */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ export function Hero() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
           </span>
           <span className="text-xs text-[#A0A0A0]">
-            <span className="text-white font-medium">23 people</span> matched their Web3 career in the last 24 hours
+            <span className="text-white font-medium">23 people</span> started their path to irreplaceable today
           </span>
         </motion.div>
 
@@ -69,11 +69,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.1, ease }}
           className="text-[42px] md:text-[66px] lg:text-[88px] font-bold text-white leading-[1.02] tracking-[-0.04em] font-heading"
         >
-          The Next Economy
+          Don&apos;t Just Get Hired.
           <br />
-          Is Being Built.
-          <br />
-          <span className="text-[#10B981]">Find Your Place In It.</span>
+          <span className="text-[#10B981]">Become Irreplaceable.</span>
         </motion.h1>
 
         {/* Subheadline */}
@@ -81,21 +79,32 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease }}
-          className="mt-7 text-lg md:text-xl text-[#A0A0A0] max-w-[620px] mx-auto leading-relaxed"
+          className="mt-7 text-lg md:text-xl text-[#A0A0A0] max-w-[640px] mx-auto leading-relaxed"
         >
-          Web3 will create more wealth than the last three tech booms combined.
-          Web3School finds exactly which role fits you — then gets you there in 90 days.
+          Whatever field you&apos;re in — Web3School builds a learning path that
+          adapts to how <em>you</em> learn, teaching your sector&apos;s fundamentals,
+          AI tools, and Web3 skills until you&apos;re the person your industry
+          cannot function without.
         </motion.p>
 
-        {/* Proof dots */}
-        <motion.p
+        {/* Three pillars */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3, ease }}
-          className="mt-5 text-sm text-[#555555] tracking-wide"
+          className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8"
         >
-          10-min AI assessment &nbsp;·&nbsp; 89+ Web3 career paths &nbsp;·&nbsp; Personalized 90-day roadmap &nbsp;·&nbsp; Zero guesswork
-        </motion.p>
+          {[
+            { label: "Adapts to your pace", desc: "Fast or slow — the platform adjusts" },
+            { label: "Any sector", desc: "Your field + AI + Web3 literacy" },
+            { label: "Non-replaceable", desc: "Not just hired — indispensable" },
+          ].map((pillar) => (
+            <div key={pillar.label} className="text-center">
+              <p className="text-sm font-semibold text-white">{pillar.label}</p>
+              <p className="text-xs text-[#555555] mt-0.5">{pillar.desc}</p>
+            </div>
+          ))}
+        </motion.div>
 
         {/* CTAs */}
         <motion.div
@@ -108,7 +117,7 @@ export function Hero() {
             href="/signup"
             className="inline-flex items-center justify-center bg-white text-black font-semibold text-base px-8 py-4 rounded-md hover:opacity-85 transition-opacity duration-200 w-full sm:w-auto"
           >
-            Discover Your Web3 Career — Free
+            Find Your Path — Free
           </Link>
           <a
             href="#how-it-works"
@@ -125,7 +134,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.5, ease }}
           className="mt-4 text-sm text-[#555555]"
         >
-          Free forever. No credit card. Join 2,400+ people already building their Web3 future.
+          Free forever. No credit card. From confused to unstoppable.
         </motion.p>
 
         {/* Rotating live match card */}
@@ -135,7 +144,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.7, ease }}
           className="mt-14 flex justify-center"
         >
-          <div className="relative h-[52px] flex items-center">
+          <div className="relative h-[56px] flex items-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={matchIndex}
@@ -149,10 +158,11 @@ export function Hero() {
                   {current.name.charAt(0)}
                 </div>
                 <div className="text-left">
-                  <p className="text-xs text-[#555555]">{current.name} just matched</p>
+                  <p className="text-xs text-[#555555]">
+                    {current.name} · {current.sector}
+                  </p>
                   <p className="text-sm text-white font-medium">
-                    {current.role}{" "}
-                    <span className="text-[#10B981]">— {current.fit}% fit</span>
+                    {current.milestone}
                   </p>
                 </div>
                 <div className="ml-1 text-[#10B981] text-[10px] font-semibold bg-[#10B981]/10 px-2 py-0.5 rounded-full uppercase tracking-wide">
