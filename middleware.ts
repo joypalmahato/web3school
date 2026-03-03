@@ -18,6 +18,6 @@ export const config = {
      * - api (API routes — handled by their own auth)
      * - public files (images, fonts, etc.)
      */
-    "/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot|mp4|webm|ogg)$).*)",
   ],
 };
