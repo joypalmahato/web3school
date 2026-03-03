@@ -1,6 +1,6 @@
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
-import { anthropic, AI_MODEL } from "@/lib/ai/client";
+import { groq, AI_MODEL } from "@/lib/ai/client";
 import type { Profile } from "@/lib/types";
 
 export async function POST(request: Request) {
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       .filter(Boolean)
       .join("\n");
 
-    const response = await anthropic.messages.create({
+    const response = await groq.chat.completions.create({
       model: AI_MODEL,
       max_tokens: 300,
       messages: [
@@ -49,7 +49,7 @@ Return: { "suggestions": ["headline 1", "headline 2", "headline 3"] }`,
       ],
     });
 
-    const aiText = response.content[0].type === "text" ? response.content[0].text : "";
+    const aiText = response.choices[0]?.message?.content ?? "";
     let suggestions: string[] = [];
     try {
       const jsonMatch = aiText.match(/\{[\s\S]*\}/);

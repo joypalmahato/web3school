@@ -1,4 +1,4 @@
-import { anthropic, AI_MODEL } from "@/lib/ai/client";
+import { groq, AI_MODEL } from "@/lib/ai/client";
 import {
   DISCOVERY_SYSTEM_PROMPT,
   buildDiscoveryPromptWithProfile,
@@ -71,15 +71,18 @@ export async function POST(request: Request) {
       // Fall back to default prompt
     }
 
-    // Stream response from Claude
-    const stream = await anthropic.messages.stream({
+    // Stream response from Groq
+    const stream = await groq.chat.completions.create({
       model: AI_MODEL,
       max_tokens: 500,
-      system: systemPrompt,
-      messages,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...messages,
+      ],
+      stream: true,
     });
 
-    // Create a TransformStream to convert Claude's stream to SSE
+    // Create a TransformStream to convert Groq's stream to SSE
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
@@ -92,12 +95,9 @@ export async function POST(request: Request) {
           )
         );
 
-        for await (const event of stream) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            const text = event.delta.text;
+        for await (const chunk of stream) {
+          const text = chunk.choices[0]?.delta?.content ?? "";
+          if (text) {
             fullResponse += text;
             controller.enqueue(
               encoder.encode(

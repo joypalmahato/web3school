@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { anthropic, AI_MODEL } from "@/lib/ai/client";
+import { groq, AI_MODEL } from "@/lib/ai/client";
 import { ROADMAP_GENERATION_PROMPT, TASK_CONTENT_GENERATION_PROMPT } from "@/lib/ai/prompts/roadmap";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
@@ -69,12 +69,12 @@ export async function POST(request: Request) {
 
     const session = sessions?.[0] ?? null;
 
-    // Generate roadmap with Claude
-    const response = await anthropic.messages.create({
+    // Generate roadmap with Groq
+    const response = await groq.chat.completions.create({
       model: AI_MODEL,
       max_tokens: 8000,
-      system: ROADMAP_GENERATION_PROMPT,
       messages: [
+        { role: "system", content: ROADMAP_GENERATION_PROMPT },
         {
           role: "user",
           content: `Generate a 12-week roadmap for this role:
@@ -91,8 +91,7 @@ Please generate the full roadmap in the specified JSON format.`,
       ],
     });
 
-    const responseText =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    const responseText = response.choices[0]?.message?.content ?? "";
 
     let roadmapData: {
       title: string;
@@ -196,13 +195,14 @@ Please generate the full roadmap in the specified JSON format.`,
             difficulty: string;
           }>).map(async (dbTask) => {
             try {
-              const contentRes = await anthropic.messages.create({
+              const contentRes = await groq.chat.completions.create({
                 model: AI_MODEL,
                 max_tokens: 2000,
-                system: TASK_CONTENT_GENERATION_PROMPT,
-                messages: [{
-                  role: "user",
-                  content: `Generate lesson content for this task:
+                messages: [
+                  { role: "system", content: TASK_CONTENT_GENERATION_PROMPT },
+                  {
+                    role: "user",
+                    content: `Generate lesson content for this task:
 
 Role: ${roleData.name}
 Category: ${roleData.category}
@@ -214,13 +214,11 @@ Week: 1 of 12
 Day: ${dbTask.day_number} of 5
 
 Generate the content in the specified JSON format.`,
-                }],
+                  },
+                ],
               });
 
-              const contentText =
-                contentRes.content[0].type === "text"
-                  ? contentRes.content[0].text
-                  : "";
+              const contentText = contentRes.choices[0]?.message?.content ?? "";
 
               let content: object;
               try {
