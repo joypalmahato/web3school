@@ -1,6 +1,6 @@
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
-import { anthropic, AI_MODEL } from "@/lib/ai/client";
+import { groq, AI_MODEL } from "@/lib/ai/client";
 
 export async function POST(request: Request) {
   try {
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
       return Response.json({ error: "Could not extract text from PDF" }, { status: 400 });
     }
 
-    // Ask Claude to analyze the resume
-    const response = await anthropic.messages.create({
+    // Ask Groq to analyze the resume
+    const response = await groq.chat.completions.create({
       model: AI_MODEL,
       max_tokens: 1000,
       messages: [
@@ -59,7 +59,7 @@ Return this JSON format:
       ],
     });
 
-    const aiText = response.content[0].type === "text" ? response.content[0].text : "";
+    const aiText = response.choices[0]?.message?.content ?? "";
     let extracted;
     try {
       const jsonMatch = aiText.match(/\{[\s\S]*\}/);

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { anthropic, AI_MODEL } from "@/lib/ai/client";
+import { groq, AI_MODEL } from "@/lib/ai/client";
 import { TASK_CONTENT_GENERATION_PROMPT } from "@/lib/ai/prompts/roadmap";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
@@ -60,11 +60,11 @@ export async function GET(_request: Request, { params }: RouteParams) {
           .eq("id", roadmap?.role_id)
           .single();
 
-        const contentResponse = await anthropic.messages.create({
+        const contentResponse = await groq.chat.completions.create({
           model: AI_MODEL,
           max_tokens: 2000,
-          system: TASK_CONTENT_GENERATION_PROMPT,
           messages: [
+            { role: "system", content: TASK_CONTENT_GENERATION_PROMPT },
             {
               role: "user",
               content: `Generate lesson content for this task:
@@ -83,10 +83,7 @@ Generate the content in the specified JSON format.`,
           ],
         });
 
-        const contentText =
-          contentResponse.content[0].type === "text"
-            ? contentResponse.content[0].text
-            : "";
+        const contentText = contentResponse.choices[0]?.message?.content ?? "";
 
         let content;
         try {

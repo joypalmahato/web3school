@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { anthropic, AI_MODEL } from "@/lib/ai/client";
+import { groq, AI_MODEL } from "@/lib/ai/client";
 import { TUTOR_SYSTEM_PROMPT } from "@/lib/ai/prompts/tutor";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
@@ -74,25 +74,23 @@ Lesson Content Summary: ${taskContent?.lesson_text?.slice(0, 500) || "No content
     ];
 
     // Stream response
-    const stream = await anthropic.messages.stream({
+    const stream = await groq.chat.completions.create({
       model: AI_MODEL,
       max_tokens: 500,
-      system: TUTOR_SYSTEM_PROMPT,
-      messages,
+      messages: [
+        { role: "system", content: TUTOR_SYSTEM_PROMPT },
+        ...messages,
+      ],
+      stream: true,
     });
 
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
-        for await (const event of stream) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            const data = JSON.stringify({
-              type: "text",
-              content: event.delta.text,
-            });
+        for await (const chunk of stream) {
+          const text = chunk.choices[0]?.delta?.content ?? "";
+          if (text) {
+            const data = JSON.stringify({ type: "text", content: text });
             controller.enqueue(encoder.encode(`data: ${data}\n\n`));
           }
         }

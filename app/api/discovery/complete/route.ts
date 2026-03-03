@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { anthropic, AI_MODEL } from "@/lib/ai/client";
+import { groq, AI_MODEL } from "@/lib/ai/client";
 import { DISCOVERY_ANALYSIS_PROMPT } from "@/lib/ai/prompts/discovery";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
@@ -31,12 +31,12 @@ export async function POST(request: Request) {
       )
       .join("\n\n");
 
-    // Ask Claude to analyze the conversation
-    const analysis = await anthropic.messages.create({
+    // Ask Groq to analyze the conversation
+    const analysis = await groq.chat.completions.create({
       model: AI_MODEL,
       max_tokens: 1000,
-      system: DISCOVERY_ANALYSIS_PROMPT,
       messages: [
+        { role: "system", content: DISCOVERY_ANALYSIS_PROMPT },
         {
           role: "user",
           content: `Here is the conversation to analyze:\n\n${conversationText}`,
@@ -45,8 +45,7 @@ export async function POST(request: Request) {
     });
 
     // Extract JSON from response
-    const responseText =
-      analysis.content[0].type === "text" ? analysis.content[0].text : "";
+    const responseText = analysis.choices[0]?.message?.content ?? "";
 
     let analysisData: {
       traits: TraitScores;
