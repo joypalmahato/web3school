@@ -255,7 +255,7 @@ export default function PassportPage() {
           <Button
             onClick={handleCopyLink}
             variant="outline"
-            className="flex-1 border-border text-text-primary rounded-xl"
+            className="flex-1 border-border bg-white/5 text-text-primary hover:bg-white/10 rounded-xl"
           >
             {copied ? (
               <Check className="w-4 h-4 mr-2 text-green-success" />
@@ -267,7 +267,7 @@ export default function PassportPage() {
           <Button
             asChild
             variant="outline"
-            className="flex-1 border-border text-text-primary rounded-xl"
+            className="flex-1 border-border bg-white/5 text-text-primary hover:bg-white/10 rounded-xl"
           >
             <a
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
