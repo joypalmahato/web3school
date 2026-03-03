@@ -7,6 +7,8 @@ import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
 import type { Profile } from "@/lib/types";
 
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   try {
     const { userId } = await auth();
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
       });
     }
 
-    // Build messages array for Claude
+    // Build messages array for Groq
     const messages = [
       ...conversation_history.map((msg: { role: string; content: string }) => ({
         role: msg.role as "user" | "assistant",
@@ -82,74 +84,92 @@ export async function POST(request: Request) {
       stream: true,
     });
 
-    // Create a TransformStream to convert Groq's stream to SSE
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
-        let fullResponse = "";
+        try {
+          let fullResponse = "";
 
-        // Send session_id first
-        controller.enqueue(
-          encoder.encode(
-            `data: ${JSON.stringify({ type: "session_id", session_id: currentSessionId })}\n\n`
-          )
-        );
+          // Send session_id first
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({ type: "session_id", session_id: currentSessionId })}\n\n`
+            )
+          );
 
-        for await (const chunk of stream) {
-          const text = chunk.choices[0]?.delta?.content ?? "";
-          if (text) {
-            fullResponse += text;
+          for await (const chunk of stream) {
+            const text = chunk.choices[0]?.delta?.content ?? "";
+            if (text) {
+              fullResponse += text;
+              controller.enqueue(
+                encoder.encode(
+                  `data: ${JSON.stringify({ type: "text", content: text })}\n\n`
+                )
+              );
+            }
+          }
+
+          // Check if conversation is complete
+          const isComplete = fullResponse.includes("[CONVERSATION_COMPLETE]");
+          const progressMatch = fullResponse.match(/\[PROGRESS: (\d+)\/10\]/);
+          const progress = progressMatch
+            ? parseInt(progressMatch[1])
+            : isComplete
+              ? 10
+              : 0;
+
+          // Clean response text (remove progress markers)
+          const cleanResponse = fullResponse
+            .replace(/\[PROGRESS: \d+\/10\]/g, "")
+            .replace(/\[CONVERSATION_COMPLETE\]/g, "")
+            .trim();
+
+          // Save updated conversation to database (non-blocking — don't fail the stream if this errors)
+          const updatedHistory = [
+            ...conversation_history,
+            { role: "user", content: message.trim(), timestamp: new Date().toISOString() },
+            {
+              role: "assistant",
+              content: cleanResponse,
+              timestamp: new Date().toISOString(),
+            },
+          ];
+
+          try {
+            await db("discovery_sessions")
+              .update({ conversation_history: updatedHistory })
+              .eq("id", currentSessionId);
+          } catch (dbErr) {
+            console.error("Failed to save conversation history:", dbErr);
+            // Don't fail the stream — the user still gets their response
+          }
+
+          // Send completion signal
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({
+                type: "done",
+                progress,
+                is_complete: isComplete,
+                clean_response: cleanResponse,
+              })}\n\n`
+            )
+          );
+
+          controller.close();
+        } catch (streamErr) {
+          console.error("Discovery stream error:", streamErr);
+          try {
             controller.enqueue(
               encoder.encode(
-                `data: ${JSON.stringify({ type: "text", content: text })}\n\n`
+                `data: ${JSON.stringify({ type: "error", message: "Stream failed" })}\n\n`
               )
             );
+            controller.close();
+          } catch {
+            controller.error(streamErr);
           }
         }
-
-        // Check if conversation is complete
-        const isComplete = fullResponse.includes("[CONVERSATION_COMPLETE]");
-        const progressMatch = fullResponse.match(/\[PROGRESS: (\d+)\/10\]/);
-        const progress = progressMatch
-          ? parseInt(progressMatch[1])
-          : isComplete
-            ? 10
-            : 0;
-
-        // Clean response text (remove progress markers)
-        const cleanResponse = fullResponse
-          .replace(/\[PROGRESS: \d+\/10\]/g, "")
-          .replace(/\[CONVERSATION_COMPLETE\]/g, "")
-          .trim();
-
-        // Save updated conversation to database
-        const updatedHistory = [
-          ...conversation_history,
-          { role: "user", content: message.trim(), timestamp: new Date().toISOString() },
-          {
-            role: "assistant",
-            content: cleanResponse,
-            timestamp: new Date().toISOString(),
-          },
-        ];
-
-        await db("discovery_sessions")
-          .update({ conversation_history: updatedHistory })
-          .eq("id", currentSessionId);
-
-        // Send completion signal
-        controller.enqueue(
-          encoder.encode(
-            `data: ${JSON.stringify({
-              type: "done",
-              progress,
-              is_complete: isComplete,
-              clean_response: cleanResponse,
-            })}\n\n`
-          )
-        );
-
-        controller.close();
       },
     });
 

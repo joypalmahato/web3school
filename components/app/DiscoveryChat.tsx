@@ -111,6 +111,8 @@ export function DiscoveryChat({
             } else if (data.type === "text") {
               accumulated += data.content;
               setStreamingContent(accumulated);
+            } else if (data.type === "error") {
+              throw new Error(data.message || "Stream error");
             } else if (data.type === "done") {
               setProgress(data.progress || 0);
               setIsComplete(data.is_complete || false);
