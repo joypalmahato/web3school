@@ -155,21 +155,35 @@ export default function TaskPage({
 
   const Icon = TASK_ICONS[task.task_type] || BookOpen;
 
-  // Guard against double-wrapped content (lesson_text is itself a JSON blob)
-  let rawContent = task.content || {};
-  if (typeof rawContent === "object" && "lesson_text" in rawContent) {
-    const lt = (rawContent as TaskContent).lesson_text ?? "";
-    const trimmed = lt.trim();
-    if (trimmed.startsWith("{")) {
-      try {
-        const inner = JSON.parse(trimmed) as TaskContent;
-        if (inner.lesson_text || inner.exercise_prompt) rawContent = inner;
-      } catch {
-        // not JSON — leave as-is
+  // Robustly extract content — handles string, object, and double-wrapped JSON
+  function extractContent(raw: unknown): TaskContent {
+    // String → try JSON parse
+    if (typeof raw === "string") {
+      const t = raw.trim();
+      if (t.startsWith("{")) {
+        try { return extractContent(JSON.parse(t)); } catch { /* fall through */ }
       }
+      return {};
     }
+    if (!raw || typeof raw !== "object") return {};
+    const obj = raw as TaskContent;
+    // lesson_text itself is a JSON blob — unwrap one more level
+    const lt = obj.lesson_text?.trim() ?? "";
+    if (lt.startsWith("{")) {
+      try {
+        const inner = JSON.parse(lt) as TaskContent;
+        if (inner.lesson_text || inner.exercise_prompt) return inner;
+      } catch { /* fall through */ }
+    }
+    return obj;
   }
-  const content = rawContent as TaskContent;
+
+  // Replace literal \n escape sequences with real newlines for markdown rendering
+  function normalizeMarkdown(text: string): string {
+    return text.replace(/\\n/g, "\n");
+  }
+
+  const content = extractContent(task.content);
   const isCompleted = task.status === "completed";
 
   return (
@@ -233,7 +247,7 @@ export default function TaskPage({
         >
           <div className="prose prose-invert prose-sm max-w-none text-text-primary [&_h1]:font-heading [&_h2]:font-heading [&_h3]:font-heading [&_h1]:text-text-primary [&_h2]:text-text-primary [&_h3]:text-text-primary [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_pre]:bg-navy-deep [&_pre]:border [&_pre]:border-border [&_blockquote]:border-white/20 [&_a]:text-white">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {content.lesson_text}
+              {normalizeMarkdown(content.lesson_text ?? "")}
             </ReactMarkdown>
           </div>
         </motion.div>
@@ -251,7 +265,7 @@ export default function TaskPage({
           </h3>
           <div className="prose prose-invert prose-sm max-w-none [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {content.exercise_prompt}
+              {normalizeMarkdown(content.exercise_prompt ?? "")}
             </ReactMarkdown>
           </div>
         </motion.div>
@@ -269,7 +283,7 @@ export default function TaskPage({
           </h3>
           <div className="prose prose-invert prose-sm max-w-none [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {content.project_brief}
+              {normalizeMarkdown(content.project_brief ?? "")}
             </ReactMarkdown>
           </div>
         </motion.div>
