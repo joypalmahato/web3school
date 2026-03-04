@@ -11,7 +11,7 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
 export function FinalCTA() {
   return (
-    <AnimatedSection className="py-16 md:py-24 lg:py-32 bg-[#0E0E0E] text-center">
+    <AnimatedSection className="py-16 md:py-24 lg:py-32 text-center">
       <div className="max-w-[1200px] mx-auto px-6">
         <h2 className="text-[28px] md:text-[40px] lg:text-[48px] font-bold text-white leading-[1.1] tracking-[-0.02em] font-heading">
           Stop Being Replaceable.

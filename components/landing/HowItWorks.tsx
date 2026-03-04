@@ -57,7 +57,7 @@ export function HowItWorks() {
   return (
     <AnimatedSection
       id="how-it-works"
-      className="py-16 md:py-24 lg:py-32 bg-[#0E0E0E]"
+      className="py-16 md:py-24 lg:py-32"
     >
       <div className="max-w-[1200px] mx-auto px-6">
 
@@ -118,7 +118,7 @@ export function HowItWorks() {
                     {step.chips.map((chip) => (
                       <div
                         key={chip.label}
-                        className="flex items-start gap-3 px-4 py-3 rounded-lg border border-white/[0.07] bg-[#111111]"
+                        className="flex items-start gap-3 px-4 py-3 rounded-lg border border-white/[0.07] bg-[#111111]/60 backdrop-blur-md"
                       >
                         <div className="mt-0.5 w-7 h-7 rounded-md bg-[#10B981]/10 flex items-center justify-center flex-shrink-0">
                           <chip.icon className="w-3.5 h-3.5 text-[#10B981]" />
