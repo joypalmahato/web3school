@@ -6,7 +6,7 @@
  */
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
@@ -155,6 +155,11 @@ export { SLUG_TO_THEMATIC, type ThematicGroup };
 
 export function RolesPreview() {
   const [activeTab, setActiveTab] = useState<ThematicGroup>("all");
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const isPaused = useRef(false);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartScroll = useRef(0);
 
   const displayRoles = useMemo(() => {
     if (activeTab === "all") return INITIAL_ROLES;
@@ -162,6 +167,44 @@ export function RolesPreview() {
       (role) => getThematicGroup(role) === activeTab
     );
   }, [activeTab]);
+
+  // Reset scroll and restart auto-slide when tab changes
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    carousel.scrollLeft = 0;
+
+    const timer = setInterval(() => {
+      if (isPaused.current || !carousel) return;
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+      if (carousel.scrollLeft >= maxScroll - 10) {
+        carousel.scrollLeft = 0;
+      } else {
+        carousel.scrollBy({ left: 300, behavior: "smooth" });
+      }
+    }, 2500);
+
+    return () => clearInterval(timer);
+  }, [activeTab]);
+
+  const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!carouselRef.current) return;
+    isDragging.current = true;
+    isPaused.current = true;
+    dragStartX.current = e.pageX - carouselRef.current.offsetLeft;
+    dragStartScroll.current = carouselRef.current.scrollLeft;
+  };
+
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging.current || !carouselRef.current) return;
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    carouselRef.current.scrollLeft = dragStartScroll.current - (x - dragStartX.current) * 1.5;
+  };
+
+  const onMouseUp = () => {
+    isDragging.current = false;
+    setTimeout(() => { isPaused.current = false; }, 800);
+  };
 
   return (
     <AnimatedSection id="roles" className="py-16 md:py-24 lg:py-32 bg-[#0E0E0E]">
@@ -204,11 +247,22 @@ export function RolesPreview() {
         <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#0E0E0E] to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#0E0E0E] to-transparent z-10 pointer-events-none" />
 
-        <div className="scroll-carousel px-6">
+        <div
+          ref={carouselRef}
+          className="scroll-carousel px-6 cursor-grab active:cursor-grabbing select-none"
+          onMouseEnter={() => { isPaused.current = true; }}
+          onMouseLeave={() => { isPaused.current = false; isDragging.current = false; }}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+        >
           {displayRoles.map((role) => (
-            <div
+            <Link
               key={role.slug}
-              className="min-w-[280px] flex-shrink-0 scroll-snap-align-start bg-[#111111] border border-white/[0.08] rounded-xl p-7 hover:border-white/[0.16] transition-colors duration-200"
+              href={`/roles/${role.slug}`}
+              draggable={false}
+              onClick={(e) => { if (isDragging.current) e.preventDefault(); }}
+              className="min-w-[280px] flex-shrink-0 scroll-snap-align-start bg-[#111111] border border-white/[0.08] rounded-xl p-7 hover:border-white/[0.16] transition-colors duration-200 block"
             >
               <span className="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white/[0.06] text-[#A0A0A0] mb-3">
                 {THEMATIC_LABEL[getThematicGroup(role)]}
@@ -219,7 +273,7 @@ export function RolesPreview() {
               <p className="text-sm text-[#A0A0A0] line-clamp-2">
                 {role.short_description}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
