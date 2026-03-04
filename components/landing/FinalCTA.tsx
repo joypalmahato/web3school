@@ -28,9 +28,6 @@ export function FinalCTA() {
           >
             Find My Web3 Path
           </Link>
-          <p className="mt-4 text-sm text-[#666666]">
-            No credit card required
-          </p>
         </div>
       </div>
     </AnimatedSection>
