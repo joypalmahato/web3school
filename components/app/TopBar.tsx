@@ -24,14 +24,22 @@ import { cn } from "@/lib/utils";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
+  "/discover": "Career Discovery",
   "/roadmap": "My Roadmap",
   "/learn": "Daily Learning",
   "/progress": "Progress",
   "/passport": "Skill Passport",
   "/settings": "Settings",
-  "/discover": "Career Discovery",
   "/results": "Your Results",
+  "/notifications": "Notifications",
 };
+
+function getPageTitle(pathname: string): string {
+  if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];
+  if (pathname.startsWith("/learn/")) return "Lesson";
+  if (pathname.startsWith("/passport/")) return "Skill Passport";
+  return "Web3School";
+}
 
 export function TopBar() {
   const pathname = usePathname();
@@ -39,8 +47,7 @@ export function TopBar() {
   const { profile, signOut } = useUser();
   const { notifications } = useAppStore();
 
-  const pageTitle =
-    PAGE_TITLES[pathname || ""] || "Web3School";
+  const pageTitle = getPageTitle(pathname || "");
 
   const initials = profile?.full_name
     ? profile.full_name

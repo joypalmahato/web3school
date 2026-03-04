@@ -9,6 +9,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  Compass,
   Map,
   BookOpen,
   BarChart3,
@@ -24,6 +25,7 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/discover", label: "Discover", icon: Compass },
   { href: "/roadmap", label: "Roadmap", icon: Map },
   { href: "/learn", label: "Learn", icon: BookOpen },
   { href: "/progress", label: "Progress", icon: BarChart3 },

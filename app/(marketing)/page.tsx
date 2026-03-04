@@ -10,6 +10,7 @@ import { Problem } from "@/components/landing/Problem";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { ProductPreview } from "@/components/landing/ProductPreview";
 import { RolesPreview } from "@/components/landing/RolesPreview";
+import { Differentiators } from "@/components/landing/Differentiators";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 
 export default function LandingPage() {
@@ -21,7 +22,8 @@ export default function LandingPage() {
       <HowItWorks />
       <ProductPreview />
       <RolesPreview />
-<FinalCTA />
+      <Differentiators />
+      <FinalCTA />
     </>
   );
 }

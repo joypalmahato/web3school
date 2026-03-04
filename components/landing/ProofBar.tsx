@@ -10,8 +10,8 @@ import { motion } from "framer-motion";
 
 const STATS = [
   { value: "90+", label: "Web3 Careers Mapped" },
-  { value: "Early Access", label: "Founding Cohort Open" },
-  { value: "Adaptive", label: "Learns How You Learn" },
+  { value: "10 min", label: "To Your Role Match" },
+  { value: "12 wks", label: "Personalized Roadmap" },
 ];
 
 export function ProofBar() {
