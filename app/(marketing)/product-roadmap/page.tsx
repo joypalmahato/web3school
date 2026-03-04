@@ -19,12 +19,12 @@ const PHASE_1_ITEMS = [
   { label: "Personalized 90-Day Roadmap", desc: "Day-by-day learning plan built around your pace, background, and matched role." },
   { label: "Daily Micro-Lessons", desc: "5–15 minute tasks — lessons, exercises, projects, and quizzes." },
   { label: "Personal AI Tutor", desc: "Answers your questions in context, adapts explanations to how you learn." },
-  { label: "Adaptive Learning Engine", desc: "Platform restructures your path based on how fast or slow you're progressing." },
   { label: "Skill Passport", desc: "Verifiable proof of skills — real projects, demonstrated expertise, shareable profile." },
-  { label: "Web3 + AI Literacy", desc: "Every roadmap includes the AI tools used in your specific role, not generic AI content." },
 ];
 
 const PHASE_2_ITEMS = [
+  { label: "Adaptive Learning Engine", desc: "Platform restructures your path based on how fast or slow you're progressing." },
+  { label: "Web3 + AI Literacy", desc: "Every roadmap includes the AI tools used in your specific role, not generic AI content." },
   { label: "AI Job Matching", desc: "Match your Skill Passport to real Web3 opportunities — no mass applying." },
   { label: "Any Sector Expansion", desc: "Extend the adaptive engine to healthcare, finance, legal, and more." },
   { label: "Cohort Learning", desc: "Learn alongside peers on the same path. Accountability groups and live sessions." },
