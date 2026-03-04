@@ -136,7 +136,7 @@ export default function LoginPage() {
           <Button
             type="button"
             variant="outline"
-            className="w-full border-border text-text-primary hover:bg-navy-light rounded-md py-5"
+            className="w-full border-white/20 text-white hover:bg-white/[0.05] hover:border-white/30 rounded-md py-5"
             onClick={() => handleOAuth("google")}
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -162,7 +162,7 @@ export default function LoginPage() {
           <Button
             type="button"
             variant="outline"
-            className="w-full border-border text-text-primary hover:bg-navy-light rounded-md py-5"
+            className="w-full border-white/20 text-white hover:bg-white/[0.05] hover:border-white/30 rounded-md py-5"
             onClick={() => handleOAuth("github")}
           >
             <Github className="w-5 h-5 mr-2" />
