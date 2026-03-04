@@ -16,42 +16,36 @@ const PERSONAS = [
     title: "The Airdrop Hunter",
     description:
       "You're in Web3 — you farm, you flip, you grind. But you have zero marketable skills. What happens when the airdrops dry up?",
-    accent: "purple-primary",
   },
   {
     icon: RefreshCw,
     title: "The Career Changer",
     description:
       "Laid off, stuck, or just done with your 9-to-5. You know Web3 is the future, but you need to reskill fast — and you need proof you can do the work.",
-    accent: "cyan-accent",
   },
   {
     icon: HelpCircle,
     title: "The Curious Outsider",
     description:
       "You keep hearing about blockchain, DeFi, NFTs. You're interested but have no idea where to start. The jargon alone is overwhelming.",
-    accent: "green-success",
   },
   {
     icon: ListChecks,
     title: "The Halfway Learner",
     description:
       "You've started 10 courses, watched 100 videos, joined 50 Discords. You know bits of everything but nothing deeply. It's time to finish something.",
-    accent: "amber-warning",
   },
 ];
 
 export function WhoIsThisFor() {
   return (
-    <AnimatedSection className="section-padding bg-navy-deep">
-      <div className="container-ds">
+    <AnimatedSection className="py-16 md:py-24 lg:py-32 bg-[#0A0A0A]">
+      <div className="max-w-[1200px] mx-auto px-6">
         {/* Title */}
-        <div className="text-center max-w-heading mx-auto mb-16">
-          <h2 className="text-heading-2 text-text-primary">
+        <div className="text-center max-w-[760px] mx-auto mb-16">
+          <h2 className="text-[28px] md:text-[40px] lg:text-[52px] font-bold text-white leading-[1.08] tracking-[-0.03em] font-heading">
             Built for People Who Are{" "}
-            <span className="text-white">
-              Ready to Change Their Lives
-            </span>
+            <span className="text-[#A0A0A0]">Ready to Change Their Lives</span>
           </h2>
         </div>
 
@@ -64,19 +58,15 @@ export function WhoIsThisFor() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.08, ease: [0, 0, 0.2, 1] }}
-              className="bg-navy-mid border border-border rounded-2xl p-6 card-interactive group"
+              className="bg-[#111111] border border-white/[0.08] rounded-2xl p-6 hover:border-white/[0.16] transition-colors duration-200 group"
             >
-              <div
-                className={`w-12 h-12 bg-${persona.accent}/10 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-smooth`}
-              >
-                <persona.icon
-                  className={`w-6 h-6 text-${persona.accent}`}
-                />
+              <div className="w-12 h-12 bg-[#10B981]/10 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-all duration-200">
+                <persona.icon className="w-6 h-6 text-[#10B981]" />
               </div>
-              <h3 className="text-heading-4 text-text-primary mb-3">
+              <h3 className="text-lg font-semibold text-white mb-3 font-heading">
                 {persona.title}
               </h3>
-              <p className="text-text-secondary text-sm leading-relaxed">
+              <p className="text-[#A0A0A0] text-sm leading-relaxed">
                 {persona.description}
               </p>
             </motion.div>
