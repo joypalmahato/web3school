@@ -70,7 +70,7 @@ function Section({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay }}
-      className="bg-[#111111] border border-white/10 rounded-2xl p-6 sm:p-8"
+      className="bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8"
     >
       <div className="flex items-center gap-3 mb-5">
         <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
@@ -120,7 +120,7 @@ export function RoleDetailClient({
   };
 
   return (
-    <div className="min-h-screen bg-navy-deep pt-24 pb-16">
+    <div className="min-h-screen pt-24 pb-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <motion.nav
@@ -139,7 +139,7 @@ export function RoleDetailClient({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#111111] border border-white/10 rounded-2xl p-6 sm:p-10"
+          className="bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-10"
         >
           <span
             className={`inline-block text-xs font-semibold px-3 py-1 rounded-full border ${CATEGORY_COLORS[role.category]}`}
@@ -284,7 +284,7 @@ export function RoleDetailClient({
                   <Link
                     key={related.slug}
                     href={`/roles/${related.slug}`}
-                    className="group block bg-[#0A0A0A] border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all"
+                    className="group block bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all"
                   >
                     <span
                       className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${CATEGORY_COLORS[related.category]}`}

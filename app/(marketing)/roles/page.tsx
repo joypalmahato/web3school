@@ -68,7 +68,7 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
     >
       <Link
         href={`/roles/${role.slug}`}
-        className="group block h-full bg-[#111111] border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300"
+        className="group block h-full bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300"
       >
         {/* Category badge */}
         <span
@@ -149,7 +149,7 @@ export default function RolesPage() {
   }, [search, activeCategory, activeThematic]);
 
   return (
-    <div className="min-h-screen bg-navy-deep pt-24 pb-16">
+    <div className="min-h-screen pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto">
@@ -258,7 +258,7 @@ export default function RolesPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-center mt-16 p-8 bg-[#111111] border border-white/10 rounded-2xl"
+          className="text-center mt-16 p-8 bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-2xl"
         >
           <h2 className="text-xl font-heading font-bold text-text-primary">
             Not sure which role fits you?
