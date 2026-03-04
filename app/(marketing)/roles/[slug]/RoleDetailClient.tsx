@@ -343,7 +343,7 @@ export function RoleDetailClient({
                 <Button
                   asChild
                   variant="outline"
-                  className="border-border text-text-primary rounded-xl px-8 py-3"
+                  className="border-white/20 text-white hover:border-white/40 hover:bg-white/[0.05] rounded-xl px-8 py-3"
                 >
                   <Link href="/discover">Not sure? Try Discovery</Link>
                 </Button>
@@ -361,7 +361,7 @@ export function RoleDetailClient({
                 <Button
                   asChild
                   variant="outline"
-                  className="border-border text-text-primary rounded-xl px-8 py-3"
+                  className="border-white/20 text-white hover:border-white/40 hover:bg-white/[0.05] rounded-xl px-8 py-3"
                 >
                   <Link href="/roles">View All Roles</Link>
                 </Button>
