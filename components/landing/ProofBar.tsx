@@ -9,7 +9,7 @@
 import { motion } from "framer-motion";
 
 const STATS = [
-  { value: "90+", label: "Web3 Careers Mapped" },
+  { value: "89+", label: "Web3 Careers Mapped" },
   { value: "10 min", label: "To Your Role Match" },
   { value: "12 wks", label: "Personalized Roadmap" },
 ];
