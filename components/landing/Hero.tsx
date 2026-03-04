@@ -93,7 +93,7 @@ export function Hero() {
         >
           {[
             { label: "Adapts to your pace", desc: "Fast or slow — the platform adjusts" },
-            { label: "90+ Web3 roles", desc: "Web3 fundamentals + AI tools for your role" },
+            { label: "89+ Web3 roles", desc: "Web3 fundamentals + AI tools for your role" },
             { label: "Non-replaceable", desc: "Not just hired — indispensable" },
           ].map((pillar) => (
             <div key={pillar.label} className="text-center">
