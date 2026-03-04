@@ -39,7 +39,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Problem() {
   return (
-    <AnimatedSection className="py-16 md:py-24 lg:py-32 bg-[#0A0A0A]">
+    <AnimatedSection className="py-16 md:py-24 lg:py-32">
       <div className="max-w-[1200px] mx-auto px-6">
 
         {/* Header */}
@@ -67,7 +67,7 @@ export function Problem() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.12, ease }}
-              className="group relative bg-[#111111] border border-white/[0.07] rounded-xl p-8 overflow-hidden hover:border-white/[0.14] transition-colors duration-300"
+              className="group relative bg-[#111111]/60 backdrop-blur-md border border-white/[0.07] rounded-xl p-8 overflow-hidden hover:border-white/[0.14] transition-colors duration-300"
             >
               {/* Red top accent */}
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />

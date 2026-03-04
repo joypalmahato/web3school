@@ -7,7 +7,19 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-navy-deep flex flex-col">
+    <div className="relative min-h-screen flex flex-col">
+      {/* Fixed background image */}
+      <div
+        className="fixed inset-0 -z-20"
+        style={{
+          backgroundImage: "url('/hero-bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+        }}
+      />
+      {/* Dark overlay */}
+      <div className="fixed inset-0 -z-10 bg-black/78" />
+
       {/* Header with logo */}
       <div className="p-6">
         <Link href="/">

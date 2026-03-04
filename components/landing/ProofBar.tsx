@@ -21,7 +21,7 @@ export function ProofBar() {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="bg-[#0E0E0E] border-y border-white/[0.06] py-12 px-6"
+      className="border-y border-white/[0.06] py-12 px-6"
     >
       <div className="max-w-[800px] mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-0">
         {STATS.map((stat, index) => (

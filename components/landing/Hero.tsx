@@ -36,10 +36,10 @@ export function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Dot grid */}
       <div
-        className="absolute inset-0 bg-[#0A0A0A]"
+        className="absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
+            "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
       />

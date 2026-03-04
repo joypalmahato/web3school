@@ -9,7 +9,7 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
 export function ProductPreview() {
   return (
-    <AnimatedSection className="py-12 md:py-20 lg:py-24 bg-[#0A0A0A] px-6" delay={0.2}>
+    <AnimatedSection className="py-12 md:py-20 lg:py-24 px-6" delay={0.2}>
       <div className="text-center mb-10">
         <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-3">
           See It In Action

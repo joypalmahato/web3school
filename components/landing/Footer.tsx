@@ -10,7 +10,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/[0.06] bg-[#0A0A0A]">
+    <footer className="border-t border-white/[0.06]">
       <div className="max-w-[1200px] mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Wordmark */}
