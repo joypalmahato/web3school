@@ -113,6 +113,10 @@ export function DiscoveryChat({
         }),
       });
 
+      if (response.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (!response.ok) throw new Error("Failed to send message");
 
       const reader = response.body?.getReader();
@@ -204,6 +208,10 @@ export function DiscoveryChat({
         }),
       });
 
+      if (res.status === 401) {
+        router.push("/login");
+        return;
+      }
       if (!res.ok) throw new Error("Failed to complete discovery");
 
       router.push("/results");
