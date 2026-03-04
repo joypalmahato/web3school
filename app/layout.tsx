@@ -24,6 +24,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://web3school.study"),
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+  },
   title: {
     default: "Web3School — AI-Powered Web3 Career Discovery",
     template: "%s | Web3School",
