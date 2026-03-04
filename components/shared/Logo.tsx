@@ -3,6 +3,7 @@
  * @part-of Web3School — Shared Components
  * @design Plain white bold text logo
  */
+import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 
 interface LogoProps {
@@ -18,14 +19,15 @@ const sizeClasses = {
 
 export function Logo({ size = "md", className }: LogoProps) {
   return (
-    <span
+    <Link
+      href="/"
       className={cn(
-        "font-heading font-bold text-white",
+        "font-heading font-bold text-white hover:opacity-80 transition-opacity duration-200",
         sizeClasses[size],
         className
       )}
     >
       Web3School
-    </span>
+    </Link>
   );
 }
