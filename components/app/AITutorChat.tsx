@@ -8,6 +8,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Sparkles } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -179,9 +181,17 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
                         : "text-text-primary"
                     )}
                   >
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                      {msg.content}
-                    </p>
+                    {msg.role === "assistant" ? (
+                      <div className="text-sm leading-relaxed prose prose-invert prose-sm max-w-none [&_p]:text-text-primary [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_li]:text-text-primary [&_strong]:text-white [&_code]:text-cyan-400 [&_code]:bg-navy-deep [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_ul]:my-1.5 [&_ol]:my-1.5">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {msg.content}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                        {msg.content}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -189,9 +199,11 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
               {streamingContent && (
                 <div className="flex justify-start">
                   <div className="max-w-[85%] px-3 py-2 text-text-primary">
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                      {streamingContent}
-                    </p>
+                    <div className="text-sm leading-relaxed prose prose-invert prose-sm max-w-none [&_p]:text-text-primary [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_li]:text-text-primary [&_strong]:text-white [&_code]:text-cyan-400 [&_code]:bg-navy-deep [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_ul]:my-1.5 [&_ol]:my-1.5">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {streamingContent}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 </div>
               )}
