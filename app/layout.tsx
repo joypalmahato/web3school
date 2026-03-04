@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from "next/font/google";
 import { getAuthFromCookies } from "@insforge/nextjs";
+import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -54,6 +55,7 @@ export default async function RootLayout({
         <Providers initialState={initialState}>
           {children}
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
