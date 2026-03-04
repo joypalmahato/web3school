@@ -1,13 +1,31 @@
 /**
  * @component ProductPreview
  * @part-of Web3School — Landing Page
- * @design Centered demo video with green glow border. Autoplays on scroll into view.
+ * @design Centered demo video with green glow border. Lazy loads on scroll into view.
  */
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
 export function ProductPreview() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [load, setLoad] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <AnimatedSection className="py-12 md:py-20 lg:py-24 px-6" delay={0.2}>
       <div className="text-center mb-10">
@@ -19,17 +37,21 @@ export function ProductPreview() {
         </h2>
       </div>
       <div
-        className="max-w-[960px] mx-auto border border-white/10 rounded-xl overflow-hidden"
+        ref={containerRef}
+        className="max-w-[960px] mx-auto border border-white/10 rounded-xl overflow-hidden bg-[#111111] aspect-video"
         style={{ boxShadow: "0 0 80px rgba(16,185,129,0.08)" }}
       >
-        <video
-          src="/product-demo.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full aspect-video object-cover bg-[#111111]"
-        />
+        {load && (
+          <video
+            src="/product-demo.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="none"
+            className="w-full h-full object-cover"
+          />
+        )}
       </div>
     </AnimatedSection>
   );
