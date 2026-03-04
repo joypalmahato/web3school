@@ -20,6 +20,9 @@ export const ACCEPTED_IMAGE_TYPES = [
   "image/gif",
 ];
 
+// TODO: Replace with live Gitbook URL when ready
+export const WHITEPAPER_URL = "https://web3school.gitbook.io/whitepaper";
+
 export const SOCIAL_LINKS = {
   twitter: "https://twitter.com/web3school",
   discord: "https://discord.gg/web3school",
