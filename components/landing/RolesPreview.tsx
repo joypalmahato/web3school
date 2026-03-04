@@ -135,6 +135,18 @@ const SLUG_TO_THEMATIC: Record<string, ThematicGroup> = {
   "ai-tool-reviewer": "creator",
 };
 
+const THEMATIC_LABEL: Record<ThematicGroup, string> = {
+  all: "All",
+  web3: "Web3",
+  "ai-ml": "AI / ML",
+  development: "Development",
+  design: "Design",
+  data: "Data",
+  marketing: "Marketing",
+  product: "Product",
+  creator: "Creator",
+};
+
 function getThematicGroup(role: RoleSeedData): ThematicGroup {
   return SLUG_TO_THEMATIC[role.slug] ?? "web3";
 }
@@ -199,7 +211,7 @@ export function RolesPreview() {
               className="min-w-[280px] flex-shrink-0 scroll-snap-align-start bg-[#111111] border border-white/[0.08] rounded-xl p-7 hover:border-white/[0.16] transition-colors duration-200"
             >
               <span className="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white/[0.06] text-[#A0A0A0] mb-3">
-                {role.category.replace("-", " ")}
+                {THEMATIC_LABEL[getThematicGroup(role)]}
               </span>
               <h3 className="text-lg font-semibold text-white mb-2 font-heading">
                 {role.name}
