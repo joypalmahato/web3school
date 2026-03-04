@@ -62,7 +62,7 @@ export default function RoadmapPage() {
               <span className="text-xs font-semibold text-[#10B981] uppercase tracking-widest">Phase 1 — Live Now</span>
             </div>
           </div>
-          <div className="bg-[#111111] border border-white/[0.08] rounded-2xl overflow-hidden">
+          <div className="bg-[#111111]/60 backdrop-blur-md border border-white/[0.08] rounded-2xl overflow-hidden">
             {PHASE_1_ITEMS.map((item, i) => (
               <div
                 key={item.label}
@@ -88,7 +88,7 @@ export default function RoadmapPage() {
               <span className="text-xs font-semibold text-[#666666] uppercase tracking-widest">Phase 2 — Coming Next</span>
             </div>
           </div>
-          <div className="bg-[#0E0E0E] border border-white/[0.06] rounded-2xl overflow-hidden">
+          <div className="bg-[#0A0A0A]/60 backdrop-blur-md border border-white/[0.06] rounded-2xl overflow-hidden">
             {PHASE_2_ITEMS.map((item, i) => (
               <div
                 key={item.label}
@@ -108,7 +108,7 @@ export default function RoadmapPage() {
 
         {/* CTA */}
         <AnimatedSection delay={0.3} className="text-center">
-          <div className="bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-12">
+          <div className="bg-[#111111]/60 backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 sm:p-12">
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
               Shape What We Build Next
             </h2>
