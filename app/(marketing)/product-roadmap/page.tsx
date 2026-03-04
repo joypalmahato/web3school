@@ -8,7 +8,7 @@ import { Check, Clock, Zap } from "lucide-react";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
 export const metadata = {
-  title: "Roadmap | Web3School",
+  title: "Product Roadmap | Web3School",
   description:
     "See what we've built and what's coming next. Web3School's product roadmap — from prototype to the world's leading Web3 career platform.",
 };
