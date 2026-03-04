@@ -80,6 +80,8 @@ export default function TaskPage({
   const [xpAwarded, setXpAwarded] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generateError, setGenerateError] = useState(false);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -97,6 +99,16 @@ export default function TaskPage({
 
     fetchTask();
   }, [taskId]);
+
+  // Auto-generate content if task loaded but content is empty
+  useEffect(() => {
+    if (!task) return;
+    const c = task.content as TaskContent;
+    const isEmpty = !c?.lesson_text && !c?.exercise_prompt && !c?.project_brief &&
+      (!c?.quiz_questions || c.quiz_questions.length === 0);
+    if (isEmpty) handleGenerateContent();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [task?.id]);
 
   const handleComplete = async () => {
     if (!task || isCompleting) return;
@@ -122,6 +134,22 @@ export default function TaskPage({
       console.error("Complete error:", err);
     } finally {
       setIsCompleting(false);
+    }
+  };
+
+  const handleGenerateContent = async () => {
+    if (!task || isGenerating) return;
+    setIsGenerating(true);
+    setGenerateError(false);
+    try {
+      const res = await fetch(`/api/tasks/${task.id}/generate`, { method: "POST" });
+      if (!res.ok) throw new Error("Generation failed");
+      const data = await res.json();
+      setTask((prev) => prev ? { ...prev, content: data.content } : null);
+    } catch {
+      setGenerateError(true);
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -381,6 +409,45 @@ export default function TaskPage({
             ))}
           </div>
         </div>
+      )}
+
+      {/* Empty content fallback */}
+      {!content.lesson_text && !content.exercise_prompt && !content.project_brief && (!content.quiz_questions || content.quiz_questions.length === 0) && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-[#111111] border border-white/[0.08] rounded-xl p-8 text-center"
+        >
+          {isGenerating ? (
+            <div className="space-y-3">
+              <Loader2 className="w-8 h-8 text-[#10B981] animate-spin mx-auto" />
+              <p className="text-white font-medium">Generating your lesson content...</p>
+              <p className="text-[#666666] text-sm">This takes about 10–15 seconds.</p>
+            </div>
+          ) : generateError ? (
+            <div className="space-y-4">
+              <p className="text-white font-medium">Content generation failed.</p>
+              <p className="text-[#666666] text-sm">Check your connection and try again.</p>
+              <Button
+                onClick={handleGenerateContent}
+                className="bg-white text-black hover:opacity-85 rounded-md"
+              >
+                Retry
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <p className="text-white font-medium">Content not generated yet.</p>
+              <p className="text-[#666666] text-sm">Click below to generate your lesson content.</p>
+              <Button
+                onClick={handleGenerateContent}
+                className="bg-white text-black hover:opacity-85 rounded-md"
+              >
+                Generate Content
+              </Button>
+            </div>
+          )}
+        </motion.div>
       )}
 
       {/* Complete / Next buttons */}
