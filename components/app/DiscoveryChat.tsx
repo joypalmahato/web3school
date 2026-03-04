@@ -11,6 +11,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Sparkles, ArrowRight, Check } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -308,9 +310,17 @@ export function DiscoveryChat({
                       : "bg-transparent text-text-primary"
                   )}
                 >
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                    {msg.content}
-                  </p>
+                  {msg.role === "assistant" ? (
+                    <div className="text-sm leading-relaxed prose prose-invert prose-sm max-w-none [&_p]:text-text-primary [&_p]:mb-2 [&_p:last-child]:mb-0 [&_li]:text-text-primary [&_strong]:text-white [&_code]:text-cyan-400 [&_code]:bg-navy-deep [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_ul]:my-2 [&_ol]:my-2">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {msg.content}
+                      </ReactMarkdown>
+                    </div>
+                  ) : (
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                      {msg.content}
+                    </p>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -327,9 +337,11 @@ export function DiscoveryChat({
                 <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
               </div>
               <div className="max-w-[80%] text-text-primary">
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                  {streamingContent}
-                </p>
+                <div className="text-sm leading-relaxed prose prose-invert prose-sm max-w-none [&_p]:text-text-primary [&_p]:mb-2 [&_p:last-child]:mb-0 [&_li]:text-text-primary [&_strong]:text-white [&_code]:text-cyan-400 [&_code]:bg-navy-deep [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_ul]:my-2 [&_ol]:my-2">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {streamingContent}
+                  </ReactMarkdown>
+                </div>
               </div>
             </motion.div>
           )}
