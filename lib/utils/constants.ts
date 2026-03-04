@@ -31,17 +31,15 @@ export const SOCIAL_LINKS = {
 } as const;
 
 export const ROLE_CATEGORIES = {
-  technical: { label: "Technical", color: "text-cyan-accent" },
-  "semi-technical": { label: "Semi-Technical", color: "text-purple-primary" },
-  "non-technical": { label: "Non-Technical", color: "text-green-success" },
-  creative: { label: "Creative", color: "text-amber-warning" },
+  technical: { label: "Technical", color: "text-[#10B981]" },
+  "semi-technical": { label: "Semi-Technical", color: "text-[#6366F1]" },
+  "non-technical": { label: "Non-Technical", color: "text-[#F59E0B]" },
+  creative: { label: "Creative", color: "text-[#EC4899]" },
 } as const;
 
 export const CATEGORY_BADGE_COLORS = {
-  technical: "bg-cyan-accent/10 text-cyan-accent border-cyan-accent/20",
-  "semi-technical":
-    "bg-purple-primary/10 text-purple-primary border-purple-primary/20",
-  "non-technical":
-    "bg-green-success/10 text-green-success border-green-success/20",
-  creative: "bg-amber-warning/10 text-amber-warning border-amber-warning/20",
+  technical: "bg-[#10B981]/10 text-[#10B981] border-[#10B981]/20",
+  "semi-technical": "bg-[#6366F1]/10 text-[#6366F1] border-[#6366F1]/20",
+  "non-technical": "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20",
+  creative: "bg-[#EC4899]/10 text-[#EC4899] border-[#EC4899]/20",
 } as const;

@@ -222,7 +222,7 @@ export default function RoadmapPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => router.push("/roles")}
+            onClick={() => router.push("/discover")}
             className="text-text-muted hover:text-text-primary text-xs flex-shrink-0"
           >
             <RotateCcw className="w-3 h-3 mr-1" />

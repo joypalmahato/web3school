@@ -53,10 +53,7 @@ export function Hero() {
           transition={{ duration: 0.6, ease }}
           className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03]"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
-          </span>
+          <span className="inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
           <span className="text-xs text-[#A0A0A0]">
             <span className="text-white font-medium">Founding cohort</span> · Early access now open
           </span>
@@ -96,7 +93,7 @@ export function Hero() {
         >
           {[
             { label: "Adapts to your pace", desc: "Fast or slow — the platform adjusts" },
-            { label: "89+ Web3 roles", desc: "Web3 fundamentals + AI tools for your role" },
+            { label: "90+ Web3 roles", desc: "Web3 fundamentals + AI tools for your role" },
             { label: "Non-replaceable", desc: "Not just hired — indispensable" },
           ].map((pillar) => (
             <div key={pillar.label} className="text-center">
