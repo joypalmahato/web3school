@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0A0A0A"/>
+  <rect width="32" height="32" rx="6" fill="#FFFFFF"/>
   <!-- Connector lines -->
-  <line x1="9" y1="21" x2="15" y2="14" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
-  <line x1="15" y1="14" x2="20" y2="17" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
-  <line x1="20" y1="17" x2="25" y2="9" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="9" y1="21" x2="15" y2="14" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="15" y1="14" x2="20" y2="17" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="20" y1="17" x2="25" y2="9" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
   <!-- Hollow nodes -->
-  <circle cx="9" cy="21" r="2.8" fill="none" stroke="#FFFFFF" stroke-width="1.8"/>
-  <circle cx="15" cy="14" r="2.8" fill="none" stroke="#FFFFFF" stroke-width="1.8"/>
-  <circle cx="20" cy="17" r="2.8" fill="none" stroke="#FFFFFF" stroke-width="1.8"/>
+  <circle cx="9" cy="21" r="2.8" fill="none" stroke="#000000" stroke-width="1.8"/>
+  <circle cx="15" cy="14" r="2.8" fill="none" stroke="#000000" stroke-width="1.8"/>
+  <circle cx="20" cy="17" r="2.8" fill="none" stroke="#000000" stroke-width="1.8"/>
   <!-- Filled top node -->
-  <circle cx="25" cy="9" r="3.2" fill="#FFFFFF"/>
+  <circle cx="25" cy="9" r="3.2" fill="#000000"/>
 </svg>
