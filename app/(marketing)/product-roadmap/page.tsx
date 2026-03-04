@@ -35,7 +35,7 @@ const PHASE_2_ITEMS = [
 
 export default function RoadmapPage() {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-16">
+    <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-16 relative z-0">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
@@ -88,7 +88,7 @@ export default function RoadmapPage() {
               <span className="text-xs font-semibold text-[#666666] uppercase tracking-widest">Phase 2 — Coming Next</span>
             </div>
           </div>
-          <div className="bg-[#111111]/60 border border-white/[0.06] rounded-2xl overflow-hidden">
+          <div className="bg-[#0E0E0E] border border-white/[0.06] rounded-2xl overflow-hidden">
             {PHASE_2_ITEMS.map((item, i) => (
               <div
                 key={item.label}
