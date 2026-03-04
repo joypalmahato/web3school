@@ -117,7 +117,7 @@ export function Hero() {
             href="/signup"
             className="inline-flex items-center justify-center bg-white text-black font-semibold text-base px-8 py-4 rounded-md hover:opacity-85 transition-opacity duration-200 w-full sm:w-auto"
           >
-            Find Your Path — Free
+            Find Your Path
           </Link>
           <a
             href="#how-it-works"
@@ -134,7 +134,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.5, ease }}
           className="mt-4 text-sm text-[#555555]"
         >
-          Free forever. No credit card. From confused to unstoppable.
+          From confused to unstoppable.
         </motion.p>
 
         {/* Rotating live match card */}
