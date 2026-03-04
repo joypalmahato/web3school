@@ -23,7 +23,7 @@ import { WHITEPAPER_URL } from "@/lib/utils/constants";
 const NAV_LINKS = [
   { label: "How It Works", href: "#how-it-works", external: false },
   { label: "Roles", href: "#roles", external: false },
-  { label: "Roadmap", href: "/roadmap", external: false },
+  { label: "Roadmap", href: "/product-roadmap", external: false },
   { label: "Whitepaper", href: WHITEPAPER_URL, external: true },
   { label: "Blog", href: "/blog", external: false },
 ];
