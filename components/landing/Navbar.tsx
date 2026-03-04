@@ -94,34 +94,39 @@ export function Navbar() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="bg-[#111111] border-l border-white/[0.08] w-72"
+                className="bg-[#0A0A0A] border-l border-white/[0.08] w-full sm:w-80 flex flex-col p-0"
               >
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                <div className="flex flex-col gap-6 mt-8">
+
+                {/* Header */}
+                <div className="flex items-center justify-between px-6 h-16 border-b border-white/[0.06]">
                   <span className="text-lg font-bold text-white font-heading">
                     Web3School
                   </span>
-                  <div className="flex flex-col gap-4">
-                    {NAV_LINKS.map((link) => (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                        onClick={() => setMobileOpen(false)}
-                        className="text-[#A0A0A0] hover:text-white transition-colors duration-200 text-base py-2"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
+                </div>
+
+                {/* Nav links */}
+                <div className="flex flex-col flex-1 px-6 py-6 gap-1">
+                  {NAV_LINKS.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      onClick={() => setMobileOpen(false)}
+                      className="text-[#A0A0A0] hover:text-white transition-colors duration-200 text-base py-3 px-3 rounded-lg hover:bg-white/[0.04]"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+
+                {/* CTA pinned to bottom */}
+                <div className="px-6 pb-10 border-t border-white/[0.06] pt-6">
                   <Button
                     asChild
-                    className="bg-white text-black hover:opacity-85 rounded-md px-5 py-3 text-sm font-semibold w-full mt-2"
+                    className="bg-white text-black hover:opacity-85 rounded-md text-sm font-semibold w-full h-12"
                   >
-                    <Link
-                      href="/signup"
-                      onClick={() => setMobileOpen(false)}
-                    >
+                    <Link href="/signup" onClick={() => setMobileOpen(false)}>
                       Start Discovery
                     </Link>
                   </Button>
