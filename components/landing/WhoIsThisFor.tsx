@@ -19,15 +19,15 @@ const PERSONAS = [
   },
   {
     icon: RefreshCw,
-    title: "The Career Changer",
+    title: "The Web2 Pro",
     description:
-      "Laid off, stuck, or just done with your 9-to-5. You know Web3 is the future, but you need to reskill fast — and you need proof you can do the work.",
+      "You're a developer, designer, or marketer with real skills. You know Web3 needs people like you — but you don't know which Web3 role your skills translate to.",
   },
   {
     icon: HelpCircle,
-    title: "The Curious Outsider",
+    title: "The Crypto Watcher",
     description:
-      "You keep hearing about blockchain, DeFi, NFTs. You're interested but have no idea where to start. The jargon alone is overwhelming.",
+      "You hold crypto, follow Web3 Twitter, and understand the culture better than most. You've been watching from the sidelines long enough. You want in.",
   },
   {
     icon: ListChecks,
