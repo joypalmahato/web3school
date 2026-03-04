@@ -26,7 +26,7 @@ export function FinalCTA() {
             href="/signup"
             className="inline-flex items-center justify-center bg-white text-black font-semibold text-lg px-10 py-5 rounded-md hover:opacity-85 transition-opacity duration-200"
           >
-            Find My Web3 Path
+            Get Early Access
           </Link>
         </div>
       </div>

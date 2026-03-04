@@ -117,7 +117,7 @@ export function Hero() {
             href="/signup"
             className="inline-flex items-center justify-center bg-white text-black font-semibold text-base px-8 py-4 rounded-md hover:opacity-85 transition-opacity duration-200 w-full sm:w-auto"
           >
-            Find Your Path
+            Get Early Access
           </Link>
           <a
             href="#how-it-works"
