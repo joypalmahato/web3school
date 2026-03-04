@@ -16,7 +16,7 @@ export const metadata = {
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-16">
+    <div className="min-h-screen pt-24 pb-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <AnimatedSection className="text-center max-w-2xl mx-auto mb-12">
@@ -35,7 +35,7 @@ export default function BlogPage() {
             <AnimatedSection key={post.slug} delay={i * 0.08}>
               <Link
                 href={`/blog/${post.slug}`}
-                className="group block h-full bg-[#111111] border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all"
+                className="group block h-full bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all"
               >
                 {/* Category tag */}
                 <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-white/5 text-[#A0A0A0]">

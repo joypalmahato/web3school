@@ -31,7 +31,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   if (!post) notFound();
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-16">
+    <div className="min-h-screen pt-24 pb-16">
       <div className="max-w-[720px] mx-auto px-4 sm:px-6">
         {/* Back link */}
         <AnimatedSection>
