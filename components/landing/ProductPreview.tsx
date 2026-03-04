@@ -48,7 +48,7 @@ export function ProductPreview() {
             muted
             loop
             playsInline
-            preload="none"
+            preload="auto"
             className="w-full h-full object-cover"
           />
         )}
