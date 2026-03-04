@@ -23,6 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://web3school.study"),
   title: {
     default: "Web3School — AI-Powered Web3 Career Discovery",
     template: "%s | Web3School",
@@ -37,6 +38,13 @@ export const metadata: Metadata = {
     "learning platform",
     "skill passport",
   ],
+  openGraph: {
+    siteName: "Web3School",
+    url: "https://web3school.study",
+  },
+  alternates: {
+    canonical: "https://web3school.study",
+  },
 };
 
 export default async function RootLayout({
