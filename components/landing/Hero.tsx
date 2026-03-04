@@ -13,11 +13,11 @@ import { useEffect, useState } from "react";
 const ease = [0.16, 1, 0.3, 1] as const;
 
 const LIVE_MATCHES = [
-  { name: "Priya S.", sector: "Healthcare", milestone: "AI + Web3 literacy unlocked", fit: 96 },
-  { name: "Marcus T.", sector: "Finance", milestone: "DeFi fundamentals — week 3", fit: 91 },
-  { name: "Aiko R.", sector: "Legal", milestone: "Smart contract basics complete", fit: 94 },
-  { name: "Jordan K.", sector: "Creative", milestone: "NFT + IP rights roadmap started", fit: 88 },
-  { name: "Fatima A.", sector: "Engineering", milestone: "Protocol research path matched", fit: 97 },
+  { name: "Alex K.", sector: "DeFi Analyst", milestone: "On-chain research path matched", fit: 94 },
+  { name: "Priya S.", sector: "Smart Contract Dev", milestone: "Solidity fundamentals — week 2", fit: 97 },
+  { name: "Marcus T.", sector: "Community Manager", milestone: "DAO operations roadmap started", fit: 91 },
+  { name: "Aiko R.", sector: "NFT Creator", milestone: "NFT + IP rights module complete", fit: 88 },
+  { name: "Jordan K.", sector: "Protocol Researcher", milestone: "ZK research path unlocked", fit: 95 },
 ];
 
 export function Hero() {
@@ -81,10 +81,10 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.2, ease }}
           className="mt-7 text-lg md:text-xl text-[#A0A0A0] max-w-[640px] mx-auto leading-relaxed"
         >
-          Whatever field you&apos;re in — Web3School builds a learning path that
-          adapts to how <em>you</em> learn, teaching your sector&apos;s fundamentals,
-          AI tools, and Web3 skills until you&apos;re the person your industry
-          cannot function without.
+          Been in crypto for years but can&apos;t name your actual skill set?
+          Or trying to break into Web3 but have no idea where you fit?
+          Web3School figures out your role, builds your path, and adapts to how
+          <em> you</em> learn — until you&apos;re the one people can&apos;t replace.
         </motion.p>
 
         {/* Three pillars */}
@@ -96,7 +96,7 @@ export function Hero() {
         >
           {[
             { label: "Adapts to your pace", desc: "Fast or slow — the platform adjusts" },
-            { label: "Any sector", desc: "Your field + AI + Web3 literacy" },
+            { label: "89+ Web3 roles", desc: "Web3 fundamentals + AI tools for your role" },
             { label: "Non-replaceable", desc: "Not just hired — indispensable" },
           ].map((pillar) => (
             <div key={pillar.label} className="text-center">

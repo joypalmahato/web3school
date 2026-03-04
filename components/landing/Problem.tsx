@@ -27,8 +27,8 @@ const PROBLEMS = [
   },
   {
     number: "03",
-    stat: "0",
-    statLabel: "proof of what you actually know",
+    stat: "72%",
+    statLabel: "of self-taught Web3 learners can't prove their skills to employers",
     title: "Skills Without Evidence",
     description:
       "You can spend months learning and still have nothing to show an employer. No portfolio. No credentials. No way to stand out in a world where everyone says they know AI and Web3.",
