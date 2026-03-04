@@ -58,7 +58,7 @@ export function Hero() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
           </span>
           <span className="text-xs text-[#A0A0A0]">
-            <span className="text-white font-medium">23 people</span> started their path to irreplaceable today
+            <span className="text-white font-medium">Founding cohort</span> · Early access now open
           </span>
         </motion.div>
 
@@ -166,7 +166,7 @@ export function Hero() {
                   </p>
                 </div>
                 <div className="ml-1 text-[#10B981] text-[10px] font-semibold bg-[#10B981]/10 px-2 py-0.5 rounded-full uppercase tracking-wide">
-                  Live
+                  {current.fit}% fit
                 </div>
               </motion.div>
             </AnimatePresence>

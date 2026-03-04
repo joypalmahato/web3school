@@ -63,7 +63,7 @@ export function Differentiators() {
               }}
               className="text-center"
             >
-              <diff.icon className="w-8 h-8 text-green-success mx-auto mb-4" />
+              <diff.icon className="w-8 h-8 text-[#10B981] mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2 font-heading">
                 {diff.title}
               </h3>

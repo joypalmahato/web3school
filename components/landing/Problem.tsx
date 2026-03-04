@@ -11,24 +11,24 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 const PROBLEMS = [
   {
     number: "01",
-    stat: "92%",
-    statLabel: "never make the transition",
+    stat: "Most",
+    statLabel: "people who try to break into Web3 never land a role",
     title: "No Clear Direction",
     description:
       "Thousands of YouTube videos, Twitter threads, and free courses. Zero structure. You learn random things and never know what actually matters for the career you want.",
   },
   {
     number: "02",
-    stat: "5.5%",
-    statLabel: "average course completion rate",
+    stat: "~5%",
+    statLabel: "average completion rate for online courses (research on MOOCs, 2023)",
     title: "Generic Learning Doesn't Stick",
     description:
       "One-size-fits-all courses weren't built for you. Without a path that adapts to how you think and learn, motivation dies before you finish week two.",
   },
   {
     number: "03",
-    stat: "72%",
-    statLabel: "of self-taught Web3 learners can't prove their skills to employers",
+    stat: "Few",
+    statLabel: "self-taught Web3 learners can actually prove their skills to employers",
     title: "Skills Without Evidence",
     description:
       "You can spend months learning and still have nothing to show an employer. No portfolio. No credentials. No way to stand out in a world where everyone says they know AI and Web3.",

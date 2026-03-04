@@ -44,7 +44,7 @@ const STEPS = [
   },
   {
     number: "05",
-    title: "Prove It. Become Irreplaceable.",
+    title: "Prove It. Own Your Career.",
     description:
       "You don't finish with a certificate. You finish with a Skill Passport — verified projects, demonstrated expertise, and sector + AI + Web3 literacy that makes you the person your industry cannot function without.",
     chips: null,
