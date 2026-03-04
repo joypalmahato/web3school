@@ -4,8 +4,6 @@
  * @design Centered headline + white CTA button. Last conversion opportunity.
  * @spec docs/04-page-build-spec.md — Final CTA
  */
-"use client";
-
 import Link from "next/link";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
