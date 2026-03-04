@@ -18,11 +18,14 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { WHITEPAPER_URL } from "@/lib/utils/constants";
 
 const NAV_LINKS = [
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Roles", href: "#roles" },
-  { label: "Blog", href: "/blog" },
+  { label: "How It Works", href: "#how-it-works", external: false },
+  { label: "Roles", href: "#roles", external: false },
+  { label: "Roadmap", href: "/roadmap", external: false },
+  { label: "Whitepaper", href: WHITEPAPER_URL, external: true },
+  { label: "Blog", href: "/blog", external: false },
 ];
 
 export function Navbar() {
@@ -63,6 +66,7 @@ export function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
+                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="text-sm text-[#A0A0A0] hover:text-white transition-colors duration-200"
               >
                 {link.label}
@@ -102,6 +106,7 @@ export function Navbar() {
                       <a
                         key={link.href}
                         href={link.href}
+                        {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                         onClick={() => setMobileOpen(false)}
                         className="text-[#A0A0A0] hover:text-white transition-colors duration-200 text-base py-2"
                       >
