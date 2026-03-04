@@ -26,7 +26,7 @@ export function FinalCTA() {
             href="/signup"
             className="inline-flex items-center justify-center bg-white text-black font-semibold text-lg px-10 py-5 rounded-md hover:opacity-85 transition-opacity duration-200"
           >
-            Find My Web3 Path — Free
+            Find My Web3 Path
           </Link>
           <p className="mt-4 text-sm text-[#666666]">
             No credit card required
