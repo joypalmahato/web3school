@@ -165,6 +165,13 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
               </button>
             </div>
 
+            {/* Disclaimer */}
+            <div className="px-4 py-2 border-b border-white/[0.05] bg-white/[0.02]">
+              <p className="text-[10px] text-[#555555] text-center leading-snug">
+                We&apos;re still building — AI responses can occasionally be inaccurate. Verify important concepts.
+              </p>
+            </div>
+
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
               {messages.length === 0 && !streamingContent && (
