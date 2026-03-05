@@ -21,7 +21,7 @@ const STEPS = [
     number: "02",
     title: "Your Path Is Built For You — Only You",
     description:
-      "You don't get a course. You get a personalized 12-week roadmap built around your pace, your background, and your goals. Every task, every resource, every milestone is yours.",
+      "You don't get a course. You get a personalized roadmap built around your role, your background, and your goals. There's no fixed timeline — some people finish in 6 weeks, others take 5 months. The platform moves at your speed, not a calendar's.",
     chips: null,
   },
   {

@@ -343,7 +343,7 @@ export function RoleDetailClient({
           </h2>
           <p className="text-text-secondary mt-3 text-sm max-w-md mx-auto">
             {isAuthenticated
-              ? `Generate your personalized 12-week roadmap for ${role.name}. Your previous roadmap will be archived.`
+              ? `Generate your personalized roadmap for ${role.name}. Learn at your own pace — the platform adapts to how fast you move.`
               : `Take our AI-powered career discovery quiz to find out if ${role.name} is the right fit for you — or discover an even better match.`}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">

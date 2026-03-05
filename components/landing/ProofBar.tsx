@@ -10,8 +10,8 @@ import { motion } from "framer-motion";
 
 const STATS = [
   { value: "89+", label: "Web3 Roles Covered" },
-  { value: "10 min", label: "Discovery Chat" },
-  { value: "12-week", label: "Personalized Path" },
+  { value: "Your Pace", label: "Adaptive Roadmap" },
+  { value: "Daily", label: "Bite-Sized Lessons" },
   { value: "Free", label: "To Join & Learn" },
 ];
 

@@ -17,18 +17,18 @@ import { FinalCTA } from "@/components/landing/FinalCTA";
 export const metadata: Metadata = {
   title: "Web3School — Find Your Web3 Career Path",
   description:
-    "A 10-minute AI discovery chat matches you to your ideal Web3 role, then builds a personalized 12-week roadmap. Free to join.",
+    "A short AI discovery chat matches you to your ideal Web3 role, then builds a personalized adaptive roadmap at your pace. Free to join.",
   openGraph: {
     title: "Web3School — Find Your Web3 Career Path",
     description:
-      "10-min AI chat → Web3 role match → 12-week personalized roadmap. Built for crypto natives and Web3 newcomers.",
+      "AI discovery chat → Web3 role match → adaptive roadmap at your pace. Built for crypto natives and Web3 newcomers.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Web3School — Find Your Web3 Career Path",
     description:
-      "10-min AI chat → Web3 role match → 12-week personalized roadmap. Free to join.",
+      "AI discovery chat → Web3 role match → adaptive roadmap at your pace. Free to join.",
   },
 };
 

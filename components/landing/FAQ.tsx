@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: "How long does it take?",
-    a: "The discovery chat is 10 minutes. Your personalized roadmap is 12 weeks of 10–15 minute daily lessons. You learn at your own pace — if you're fast, the platform accelerates. If you need more time on something, it slows down and re-explains.",
+    a: "The discovery chat takes about 10 minutes. Your roadmap? However long you need. Some fast learners push through in 6–8 weeks. Others take 4–5 months because life happens. The platform doesn't care about a timeline — it adapts to your pace, not the other way around.",
   },
   {
     q: "I already have some Web3 experience. Can I skip ahead?",

@@ -30,9 +30,9 @@ const VARIANTS = {
   a: {
     headline1: "The School That Finds Your Path.",
     headline2: "Then Builds It With You.",
-    sub: "Web3School runs a 10-minute AI chat, matches you to the right role, then teaches it the way your brain works — week by week, until you can prove it.",
+    sub: "Web3School starts with a short AI conversation, matches you to the right role, then teaches it the way your brain works — at your pace, until you can prove it.",
     pillars: [
-      { label: "Your role, found for you", desc: "10-min chat → precise role match" },
+      { label: "Your role, found for you", desc: "Quick AI chat → precise role match" },
       { label: "Learns how you learn", desc: "Adapts pace and style to you" },
       { label: "Skill Passport you can show", desc: "Proof, not just a certificate" },
     ],
