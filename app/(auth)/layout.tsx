@@ -1,11 +1,32 @@
 import { Logo } from "@/components/shared/Logo";
 import Link from "next/link";
+import { auth } from "@insforge/nextjs";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // If the user is already logged in, send them to their appropriate page
+  const { userId } = await auth();
+  if (userId) {
+    try {
+      const { data: profile } = await db("profiles")
+        .select("onboarding_completed, discovery_completed, is_approved")
+        .eq("user_id", userId)
+        .single();
+
+      if (!profile?.is_approved) redirect("/waitlist");
+      else if (profile?.discovery_completed) redirect("/learn");
+      else if (profile?.onboarding_completed) redirect("/discover");
+      else redirect("/onboarding");
+    } catch {
+      redirect("/discover");
+    }
+  }
+
   return (
     <div className="relative min-h-screen flex flex-col">
       {/* Fixed background image */}
