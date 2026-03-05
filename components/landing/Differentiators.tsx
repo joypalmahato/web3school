@@ -1,32 +1,39 @@
 /**
  * @component Differentiators
  * @part-of Web3School — Landing Page
- * @design 3-column centered grid with icon + title + description.
+ * @design Direct comparison table: Everywhere Else vs Web3School.
  */
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, ShieldCheck, Compass } from "lucide-react";
+import { X, Check } from "lucide-react";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
-const DIFFS = [
+const ROWS = [
   {
-    icon: Compass,
-    title: "Role-First, Not Content-First",
-    description:
-      "Most platforms hand you a syllabus. Web3School starts by finding your role — then builds everything around it. You never learn something that doesn't matter for where you're going.",
+    dimension: "Starting point",
+    others: "A generic syllabus — same for everyone",
+    us: "A role match built around your skills and goals",
   },
   {
-    icon: Brain,
-    title: "The Platform Learns With You",
-    description:
-      "Moving fast? It accelerates. Stuck? It restructures the lesson until the concept clicks. No other platform does this — they just move on.",
+    dimension: "Learning path",
+    others: "Fixed order, fixed pace, fixed content",
+    us: "Adapts to how fast — or slow — you actually learn",
   },
   {
-    icon: ShieldCheck,
-    title: "Proof That Actually Means Something",
-    description:
-      "You finish with a Skill Passport — verified projects and demonstrated expertise, not a certificate that just says you clicked through a course.",
+    dimension: "When you're stuck",
+    others: "Platform moves on anyway",
+    us: "AI restructures the lesson until it clicks",
+  },
+  {
+    dimension: "What you finish with",
+    others: "A completion badge no one takes seriously",
+    us: "A Skill Passport with verified, demonstrated expertise",
+  },
+  {
+    dimension: "Cost",
+    others: "Paid course, subscription, or bootcamp fees",
+    us: "Always free",
   },
 ];
 
@@ -36,40 +43,74 @@ export function Differentiators() {
   return (
     <AnimatedSection className="py-16 md:py-24 lg:py-32 bg-[#0A0A0A]">
       <div className="max-w-[1200px] mx-auto px-6">
+
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-4">
             Why Web3School
           </p>
           <h2 className="text-[28px] md:text-[40px] lg:text-[48px] font-bold text-white leading-[1.1] tracking-[-0.02em] font-heading">
-            Built Different. On Purpose.
+            Not Another Course Platform.
+            <br />
+            <span className="text-[#A0A0A0]">Here&apos;s the actual difference.</span>
           </h2>
-          <p className="mt-4 text-lg text-[#A0A0A0] max-w-[520px] mx-auto">
-            Three things no other learning platform does — and why they matter for your career.
-          </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid gap-6 md:gap-8 md:grid-cols-3 max-w-[1000px] mx-auto">
-          {DIFFS.map((diff, index) => (
+        {/* Comparison table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease }}
+          className="max-w-[900px] mx-auto border border-white/[0.08] rounded-2xl overflow-hidden"
+        >
+          {/* Column headers */}
+          <div className="grid grid-cols-[1fr_1fr_1fr] bg-[#111111]/80">
+            <div className="px-6 py-4 border-b border-white/[0.06]" />
+            <div className="px-6 py-4 border-b border-l border-white/[0.06]">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#555555]">
+                Everywhere Else
+              </p>
+            </div>
+            <div className="px-6 py-4 border-b border-l border-white/[0.06] bg-[#10B981]/[0.04]">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#10B981]">
+                Web3School
+              </p>
+            </div>
+          </div>
+
+          {/* Rows */}
+          {ROWS.map((row, index) => (
             <motion.div
-              key={diff.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              key={row.dimension}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1, ease }}
-              className="bg-[#111111]/60 border border-white/[0.07] rounded-xl p-7 hover:border-white/[0.14] transition-colors duration-300"
+              transition={{ duration: 0.4, delay: index * 0.07, ease }}
+              className={`grid grid-cols-[1fr_1fr_1fr] ${index < ROWS.length - 1 ? "border-b border-white/[0.06]" : ""}`}
             >
-              <div className="w-10 h-10 rounded-lg bg-[#10B981]/10 flex items-center justify-center mb-5">
-                <diff.icon className="w-5 h-5 text-[#10B981]" />
+              {/* Dimension */}
+              <div className="px-6 py-5 flex items-center">
+                <p className="text-xs font-semibold text-[#555555] uppercase tracking-wide">
+                  {row.dimension}
+                </p>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2 font-heading">
-                {diff.title}
-              </h3>
-              <p className="text-sm text-[#888888] leading-relaxed">{diff.description}</p>
+
+              {/* Others */}
+              <div className="px-6 py-5 border-l border-white/[0.06] flex items-start gap-3">
+                <X className="w-4 h-4 text-red-500/60 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-[#555555] leading-relaxed">{row.others}</p>
+              </div>
+
+              {/* Web3School */}
+              <div className="px-6 py-5 border-l border-white/[0.06] bg-[#10B981]/[0.03] flex items-start gap-3">
+                <Check className="w-4 h-4 text-[#10B981] flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-white leading-relaxed">{row.us}</p>
+              </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
+
       </div>
     </AnimatedSection>
   );
