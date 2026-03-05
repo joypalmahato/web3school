@@ -1,7 +1,7 @@
 /**
  * @component HowItWorksPage
  * @part-of Web3School -- Marketing
- * @design 5-step vertical layout with green step numbers, Kled style
+ * @design 5-step vertical layout with green step numbers
  */
 import Link from "next/link";
 import { Compass, Target, BookOpen, Code, ShieldCheck } from "lucide-react";
@@ -10,7 +10,7 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 export const metadata = {
   title: "How It Works | Web3School",
   description:
-    "Discover your ideal Web3 career in 5 simple steps: Discover, Match, Learn, Practice, and Verify.",
+    "Five steps from confusion to a verified Web3 career — AI-matched role, personalized roadmap, adaptive lessons, and a Skill Passport you can show.",
 };
 
 const STEPS = [
@@ -19,35 +19,35 @@ const STEPS = [
     title: "Discover",
     icon: Compass,
     description:
-      "Start with a 10-minute AI-powered conversation. We ask about your background, interests, strengths, and goals to understand who you are and what excites you about Web3.",
+      "Start with a focused AI conversation. We ask about your background, interests, strengths, and goals to understand who you are and what excites you about Web3.",
   },
   {
     number: "02",
     title: "Match",
     icon: Target,
     description:
-      "Our AI analyzes your profile against 89+ digital career paths and matches you with the roles where you have the highest chance of success. No guesswork, just data.",
+      "Our AI analyzes your profile against 89+ Web3 career paths and matches you to the role where your skills and interests align. No guesswork, just real analysis.",
   },
   {
     number: "03",
     title: "Learn",
     icon: BookOpen,
     description:
-      "Get a personalized 90-day roadmap tailored to your matched role. An AI tutor adapts to your learning pace and style, breaking down complex topics into digestible lessons.",
+      "Get a personalized roadmap built around your matched role. There's no fixed timeline — the platform adapts to your pace, restructuring lessons until every concept clicks.",
   },
   {
     number: "04",
     title: "Practice",
     icon: Code,
     description:
-      "Apply what you learn through hands-on projects and real-world challenges. Build a portfolio of work that demonstrates your skills to future employers.",
+      "Apply what you learn through hands-on projects and real-world challenges specific to your Web3 role. Build work you can actually point to.",
   },
   {
     number: "05",
-    title: "Verify",
+    title: "Prove It",
     icon: ShieldCheck,
     description:
-      "Earn a verifiable Skill Passport that proves your competence. Share it with employers, showcase your projects, and get matched to real Web3 job opportunities.",
+      "Finish with a Skill Passport — verified projects and demonstrated expertise that prove what you can do, not just what you watched. Something you can actually show.",
   },
 ];
 
@@ -61,8 +61,8 @@ export default function HowItWorksPage() {
             How It Works
           </h1>
           <p className="text-[#A0A0A0] mt-4 text-lg max-w-xl mx-auto">
-            From discovery to employment in five steps. No fluff, no filler —
-            just a clear path to your Web3 career.
+            Five steps from confusion to a verified Web3 career — no fluff,
+            no filler, just a path built around you.
           </p>
         </AnimatedSection>
 
@@ -101,17 +101,17 @@ export default function HowItWorksPage() {
         <AnimatedSection delay={0.5} className="text-center mt-16">
           <div className="bg-[#111111] border border-white/10 rounded-2xl p-8 sm:p-12">
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
-              Ready to Begin?
+              Ready to Find Your Path?
             </h2>
             <p className="text-[#A0A0A0] mt-3 text-sm max-w-md mx-auto">
               Start your free AI career discovery conversation and find out
-              which Web3 role is the best fit for you.
+              which Web3 role is built for you.
             </p>
             <Link
               href="/signup"
               className="inline-flex items-center gap-2 mt-6 px-8 py-3 bg-white text-black rounded-xl font-semibold text-sm hover:bg-white/90 transition-colors"
             >
-              Get Started Free
+              Start Your Discovery
             </Link>
           </div>
         </AnimatedSection>
