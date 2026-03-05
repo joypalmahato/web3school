@@ -1,14 +1,15 @@
 /**
  * @component Hero
  * @part-of Web3School — Landing Page
- * @moto v2: From confusion to irreplaceable.
- * @design Manifesto-style. Live proof. Rotating match card. Adaptive learning angle.
+ * @ab-test variant=a (Angle 2: The School) | variant=b (Angle 5: Future-Proof)
+ * @tracking PostHog events: hero_variant_viewed, hero_cta_clicked
  */
 "use client";
 
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import posthog from "posthog-js";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -20,9 +21,46 @@ const LIVE_MATCHES = [
   { name: "Jordan K.", sector: "Protocol Researcher", milestone: "ZK research path unlocked", fit: 95 },
 ];
 
-export function Hero() {
-  const [matchIndex, setMatchIndex] = useState(0);
+// ---------------------------------------------------------------------------
+// Copy variants
+// ---------------------------------------------------------------------------
 
+const VARIANTS = {
+  a: {
+    headline1: "The School That Finds Your Path.",
+    headline2: "Then Builds It With You.",
+    sub: "Most Web3 learners copy someone else's roadmap and wonder why it doesn't stick. Web3School runs a 10-minute AI chat, matches you to the role that actually fits, then teaches it the way your brain works — week by week, until you can prove it.",
+    pillars: [
+      { label: "Your role, found for you", desc: "10-min chat → precise role match" },
+      { label: "Learns how you learn", desc: "Adapts pace and style to you" },
+      { label: "Skill Passport you can show", desc: "Proof, not just a certificate" },
+    ],
+    cta: "Start Your Discovery",
+    microcopy: "No roadmap copying. No guessing. Just your path.",
+  },
+  b: {
+    headline1: "The World Is Changing Fast.",
+    headline2: "Learn the Skills That Actually Keep Up.",
+    sub: "AI is reshaping every field. Web3 is rewriting how value moves. The people who survive both know their specific role deeply — and can prove it. Web3School finds your role, builds your path, and adapts until you're the one they can't replace.",
+    pillars: [
+      { label: "AI + Web3 for your role", desc: "Not generic — built for your path" },
+      { label: "Adapts to how you learn", desc: "Fast or slow, the platform adjusts" },
+      { label: "Proof, not just certificates", desc: "A Skill Passport you can show" },
+    ],
+    cta: "Start Your Discovery",
+    microcopy: "Built for people who want to be irreplaceable, not just employable.",
+  },
+} as const;
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
+export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
+  const [matchIndex, setMatchIndex] = useState(0);
+  const copy = VARIANTS[variant];
+
+  // Rotate the live match card
   useEffect(() => {
     const interval = setInterval(() => {
       setMatchIndex((i) => (i + 1) % LIVE_MATCHES.length);
@@ -30,7 +68,16 @@ export function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  // Track which variant this visitor sees
+  useEffect(() => {
+    posthog.capture("hero_variant_viewed", { variant });
+  }, [variant]);
+
   const current = LIVE_MATCHES[matchIndex];
+
+  const trackCta = (cta: "primary" | "secondary") => {
+    posthog.capture("hero_cta_clicked", { variant, cta });
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -38,8 +85,7 @@ export function Hero() {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
       />
@@ -64,11 +110,11 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease }}
-          className="text-[42px] md:text-[66px] lg:text-[88px] font-bold text-white leading-[1.02] tracking-[-0.04em] font-heading"
+          className="text-[38px] md:text-[60px] lg:text-[78px] font-bold text-white leading-[1.05] tracking-[-0.04em] font-heading"
         >
-          Don&apos;t Just Get Hired.
+          {copy.headline1}
           <br />
-          <span className="text-[#10B981]">Become Irreplaceable.</span>
+          <span className="text-[#10B981]">{copy.headline2}</span>
         </motion.h1>
 
         {/* Subheadline */}
@@ -78,10 +124,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.2, ease }}
           className="mt-7 text-lg md:text-xl text-[#A0A0A0] max-w-[640px] mx-auto leading-relaxed"
         >
-          Been in crypto for years but can&apos;t name your actual skill set?
-          Or trying to break into Web3 but have no idea where you fit?
-          Web3School figures out your role, builds your path, and adapts to how
-          <em> you</em> learn — until you&apos;re the one people can&apos;t replace.
+          {copy.sub}
         </motion.p>
 
         {/* Three pillars */}
@@ -91,11 +134,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.3, ease }}
           className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8"
         >
-          {[
-            { label: "Adapts to your pace", desc: "Fast or slow — the platform adjusts" },
-            { label: "89+ Web3 roles", desc: "Web3 fundamentals + AI tools for your role" },
-            { label: "Non-replaceable", desc: "Not just hired — indispensable" },
-          ].map((pillar) => (
+          {copy.pillars.map((pillar) => (
             <div key={pillar.label} className="text-center">
               <p className="text-sm font-semibold text-white">{pillar.label}</p>
               <p className="text-xs text-[#555555] mt-0.5">{pillar.desc}</p>
@@ -112,12 +151,14 @@ export function Hero() {
         >
           <Link
             href="/signup"
+            onClick={() => trackCta("primary")}
             className="inline-flex items-center justify-center bg-white text-black font-semibold text-base px-8 py-4 rounded-md hover:opacity-85 transition-opacity duration-200 w-full sm:w-auto"
           >
-            Get Early Access
+            {copy.cta}
           </Link>
           <a
             href="#how-it-works"
+            onClick={() => trackCta("secondary")}
             className="inline-flex items-center justify-center bg-transparent text-white font-medium text-base px-8 py-4 rounded-md border border-white/20 hover:border-white/40 hover:bg-white/[0.05] transition-all duration-200 w-full sm:w-auto"
           >
             See How It Works
@@ -131,7 +172,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.5, ease }}
           className="mt-4 text-sm text-[#555555]"
         >
-          From confused to unstoppable.
+          {copy.microcopy}
         </motion.p>
 
         {/* Rotating live match card */}

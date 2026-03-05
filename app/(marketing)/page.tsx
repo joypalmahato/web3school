@@ -5,6 +5,7 @@
  * @spec docs/01-website-blueprint.md
  */
 import dynamic from "next/dynamic";
+import { cookies } from "next/headers";
 import { Hero } from "@/components/landing/Hero";
 import { ProofBar } from "@/components/landing/ProofBar";
 import { Problem } from "@/components/landing/Problem";
@@ -19,10 +20,13 @@ const RolesPreview = dynamic(() =>
   import("@/components/landing/RolesPreview").then((m) => m.RolesPreview)
 );
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const cookieStore = await cookies();
+  const variant = (cookieStore.get("hero_variant")?.value ?? "a") as "a" | "b";
+
   return (
     <>
-      <Hero />
+      <Hero variant={variant} />
       <ProofBar />
       <Problem />
       <HowItWorks />

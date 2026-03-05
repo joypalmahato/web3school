@@ -1,6 +1,7 @@
 import { InsforgeMiddleware } from "@insforge/nextjs/middleware";
+import { NextRequest, NextResponse } from "next/server";
 
-export default InsforgeMiddleware({
+const insforgeHandler = InsforgeMiddleware({
   baseUrl: process.env.NEXT_PUBLIC_INSFORGE_BASE_URL!,
   publicRoutes: ["/", "/login", "/signup", "/verify-email", "/callback", "/waitlist", "/share", "/passport", "/blog", "/roles", "/how-it-works", "/product-roadmap"],
   signInUrl: "/login",
@@ -8,16 +9,28 @@ export default InsforgeMiddleware({
   useBuiltInAuth: false,
 });
 
+export default function middleware(request: NextRequest) {
+  const response = insforgeHandler(request) as NextResponse;
+
+  // A/B test: assign hero variant cookie on homepage first visit (30-day window)
+  if (
+    request.nextUrl.pathname === "/" &&
+    !request.cookies.get("hero_variant")?.value
+  ) {
+    const variant = Math.random() < 0.5 ? "a" : "b";
+    response.cookies.set("hero_variant", variant, {
+      maxAge: 60 * 60 * 24 * 30,
+      path: "/",
+      sameSite: "lax",
+      httpOnly: false,
+    });
+  }
+
+  return response;
+}
+
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - api (API routes — handled by their own auth)
-     * - public files (images, fonts, etc.)
-     */
     "/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot|mp4|webm|ogg)$).*)",
   ],
 };
