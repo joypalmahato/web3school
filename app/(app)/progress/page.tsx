@@ -68,22 +68,26 @@ function StatCard({
   value,
   sublabel,
   delay,
+  iconColor = "text-text-muted",
+  accent = "border-border",
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: string | number;
   sublabel?: string;
   delay: number;
+  iconColor?: string;
+  accent?: string;
 }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay }}
-      className="bg-navy-mid border border-border rounded-xl p-4"
+      className={cn("bg-navy-mid border rounded-xl p-4", accent)}
     >
       <div className="flex items-center gap-2 mb-2">
-        <Icon className="w-4 h-4 text-text-muted" />
+        <Icon className={cn("w-4 h-4", iconColor)} />
         <span className="text-text-muted text-xs">{label}</span>
       </div>
       <p className="text-2xl font-heading font-bold text-text-primary">
@@ -147,7 +151,7 @@ export default function ProgressPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-navy-mid border border-border rounded-xl p-6"
+          className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6"
         >
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-amber-warning/10 rounded-xl flex items-center justify-center">
@@ -193,7 +197,7 @@ export default function ProgressPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="bg-navy-mid border border-border rounded-xl p-6"
+          className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-6"
         >
           <div className="flex items-center gap-4">
             <ProgressRing
@@ -202,6 +206,7 @@ export default function ProgressPage() {
               strokeWidth={6}
               label={`${level}`}
               sublabel="Level"
+              color="violet"
             />
             <div>
               <p className="text-text-primary font-heading font-bold text-lg">
@@ -224,7 +229,7 @@ export default function ProgressPage() {
                   <span className="text-text-secondary truncate">
                     {xp.description}
                   </span>
-                  <span className="text-[#10B981] font-semibold flex-shrink-0 ml-2">
+                  <span className="text-violet-400 font-semibold flex-shrink-0 ml-2">
                     +{xp.amount}
                   </span>
                 </div>
@@ -242,6 +247,8 @@ export default function ProgressPage() {
           value={stats.tasks_completed}
           sublabel={`of ${stats.total_tasks}`}
           delay={0.1}
+          iconColor="text-emerald-400"
+          accent="border-emerald-500/20"
         />
         <StatCard
           icon={Clock}
@@ -249,18 +256,24 @@ export default function ProgressPage() {
           value={stats.hours_learned}
           sublabel="total"
           delay={0.15}
+          iconColor="text-blue-400"
+          accent="border-blue-500/20"
         />
         <StatCard
           icon={BookOpen}
           label="Current Week"
           value={roadmap ? `${roadmap.current_week} / ${roadmap.total_weeks}` : "—"}
           delay={0.2}
+          iconColor="text-violet-400"
+          accent="border-violet-500/20"
         />
         <StatCard
           icon={Target}
           label="Overall Progress"
           value={`${stats.overall_progress}%`}
           delay={0.25}
+          iconColor="text-amber-400"
+          accent="border-amber-500/20"
         />
       </div>
 
@@ -269,11 +282,11 @@ export default function ProgressPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-navy-mid border border-border rounded-xl p-6"
+        className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6"
       >
         <h3 className="font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-text-muted" />
-          Activity
+          <TrendingUp className="w-4 h-4 text-amber-400" />
+          <span className="text-amber-300">Activity</span>
         </h3>
         <CalendarHeatmap data={heatmap} />
       </motion.div>
@@ -286,10 +299,10 @@ export default function ProgressPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35 }}
-            className="bg-navy-mid border border-border rounded-xl p-6"
+            className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-6"
           >
-            <h3 className="font-heading font-bold text-text-primary mb-2">
-              Skill Profile
+            <h3 className="font-heading font-bold mb-2 flex items-center gap-2">
+              <span className="text-violet-300">Skill Profile</span>
             </h3>
             <SkillRadar traits={traits} />
           </motion.div>
@@ -300,23 +313,30 @@ export default function ProgressPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-navy-mid border border-border rounded-xl p-6"
+          className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6"
         >
-          <h3 className="font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Trophy className="w-4 h-4 text-text-muted" />
-            Achievements
+          <h3 className="font-heading font-bold mb-4 flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-amber-400" />
+            <span className="text-amber-300">Achievements</span>
           </h3>
           {milestones.length > 0 ? (
             <div className="space-y-3">
-              {milestones.map((m) => {
+              {milestones.map((m, i) => {
                 const Icon = MILESTONE_ICONS[m.icon] || Star;
+                const colors = [
+                  { bg: "bg-amber-500/15 border-amber-500/25", icon: "text-amber-400" },
+                  { bg: "bg-violet-500/15 border-violet-500/25", icon: "text-violet-400" },
+                  { bg: "bg-emerald-500/15 border-emerald-500/25", icon: "text-emerald-400" },
+                  { bg: "bg-blue-500/15 border-blue-500/25", icon: "text-blue-400" },
+                ];
+                const c = colors[i % colors.length];
                 return (
                   <div
                     key={m.id}
-                    className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl"
+                    className={cn("flex items-center gap-3 p-3 border rounded-xl", c.bg)}
                   >
-                    <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-white" />
+                    <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", c.bg)}>
+                      <Icon className={cn("w-4 h-4", c.icon)} />
                     </div>
                     <span className="text-text-primary text-sm font-medium">
                       {m.label}
