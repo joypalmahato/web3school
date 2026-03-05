@@ -235,7 +235,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 gap-3">
           {[
             { href: "/roadmap",  icon: Map,      label: "My Roadmap",     iconColor: "text-violet-400",  hoverBorder: "hover:border-violet-500/30" },
-            { href: "/learn",    icon: BookOpen, label: "Daily Learning",  iconColor: "text-emerald-400", hoverBorder: "hover:border-emerald-500/30" },
+            { href: "/learn",    icon: BookOpen, label: "Today's Lesson",  iconColor: "text-emerald-400", hoverBorder: "hover:border-emerald-500/30" },
             { href: "/progress", icon: BarChart3, label: "Progress",       iconColor: "text-amber-400",   hoverBorder: "hover:border-amber-500/30" },
             { href: "/passport", icon: Award,    label: "Skill Passport",  iconColor: "text-blue-400",    hoverBorder: "hover:border-blue-500/30" },
           ].map(({ href, icon: Icon, label, iconColor, hoverBorder }) => (

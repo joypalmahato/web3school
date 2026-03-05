@@ -149,8 +149,7 @@ export default function RoadmapPage() {
             No Roadmap Yet
           </h2>
           <p className="text-text-secondary">
-            Generate your personalized 12-week learning roadmap based on your
-            chosen career path.
+            Generate your personalized learning roadmap based on your chosen career path. It adapts to your pace — no fixed timeline.
           </p>
           <Button
             onClick={handleGenerateRoadmap}
@@ -217,7 +216,7 @@ export default function RoadmapPage() {
       >
         <div className="flex items-start justify-between gap-4">
           <h2 className="text-2xl font-heading font-bold text-text-primary">
-            {roadmap.title}
+            {roadmap.title.replace(/\s*[—–-]+\s*\d+-Week Roadmap/i, "").trim()}
           </h2>
           <Button
             variant="ghost"

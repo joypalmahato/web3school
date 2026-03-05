@@ -84,7 +84,7 @@ function StatCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay }}
-      className={cn("bg-navy-mid border rounded-xl p-4", accent)}
+      className={cn("bg-navy-mid/60 border rounded-xl p-4 backdrop-blur-sm", accent)}
     >
       <div className="flex items-center gap-2 mb-2">
         <Icon className={cn("w-4 h-4", iconColor)} />
@@ -144,14 +144,23 @@ export default function ProgressPage() {
     getXPForNextLevel(profile.xp_total);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+    <div className="relative min-h-screen">
+      {/* Subtle dot grid — matches landing page tone */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+    <div className="relative z-10 max-w-4xl mx-auto px-4 py-6 space-y-6">
       {/* Streak & XP header */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Streak card */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6"
+          className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6 backdrop-blur-sm"
         >
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-amber-warning/10 rounded-xl flex items-center justify-center">
@@ -197,7 +206,7 @@ export default function ProgressPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-6"
+          className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-6 backdrop-blur-sm"
         >
           <div className="flex items-center gap-4">
             <ProgressRing
@@ -282,7 +291,7 @@ export default function ProgressPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6"
+        className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6 backdrop-blur-sm"
       >
         <h3 className="font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-amber-400" />
@@ -299,7 +308,7 @@ export default function ProgressPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35 }}
-            className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-6"
+            className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-6 backdrop-blur-sm"
           >
             <h3 className="font-heading font-bold mb-2 flex items-center gap-2">
               <span className="text-violet-300">Skill Profile</span>
@@ -313,7 +322,7 @@ export default function ProgressPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6"
+          className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6 backdrop-blur-sm"
         >
           <h3 className="font-heading font-bold mb-4 flex items-center gap-2">
             <Trophy className="w-4 h-4 text-amber-400" />
@@ -355,6 +364,7 @@ export default function ProgressPage() {
 
       {/* Nudge toasts */}
       <NudgeToast />
+    </div>
     </div>
   );
 }

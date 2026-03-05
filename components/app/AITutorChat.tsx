@@ -7,7 +7,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Sparkles } from "lucide-react";
+import { X, Send, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -125,10 +125,18 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-24 md:bottom-6 right-4 md:right-6 w-14 h-14 bg-[#10B981] hover:opacity-85 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-colors"
+          className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-50 flex flex-col items-center gap-1"
+          aria-label="Open AI Tutor"
         >
-          <MessageCircle className="w-6 h-6" />
+          {/* Pulse ring */}
+          <span className="absolute w-16 h-16 rounded-full bg-[#10B981]/20 animate-ping" />
+          <span className="relative w-14 h-14 bg-[#0f1f1a] border-2 border-[#10B981]/60 hover:border-[#10B981] rounded-full shadow-[0_0_20px_rgba(16,185,129,0.25)] flex items-center justify-center transition-all duration-200">
+            <span className="text-2xl leading-none select-none">🤖</span>
+          </span>
+          <span className="relative text-[10px] font-semibold text-[#10B981] tracking-wide uppercase">Ask AI</span>
         </motion.button>
       )}
 
