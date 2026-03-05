@@ -31,7 +31,7 @@ const QUESTIONS = [
     statLabel: "do I actually stick with it?",
     title: "Skills Without Evidence",
     description:
-      "You can spend months learning and still have nothing to show an employer. No portfolio. No credentials. No way to stand out in a world where everyone claims to know Web3.",
+      "Generic content doesn't adapt to you. When you fall behind, the platform moves on anyway. When you grasp something fast, you're stuck waiting. Nothing adjusts — so motivation collapses before you ever finish.",
   },
 ];
 
@@ -64,7 +64,7 @@ export function Problem() {
           <p className="text-base md:text-lg text-[#888888] leading-relaxed text-center">
             The problem was never access to information.{" "}
             <span className="text-white font-medium">
-              Nobody is helping them answer three fundamental questions — and those three gaps are what Web3School is built to close.
+              Nobody is helping them answer three fundamental questions.
             </span>
           </p>
         </motion.div>
