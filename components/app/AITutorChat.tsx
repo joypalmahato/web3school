@@ -134,7 +134,7 @@ export function AITutorChat({ taskId }: AITutorChatProps) {
           {/* Pulse ring */}
           <span className="absolute w-16 h-16 rounded-full bg-[#10B981]/20 animate-ping" />
           <span className="relative w-14 h-14 bg-[#0f1f1a] border-2 border-[#10B981]/60 hover:border-[#10B981] rounded-full shadow-[0_0_20px_rgba(16,185,129,0.25)] flex items-center justify-center transition-all duration-200">
-            <span className="text-2xl leading-none select-none">🤖</span>
+            <span className="text-2xl leading-none select-none">🧑‍🏫</span>
           </span>
           <span className="relative text-[10px] font-semibold text-[#10B981] tracking-wide uppercase">Ask AI</span>
         </motion.button>
