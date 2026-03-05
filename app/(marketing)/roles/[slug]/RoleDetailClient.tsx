@@ -120,7 +120,32 @@ export function RoleDetailClient({
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16">
+    <div className={`min-h-screen pt-24 ${isAuthenticated ? "pb-16" : "pb-28"}`}>
+      {/* Sticky bottom bar for unauthenticated visitors */}
+      {!isAuthenticated && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/[0.08] bg-[rgba(10,10,10,0.92)] backdrop-blur-xl px-4 py-3">
+          <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+            <p className="text-sm text-[#A0A0A0] hidden sm:block">
+              Is <span className="text-white font-medium">{role.name}</span> your path? Find out in 10 minutes.
+            </p>
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <Link
+                href="/signup"
+                className="flex-1 sm:flex-none inline-flex items-center justify-center bg-white text-black font-semibold text-sm px-6 py-2.5 rounded-md hover:opacity-85 transition-opacity"
+              >
+                Start Your Discovery <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+              </Link>
+              <Link
+                href="/login"
+                className="text-sm text-[#666666] hover:text-white transition-colors whitespace-nowrap"
+              >
+                Log in
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <motion.nav

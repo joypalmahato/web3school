@@ -1,13 +1,18 @@
 /**
  * @component LandingPage
  * @part-of Web3School — Marketing
- * @design 7 sections: Hero → ProofBar → Problem → HowItWorks → ProductPreview → Roles → FinalCTA
+ * @design 8 sections: Hero → ProofBar → Problem → HowItWorks → ProductPreview → Roles → FAQ → FinalCTA
  * @spec docs/01-website-blueprint.md
  */
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
 import { Hero } from "@/components/landing/Hero";
+import { ProofBar } from "@/components/landing/ProofBar";
+import { Problem } from "@/components/landing/Problem";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+import { FAQ } from "@/components/landing/FAQ";
+import { FinalCTA } from "@/components/landing/FinalCTA";
 
 export const metadata: Metadata = {
   title: "Web3School — Find Your Web3 Career Path",
@@ -26,10 +31,6 @@ export const metadata: Metadata = {
       "10-min AI chat → Web3 role match → 12-week personalized roadmap. Free to join.",
   },
 };
-import { ProofBar } from "@/components/landing/ProofBar";
-import { Problem } from "@/components/landing/Problem";
-import { HowItWorks } from "@/components/landing/HowItWorks";
-import { FinalCTA } from "@/components/landing/FinalCTA";
 
 // Lazy-load heavy below-fold sections
 const ProductPreview = dynamic(() =>
@@ -51,6 +52,7 @@ export default async function LandingPage() {
       <HowItWorks />
       <ProductPreview />
       <RolesPreview />
+      <FAQ />
       <FinalCTA />
     </>
   );
