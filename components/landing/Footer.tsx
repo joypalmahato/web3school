@@ -12,7 +12,7 @@ const NAV_COLS = [
     links: [
       { label: "How It Works", href: "/#how-it-works" },
       { label: "Explore Roles", href: "/roles" },
-      { label: "Product Roadmap", href: "/product-roadmap" },
+      { label: "Roadmap", href: "/product-roadmap" },
       { label: "Blog", href: "/blog" },
     ],
   },
