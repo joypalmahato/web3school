@@ -901,7 +901,7 @@ export default function SettingsPage() {
         <div className="bg-navy-mid border border-border rounded-xl p-6 space-y-4">
           <Button
             variant="outline"
-            className="w-full border-border text-text-primary rounded-xl"
+            className="w-full border-white/20 bg-transparent text-white hover:bg-white/5 hover:text-white rounded-xl"
             onClick={handleSignOut}
           >
             Sign Out
