@@ -59,14 +59,33 @@ export function Problem() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease }}
-          className="max-w-[760px] mx-auto mb-14 px-7 py-6 border border-white/[0.07] rounded-2xl bg-white/[0.02]"
+          className="max-w-[760px] mx-auto mb-14 px-7 py-7 border border-white/[0.07] rounded-2xl bg-white/[0.02]"
         >
-          <p className="text-base md:text-lg text-[#888888] leading-relaxed text-center">
+          <p className="text-base md:text-lg text-[#888888] leading-relaxed text-center mb-6">
             The problem was never access to information.{" "}
             <span className="text-white font-medium">
-              Nobody is helping them answer three fundamental questions: What should I learn? In what order? And how do I actually stick with it?
+              Nobody is helping them answer three fundamental questions:
             </span>
           </p>
+
+          <div className="flex flex-col gap-3">
+            {[
+              { n: "01", q: "What should I learn?", sub: "No one maps your skills to a specific role" },
+              { n: "02", q: "In what order?", sub: "No one sequences the path that's right for you" },
+              { n: "03", q: "How do I actually stick with it?", sub: "No one adapts when you fall behind or move fast" },
+            ].map(({ n, q, sub }) => (
+              <div
+                key={n}
+                className="flex items-center gap-4 px-5 py-4 rounded-xl border border-white/[0.06] bg-white/[0.02]"
+              >
+                <span className="text-xs font-mono text-[#10B981] w-6 flex-shrink-0">{n}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm md:text-base font-semibold text-white">{q}</p>
+                  <p className="text-xs text-[#555555] mt-0.5">{sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Cards */}
