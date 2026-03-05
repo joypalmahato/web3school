@@ -32,8 +32,12 @@ const FAQS = [
     a: "The discovery chat takes about 10 minutes. Your roadmap? However long you need. Some fast learners push through in 6–8 weeks. Others take 4–5 months because life happens. The platform doesn't care about a timeline — it adapts to your pace, not the other way around.",
   },
   {
-    q: "I already have some Web3 experience. Can I skip ahead?",
-    a: "Yes. The discovery chat maps your current skill level. If you already know the basics, your roadmap will reflect that — you'll start at the right point, not at zero.",
+    q: "I already have some Web3 experience. Can I start at the right level?",
+    a: "Yes. The discovery chat maps your current skill level. If you already know the basics, your roadmap will reflect that — you'll start where you actually are, not at zero.",
+  },
+  {
+    q: "Will Web3School cover other industries beyond Web3?",
+    a: "Web3 is where we're going deep first — and intentionally so. Our focus right now is building the most precise career paths for Web3 roles. Other sectors are on the roadmap. When we expand, the same adaptive engine will work for whatever field you're in. But right now, Web3 is the priority.",
   },
 ];
 

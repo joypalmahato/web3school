@@ -43,7 +43,7 @@ export function Problem() {
       <div className="max-w-[1200px] mx-auto px-6">
 
         {/* Header */}
-        <div className="text-center max-w-[760px] mx-auto mb-16">
+        <div className="text-center max-w-[760px] mx-auto mb-10">
           <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-4">
             The Problem
           </p>
@@ -52,11 +52,24 @@ export function Problem() {
             <br />
             <span className="text-[#A0A0A0]">And the same gaps keep showing up.</span>
           </h2>
-          <p className="mt-5 text-lg text-[#666666] max-w-[520px] mx-auto">
-            It&apos;s not a lack of ability. It&apos;s the absence of a clear,
-            personalized path that actually adapts to you.
-          </p>
         </div>
+
+        {/* Insight block */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease }}
+          className="max-w-[760px] mx-auto mb-14 px-7 py-6 border border-white/[0.07] rounded-2xl bg-white/[0.02]"
+        >
+          <p className="text-base md:text-lg text-[#888888] leading-relaxed text-center">
+            The world has more learning resources than ever — and people are more confused than ever.
+            The problem was never access to information.{" "}
+            <span className="text-white font-medium">
+              Nobody is helping them answer three fundamental questions: What should I learn? In what order? And how do I actually stick with it?
+            </span>
+          </p>
+        </motion.div>
 
         {/* Cards */}
         <div className="grid gap-5 md:grid-cols-3 max-w-[1040px] mx-auto">
