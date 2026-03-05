@@ -13,7 +13,7 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 const FAQS = [
   {
     q: "Is it really free?",
-    a: "Yes — completely free during early access. No credit card, no hidden costs. You get full access to the discovery chat, your personalized roadmap, daily lessons, and your Skill Passport.",
+    a: "Yes — completely free during early access. You get full access to the discovery chat, your personalized roadmap, daily lessons, and your Skill Passport.",
   },
   {
     q: "I'm completely new to Web3. Is this for me?",

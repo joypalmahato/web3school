@@ -17,7 +17,7 @@ export function FinalCTA() {
           <span className="text-[#10B981]">Find Out Where You Belong.</span>
         </h2>
         <p className="mt-4 text-lg text-[#A0A0A0]">
-          A short AI conversation. A personalized roadmap that moves at your pace. Free to join — no credit card needed.
+          A short AI conversation. A personalized roadmap that moves at your pace. Completely free.
         </p>
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
@@ -33,9 +33,6 @@ export function FinalCTA() {
             See how it works →
           </Link>
         </div>
-        <p className="mt-5 text-sm text-[#555555]">
-          Free during early access · No credit card · Cancel anytime
-        </p>
       </div>
     </AnimatedSection>
   );
