@@ -53,7 +53,15 @@ const STEPS = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] pt-24 pb-16">
+    <div className="relative min-h-screen pt-24 pb-16">
+      {/* Dot grid — same as landing page hero */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <AnimatedSection className="text-center mb-16">
@@ -70,7 +78,7 @@ export default function HowItWorksPage() {
         <div className="space-y-6">
           {STEPS.map((step, i) => (
             <AnimatedSection key={step.number} delay={i * 0.08}>
-              <div className="bg-[#111111] border border-white/10 rounded-2xl p-6 sm:p-8">
+              <div className="bg-[#111111]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8">
                 <div className="flex items-start gap-5">
                   {/* Step number */}
                   <div className="flex-shrink-0">
@@ -99,7 +107,7 @@ export default function HowItWorksPage() {
 
         {/* CTA */}
         <AnimatedSection delay={0.5} className="text-center mt-16">
-          <div className="bg-[#111111] border border-white/10 rounded-2xl p-8 sm:p-12">
+          <div className="bg-[#111111]/50 backdrop-blur-md border border-white/10 rounded-2xl p-8 sm:p-12">
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
               Ready to Find Your Path?
             </h2>
