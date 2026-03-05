@@ -148,27 +148,28 @@ export default function DashboardPage() {
         </div>
 
         {/* Level */}
-        <div className="bg-navy-mid border border-border rounded-xl p-4 text-center">
+        <div className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-4 text-center">
           <ProgressRing
             progress={xpProgress * 100}
             size={40}
             strokeWidth={3}
             label=""
+            color="violet"
             className="mx-auto mb-1"
           />
-          <p className="text-xl font-heading font-bold text-text-primary">
+          <p className="text-xl font-heading font-bold text-violet-300">
             {level}
           </p>
-          <p className="text-text-muted text-[10px]">Level</p>
+          <p className="text-violet-400/60 text-[10px]">Level</p>
         </div>
 
         {/* XP */}
-        <div className="bg-navy-mid border border-border rounded-xl p-4 text-center">
-          <Target className="w-6 h-6 text-text-muted mx-auto mb-1" />
-          <p className="text-xl font-heading font-bold text-text-primary">
+        <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-4 text-center">
+          <Target className="w-6 h-6 text-amber-400 mx-auto mb-1" />
+          <p className="text-xl font-heading font-bold text-amber-300">
             {totalXP.toLocaleString()}
           </p>
-          <p className="text-text-muted text-[10px]">Total XP</p>
+          <p className="text-amber-400/60 text-[10px]">Total XP</p>
         </div>
       </motion.div>
 
@@ -178,9 +179,9 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-navy-mid border border-border rounded-xl p-5"
+          className="bg-navy-mid border border-emerald-500/20 rounded-xl p-5 border-l-4 border-l-emerald-500"
         >
-          <p className="text-text-muted text-xs font-mono mb-2">
+          <p className="text-emerald-400/70 text-xs font-mono mb-2">
             TODAY&apos;S LESSON
           </p>
           <h3 className="font-heading font-bold text-text-primary text-lg mb-1">
@@ -233,20 +234,21 @@ export default function DashboardPage() {
         <p className="text-text-muted text-xs font-mono">QUICK ACTIONS</p>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { href: "/roadmap", icon: Map, label: "My Roadmap" },
-            { href: "/learn", icon: BookOpen, label: "Daily Learning" },
-            { href: "/progress", icon: BarChart3, label: "Progress" },
-            { href: "/passport", icon: Award, label: "Skill Passport" },
-          ].map(({ href, icon: Icon, label }) => (
+            { href: "/roadmap",  icon: Map,      label: "My Roadmap",     iconColor: "text-violet-400",  hoverBorder: "hover:border-violet-500/30" },
+            { href: "/learn",    icon: BookOpen, label: "Daily Learning",  iconColor: "text-emerald-400", hoverBorder: "hover:border-emerald-500/30" },
+            { href: "/progress", icon: BarChart3, label: "Progress",       iconColor: "text-amber-400",   hoverBorder: "hover:border-amber-500/30" },
+            { href: "/passport", icon: Award,    label: "Skill Passport",  iconColor: "text-blue-400",    hoverBorder: "hover:border-blue-500/30" },
+          ].map(({ href, icon: Icon, label, iconColor, hoverBorder }) => (
             <button
               key={href}
               onClick={() => router.push(href)}
-              className="flex items-center gap-3 p-4 bg-navy-mid border border-border rounded-xl hover:border-white/20 transition-colors text-left"
+              className={cn(
+                "flex items-center gap-3 p-4 bg-navy-mid border border-border rounded-xl transition-colors text-left",
+                hoverBorder
+              )}
             >
-              <Icon className="w-5 h-5 text-white flex-shrink-0" />
-              <span className="text-text-primary text-sm font-medium">
-                {label}
-              </span>
+              <Icon className={cn("w-5 h-5 flex-shrink-0", iconColor)} />
+              <span className="text-text-primary text-sm font-medium">{label}</span>
             </button>
           ))}
         </div>

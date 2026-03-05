@@ -8,6 +8,14 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+const RING_COLORS: Record<string, [string, string]> = {
+  green:  ["#10B981", "#34D399"],
+  violet: ["#7C3AED", "#8B5CF6"],
+  amber:  ["#D97706", "#EAB308"],
+  blue:   ["#1D4ED8", "#3B82F6"],
+  orange: ["#EA580C", "#F97316"],
+};
+
 interface ProgressRingProps {
   progress: number; // 0-100
   size?: number;
@@ -15,6 +23,7 @@ interface ProgressRingProps {
   label?: string;
   sublabel?: string;
   className?: string;
+  color?: keyof typeof RING_COLORS;
 }
 
 export function ProgressRing({
@@ -24,15 +33,17 @@ export function ProgressRing({
   label,
   sublabel,
   className,
+  color = "green",
 }: ProgressRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (Math.min(progress, 100) / 100) * circumference;
+  const [colorStart, colorEnd] = RING_COLORS[color] ?? RING_COLORS.green;
+  const gradientId = `ringGradient-${color}`;
 
   return (
     <div className={cn("relative inline-flex items-center justify-center", className)}>
       <svg width={size} height={size} className="-rotate-90">
-        {/* Background circle */}
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -42,13 +53,12 @@ export function ProgressRing({
           strokeWidth={strokeWidth}
           className="text-navy-deep"
         />
-        {/* Progress circle */}
         <motion.circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="url(#progressGradient)"
+          stroke={`url(#${gradientId})`}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={circumference}
@@ -57,13 +67,12 @@ export function ProgressRing({
           transition={{ duration: 1, ease: "easeOut" }}
         />
         <defs>
-          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#10B981" />
-            <stop offset="100%" stopColor="#10B981" />
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor={colorStart} />
+            <stop offset="100%" stopColor={colorEnd} />
           </linearGradient>
         </defs>
       </svg>
-      {/* Center text */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-2xl font-heading font-bold text-text-primary">
           {label ?? `${Math.round(progress)}%`}

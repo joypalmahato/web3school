@@ -1,7 +1,7 @@
 /**
  * @component XPBar
  * @part-of Web3School — Gamification
- * @design Animated progress bar with level badge
+ * @design Animated gold XP progress bar with level badge
  */
 "use client";
 
@@ -31,17 +31,18 @@ export function XPBar({ compact = false }: XPBarProps) {
             compact ? "min-w-[80px]" : "min-w-[120px]"
           )}
         >
-          {/* Level badge */}
+          {/* Level badge — gold star */}
           <div className="flex items-center gap-1">
             <Star
               className={cn(
-                "text-purple-primary",
+                "text-amber-400",
                 compact ? "w-3.5 h-3.5" : "w-4 h-4"
               )}
+              fill="currentColor"
             />
             <span
               className={cn(
-                "font-heading font-bold text-purple-primary",
+                "font-heading font-bold text-amber-400",
                 compact ? "text-xs" : "text-sm"
               )}
             >
@@ -49,7 +50,7 @@ export function XPBar({ compact = false }: XPBarProps) {
             </span>
           </div>
 
-          {/* Progress bar */}
+          {/* Progress bar — amber gradient */}
           <div
             className={cn(
               "flex-1 bg-navy-deep rounded-full overflow-hidden",
@@ -57,7 +58,7 @@ export function XPBar({ compact = false }: XPBarProps) {
             )}
           >
             <motion.div
-              className="h-full bg-[#10B981] rounded-full"
+              className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400"
               initial={{ width: 0 }}
               animate={{ width: `${Math.min(progress * 100, 100)}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}
@@ -70,10 +71,8 @@ export function XPBar({ compact = false }: XPBarProps) {
         className="bg-navy-mid border-border text-text-primary"
       >
         <div className="space-y-1 text-xs">
-          <p className="font-semibold">Level {level}</p>
-          <p className="text-text-muted">
-            {totalXP.toLocaleString()} XP total
-          </p>
+          <p className="font-semibold text-amber-400">Level {level}</p>
+          <p className="text-text-muted">{totalXP.toLocaleString()} XP total</p>
           <p className="text-text-secondary">
             {currentLevelXP} / {neededForNext} XP to next level
           </p>
