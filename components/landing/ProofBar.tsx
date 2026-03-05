@@ -10,9 +10,9 @@ import { motion } from "framer-motion";
 
 const STATS = [
   { value: "89+", label: "Web3 Roles Covered" },
-  { value: "Your Pace", label: "Adaptive Roadmap" },
-  { value: "Daily", label: "Bite-Sized Lessons" },
-  { value: "Free", label: "To Join & Learn" },
+  { value: "1 Chat", label: "To Find Your Fit" },
+  { value: "Adaptive", label: "Personalized Path" },
+  { value: "Free", label: "During Early Access" },
 ];
 
 export function ProofBar() {

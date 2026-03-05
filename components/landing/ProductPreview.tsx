@@ -33,7 +33,7 @@ export function ProductPreview() {
           See It In Action
         </p>
         <h2 className="text-[24px] md:text-[32px] font-bold text-white leading-tight tracking-[-0.02em] font-heading">
-          10 Minutes to Your Web3 Career Match
+          See the Discovery in Action
         </h2>
       </div>
       <div

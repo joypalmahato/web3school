@@ -38,8 +38,8 @@ export function Footer() {
             <span className="text-base font-semibold text-white font-heading">
               Web3School
             </span>
-            <p className="text-xs text-[#555555] mt-1.5 max-w-[180px] leading-relaxed">
-              From confusion to irreplaceable. Free to join.
+            <p className="text-xs text-[#555555] mt-1.5 max-w-[200px] leading-relaxed">
+              Built by people who believe Web3 careers deserve a real path. Free to join.
             </p>
           </div>
 

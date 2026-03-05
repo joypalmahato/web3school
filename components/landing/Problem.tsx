@@ -50,7 +50,7 @@ export function Problem() {
           <h2 className="text-[28px] md:text-[40px] lg:text-[52px] font-bold text-white leading-[1.08] tracking-[-0.03em] font-heading">
             Breaking Into Web3 Is Harder Than It Should Be.
             <br />
-            <span className="text-[#A0A0A0]">Three reasons most people fail.</span>
+            <span className="text-[#A0A0A0]">And the same gaps keep showing up.</span>
           </h2>
           <p className="mt-5 text-lg text-[#666666] max-w-[520px] mx-auto">
             It&apos;s not a lack of ability. It&apos;s the absence of a clear,

@@ -12,7 +12,7 @@ import { Zap, RefreshCw, BookOpen } from "lucide-react";
 const STEPS = [
   {
     number: "01",
-    title: "AI Discovers Where You Belong",
+    title: "AI Finds Where You Belong",
     description:
       "A 10-minute conversation with our AI maps your existing skills, background, and goals — then matches you to the exact role and sector you're built for. No quiz. No guessing. Real analysis.",
     chips: null,
@@ -37,9 +37,9 @@ const STEPS = [
   },
   {
     number: "04",
-    title: "Daily Micro-Lessons With a Personal AI Tutor",
+    title: "Bite-Sized Lessons With a Personal AI Tutor",
     description:
-      "5–15 minutes a day. Every lesson comes with an AI tutor that answers your specific questions in context. Ask anything, get clarity, move forward — at whatever pace you need.",
+      "Every lesson comes with an AI tutor that answers your specific questions in context. Ask anything, get clarity, move forward — no timer, no pressure, just progress.",
     chips: null,
   },
   {

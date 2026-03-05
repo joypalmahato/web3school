@@ -37,11 +37,11 @@ const VARIANTS = {
       { label: "Skill Passport you can show", desc: "Proof, not just a certificate" },
     ],
     cta: "Start Your Discovery",
-    microcopy: "Free to join. No roadmap copying. Just your path.",
+    microcopy: "Free to join. Built for your role, your pace, your proof.",
   },
   b: {
     headline1: "Everyone Fears Being Replaced.",
-    headline2: "Become the Person They Can't.",
+    headline2: "Become the Person They Can't Replace.",
     sub: "AI is reshaping every field. Web3 is rewriting how value moves. Web3School finds your specific role, builds your path, and adapts until you're irreplaceable.",
     pillars: [
       { label: "AI + Web3 for your role", desc: "Not generic — built for your path" },
@@ -176,13 +176,14 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           {copy.microcopy}
         </motion.p>
 
-        {/* Rotating live match card */}
+        {/* Example match card */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7, ease }}
-          className="mt-14 flex justify-center"
+          className="mt-14 flex flex-col items-center gap-2"
         >
+          <p className="text-[10px] uppercase tracking-widest text-[#444444]">Example paths</p>
           <div className="relative h-[56px] flex items-center">
             <AnimatePresence mode="wait">
               <motion.div
@@ -193,7 +194,7 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
                 transition={{ duration: 0.35, ease }}
                 className="inline-flex items-center gap-3 px-4 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-sm"
               >
-                <div className="w-8 h-8 rounded-full bg-[#10B981]/20 flex items-center justify-center text-sm font-semibold text-[#10B981]">
+                <div className="w-8 h-8 rounded-full bg-white/[0.08] flex items-center justify-center text-sm font-semibold text-white/60">
                   {current.name.charAt(0)}
                 </div>
                 <div className="text-left">

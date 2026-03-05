@@ -17,15 +17,15 @@ const FAQS = [
   },
   {
     q: "I'm completely new to Web3. Is this for me?",
-    a: "Especially yes. The 10-minute discovery chat is designed for people who don't know where they fit yet. It maps your existing skills and background, then finds the Web3 role that actually makes sense for you — even if you've never touched a blockchain.",
-  },
-  {
-    q: "How is this different from YouTube or a Udemy course?",
-    a: "Those platforms give everyone the same content in the same order. Web3School builds your specific path based on your role, your pace, and how your brain learns. If you get stuck, the platform restructures the lesson — it doesn't just move on. You also finish with a Skill Passport, not just a completion badge.",
+    a: "Especially yes. The discovery chat is designed for people who don't know where they fit yet. It maps your existing skills and background, then finds the Web3 role that actually makes sense for you — even if you've never touched crypto before.",
   },
   {
     q: "What exactly is a Skill Passport?",
     a: "A verified record of what you've actually demonstrated — projects completed, concepts mastered, role-specific skills proven. Something you can show a hiring manager or a DAO that actually means something, unlike a certificate that just says you watched a course.",
+  },
+  {
+    q: "How is this different from YouTube or a Udemy course?",
+    a: "Those platforms give everyone the same content in the same order. Web3School builds your specific path based on your role, your pace, and how your brain learns. If you get stuck, the platform restructures the lesson — it doesn't just move on. You also finish with a Skill Passport, not just a completion badge.",
   },
   {
     q: "How long does it take?",

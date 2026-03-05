@@ -27,7 +27,7 @@ export function FinalCTA() {
             Start Your Discovery
           </Link>
           <Link
-            href="#how-it-works"
+            href="/how-it-works"
             className="inline-flex items-center justify-center text-[#A0A0A0] hover:text-white text-base font-medium transition-colors duration-200"
           >
             See how it works →
