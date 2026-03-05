@@ -31,6 +31,7 @@ const PHASE_2_ITEMS = [
   { label: "On-Chain Skill Credentials", desc: "Issue verifiable credentials on-chain — your Skill Passport becomes an NFT." },
   { label: "Enterprise & Teams", desc: "Upskill entire teams with custom roadmaps and org-level dashboards." },
   { label: "Mentor Marketplace", desc: "Connect with verified Web3 practitioners for 1:1 guidance." },
+  { label: "OpenClaw Integration", desc: "Native OpenClaw support — bringing deeper on-chain tooling directly into your learning path." },
 ];
 
 export default function RoadmapPage() {
