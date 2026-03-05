@@ -16,7 +16,7 @@ export const metadata = {
 const PHASE_1_ITEMS = [
   { label: "AI Discovery Chat", desc: "10-minute conversation that maps your background and goals to a Web3 role." },
   { label: "Role Matching Engine", desc: "Matches you against 89+ Web3-native careers using a multi-trait scoring model." },
-  { label: "Personalized 90-Day Roadmap", desc: "Day-by-day learning plan built around your pace, background, and matched role." },
+  { label: "Personalized Roadmap", desc: "Day-by-day learning plan built around your pace, background, and matched role." },
   { label: "Daily Micro-Lessons", desc: "5–15 minute tasks — lessons, exercises, projects, and quizzes." },
   { label: "Personal AI Tutor", desc: "Answers your questions in context, adapts explanations to how you learn." },
   { label: "Skill Passport", desc: "Verifiable proof of skills — real projects, demonstrated expertise, shareable profile." },
