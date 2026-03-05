@@ -15,11 +15,11 @@ import posthog from "posthog-js";
 const ease = [0.16, 1, 0.3, 1] as const;
 
 const LIVE_MATCHES = [
-  { name: "Alex K.", sector: "DeFi Analyst", milestone: "On-chain research path matched", fit: 94 },
-  { name: "Priya S.", sector: "Smart Contract Dev", milestone: "Solidity fundamentals — week 2", fit: 97 },
-  { name: "Marcus T.", sector: "Community Manager", milestone: "DAO operations roadmap started", fit: 91 },
-  { name: "Aiko R.", sector: "NFT Creator", milestone: "NFT + IP rights module complete", fit: 88 },
-  { name: "Jordan K.", sector: "Protocol Researcher", milestone: "ZK research path unlocked", fit: 95 },
+  { name: "Alex K.", sector: "DeFi Analyst", milestone: "On-chain research path matched" },
+  { name: "Priya S.", sector: "Smart Contract Dev", milestone: "Solidity fundamentals — chapter 2" },
+  { name: "Marcus T.", sector: "Community Manager", milestone: "DAO operations roadmap started" },
+  { name: "Aiko R.", sector: "NFT Creator", milestone: "NFT + IP rights module complete" },
+  { name: "Jordan K.", sector: "Protocol Researcher", milestone: "ZK research path unlocked" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -75,6 +75,7 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
   }, [variant]);
 
   const current = LIVE_MATCHES[matchIndex];
+
 
   const trackCta = (cta: "primary" | "secondary") => {
     posthog.capture("hero_cta_clicked", { variant, cta });
@@ -206,7 +207,7 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
                   </p>
                 </div>
                 <div className="ml-1 text-[#10B981] text-[10px] font-semibold bg-[#10B981]/10 px-2 py-0.5 rounded-full uppercase tracking-wide">
-                  {current.fit}% fit
+                  Matched
                 </div>
               </motion.div>
             </AnimatePresence>

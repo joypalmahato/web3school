@@ -30,10 +30,10 @@ export function ProductPreview() {
     <AnimatedSection className="py-12 md:py-20 lg:py-24 px-6" delay={0.2}>
       <div className="text-center mb-10">
         <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-3">
-          See It In Action
+          Product Demo
         </p>
         <h2 className="text-[24px] md:text-[32px] font-bold text-white leading-tight tracking-[-0.02em] font-heading">
-          See the Discovery in Action
+          Watch the AI Find Your Role in Real Time
         </h2>
       </div>
       <div

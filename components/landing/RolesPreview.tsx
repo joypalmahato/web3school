@@ -217,8 +217,7 @@ export function RolesPreview() {
           {INITIAL_ROLES.length}+ Digital Careers. One Is Yours.
         </h2>
         <p className="mt-4 text-lg text-[#A0A0A0] max-w-[600px] mx-auto">
-          Browse real career paths across Web3, AI, development, design, data,
-          marketing, and more.
+          Browse real Web3 career paths — from on-chain research to smart contract dev, NFT creation, DAO operations, and beyond.
         </p>
       </div>
 

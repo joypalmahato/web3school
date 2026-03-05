@@ -14,7 +14,7 @@ const STEPS = [
     number: "01",
     title: "AI Finds Where You Belong",
     description:
-      "A 10-minute conversation with our AI maps your existing skills, background, and goals — then matches you to the exact role and sector you're built for. No quiz. No guessing. Real analysis.",
+      "A focused AI conversation maps your existing skills, background, and goals — then matches you to the exact role you're built for. No quiz. No guessing. Real analysis.",
     chips: null,
   },
   {

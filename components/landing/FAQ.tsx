@@ -91,7 +91,7 @@ export function FAQ() {
       <div className="max-w-[760px] mx-auto px-6">
         <div className="text-center mb-12">
           <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-4">
-            FAQ
+            Good Questions
           </p>
           <h2 className="text-[28px] md:text-[38px] font-bold text-white leading-[1.1] tracking-[-0.02em] font-heading">
             Questions You&apos;re Probably Thinking
