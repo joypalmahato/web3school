@@ -21,7 +21,7 @@ const STEPS = [
     number: "02",
     title: "Your Path Is Built For You — Only You",
     description:
-      "You don't get a course. You get a personalized 90-day roadmap built around your pace, your background, and your goals. Every task, every resource, every milestone is yours.",
+      "You don't get a course. You get a personalized 12-week roadmap built around your pace, your background, and your goals. Every task, every resource, every milestone is yours.",
     chips: null,
   },
   {
@@ -63,11 +63,6 @@ export function HowItWorks() {
 
         {/* Header */}
         <div className="text-center mb-16 max-w-[720px] mx-auto">
-          <div className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03]">
-            <span className="text-xs font-medium text-[#10B981] uppercase tracking-widest">
-              Not a course platform
-            </span>
-          </div>
           <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-4">
             How It Works
           </p>

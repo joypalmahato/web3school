@@ -38,9 +38,18 @@ export function ProductPreview() {
       </div>
       <div
         ref={containerRef}
-        className="max-w-[960px] mx-auto border border-white/10 rounded-xl overflow-hidden bg-[#111111] aspect-video"
+        className="max-w-[960px] mx-auto border border-white/10 rounded-xl overflow-hidden bg-[#111111] aspect-video relative"
         style={{ boxShadow: "0 0 80px rgba(16,185,129,0.08)" }}
       >
+        {/* Loading skeleton — shown before video loads */}
+        {!load && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
+              <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[14px] border-l-white/50 border-b-[8px] border-b-transparent ml-1" />
+            </div>
+            <p className="text-xs text-[#555555] tracking-widest uppercase">Loading demo</p>
+          </div>
+        )}
         {load && (
           <video
             src="/product-demo.mp4"
@@ -48,7 +57,6 @@ export function ProductPreview() {
             muted
             loop
             playsInline
-            preload="auto"
             className="w-full h-full object-cover"
           />
         )}

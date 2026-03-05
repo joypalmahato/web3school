@@ -85,12 +85,18 @@ export function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-4">
+            <Link
+              href="/login"
+              className="text-sm text-[#A0A0A0] hover:text-white transition-colors duration-200"
+            >
+              Log in
+            </Link>
             <Button
               asChild
               className="bg-white text-black hover:opacity-85 rounded-md px-5 py-2.5 text-sm font-semibold transition-opacity duration-200"
             >
-              <Link href="/signup">Start Discovery</Link>
+              <Link href="/signup">Start Your Discovery</Link>
             </Button>
           </div>
 
@@ -131,15 +137,22 @@ export function Navbar() {
                 </div>
 
                 {/* CTA pinned to bottom */}
-                <div className="px-6 pb-10 border-t border-white/[0.06] pt-6">
+                <div className="px-6 pb-10 border-t border-white/[0.06] pt-6 space-y-3">
                   <Button
                     asChild
                     className="bg-white text-black hover:opacity-85 rounded-md text-sm font-semibold w-full h-12"
                   >
                     <Link href="/signup" onClick={() => setMobileOpen(false)}>
-                      Start Discovery
+                      Start Your Discovery
                     </Link>
                   </Button>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="block text-center text-sm text-[#A0A0A0] hover:text-white transition-colors py-2"
+                  >
+                    Already have an account? Log in
+                  </Link>
                 </div>
               </SheetContent>
             </Sheet>

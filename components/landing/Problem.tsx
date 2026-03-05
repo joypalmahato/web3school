@@ -11,27 +11,27 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 const PROBLEMS = [
   {
     number: "01",
-    stat: "Most",
-    statLabel: "people who try to break into Web3 never land a role",
+    stat: "Lost",
+    statLabel: "— thousands of videos, threads, and free courses, but zero structure",
     title: "No Clear Direction",
     description:
-      "Thousands of YouTube videos, Twitter threads, and free courses. Zero structure. You learn random things and never know what actually matters for the career you want.",
+      "You learn random things and never know what actually matters for the career you want. Without a specific path, all that effort goes nowhere.",
   },
   {
     number: "02",
     stat: "~5%",
-    statLabel: "average completion rate for online courses (research on MOOCs, 2023)",
+    statLabel: "average completion rate for online courses (MOOC research, 2023)",
     title: "Generic Learning Doesn't Stick",
     description:
       "One-size-fits-all courses weren't built for you. Without a path that adapts to how you think and learn, motivation dies before you finish week two.",
   },
   {
     number: "03",
-    stat: "Few",
-    statLabel: "self-taught Web3 learners can actually prove their skills to employers",
+    stat: "Invisible",
+    statLabel: "— months of self-teaching still leaves you with nothing to show a hiring manager",
     title: "Skills Without Evidence",
     description:
-      "You can spend months learning and still have nothing to show an employer. No portfolio. No credentials. No way to stand out in a world where everyone says they know AI and Web3.",
+      "You can spend months learning and still have nothing to show an employer. No portfolio. No credentials. No way to stand out in a world where everyone claims to know Web3.",
   },
 ];
 
@@ -48,9 +48,9 @@ export function Problem() {
             The Problem
           </p>
           <h2 className="text-[28px] md:text-[40px] lg:text-[52px] font-bold text-white leading-[1.08] tracking-[-0.03em] font-heading">
-            The World Is Moving Fast.
+            Breaking Into Web3 Is Harder Than It Should Be.
             <br />
-            <span className="text-[#A0A0A0]">Most People Are Standing Still.</span>
+            <span className="text-[#A0A0A0]">Three reasons most people fail.</span>
           </h2>
           <p className="mt-5 text-lg text-[#666666] max-w-[520px] mx-auto">
             It&apos;s not a lack of ability. It&apos;s the absence of a clear,
@@ -70,7 +70,7 @@ export function Problem() {
               className="group relative bg-[#111111]/60 backdrop-blur-md border border-white/[0.07] rounded-xl p-8 overflow-hidden hover:border-white/[0.14] transition-colors duration-300"
             >
               {/* Red top accent */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent" />
 
               {/* Number label */}
               <p className="text-xs font-mono text-[#333333] mb-6 tracking-widest">

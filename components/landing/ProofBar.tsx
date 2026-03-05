@@ -9,9 +9,10 @@
 import { motion } from "framer-motion";
 
 const STATS = [
-  { value: "89+", label: "Web3 Careers Mapped" },
-  { value: "10 min", label: "To Your Role Match" },
-  { value: "12 wks", label: "Personalized Roadmap" },
+  { value: "89+", label: "Web3 Roles Covered" },
+  { value: "10 min", label: "Discovery Chat" },
+  { value: "12-week", label: "Personalized Path" },
+  { value: "Free", label: "To Join & Learn" },
 ];
 
 export function ProofBar() {
@@ -23,7 +24,7 @@ export function ProofBar() {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="border-y border-white/[0.06] py-12 px-6"
     >
-      <div className="max-w-[800px] mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-0">
+      <div className="max-w-[960px] mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-0">
         {STATS.map((stat, index) => (
           <div key={stat.label} className="flex items-center">
             {index > 0 && (

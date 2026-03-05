@@ -9,6 +9,7 @@
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import posthog from "posthog-js";
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -29,26 +30,26 @@ const VARIANTS = {
   a: {
     headline1: "The School That Finds Your Path.",
     headline2: "Then Builds It With You.",
-    sub: "Most Web3 learners copy someone else's roadmap and wonder why it doesn't stick. Web3School runs a 10-minute AI chat, matches you to the role that actually fits, then teaches it the way your brain works — week by week, until you can prove it.",
+    sub: "Web3School runs a 10-minute AI chat, matches you to the right role, then teaches it the way your brain works — week by week, until you can prove it.",
     pillars: [
       { label: "Your role, found for you", desc: "10-min chat → precise role match" },
       { label: "Learns how you learn", desc: "Adapts pace and style to you" },
       { label: "Skill Passport you can show", desc: "Proof, not just a certificate" },
     ],
     cta: "Start Your Discovery",
-    microcopy: "No roadmap copying. No guessing. Just your path.",
+    microcopy: "Free to join. No roadmap copying. Just your path.",
   },
   b: {
-    headline1: "The World Is Changing Fast.",
-    headline2: "Learn the Skills That Actually Keep Up.",
-    sub: "AI is reshaping every field. Web3 is rewriting how value moves. The people who survive both know their specific role deeply — and can prove it. Web3School finds your role, builds your path, and adapts until you're the one they can't replace.",
+    headline1: "Everyone Fears Being Replaced.",
+    headline2: "Become the Person They Can't.",
+    sub: "AI is reshaping every field. Web3 is rewriting how value moves. Web3School finds your specific role, builds your path, and adapts until you're irreplaceable.",
     pillars: [
       { label: "AI + Web3 for your role", desc: "Not generic — built for your path" },
       { label: "Adapts to how you learn", desc: "Fast or slow, the platform adjusts" },
       { label: "Proof, not just certificates", desc: "A Skill Passport you can show" },
     ],
     cta: "Start Your Discovery",
-    microcopy: "Built for people who want to be irreplaceable, not just employable.",
+    microcopy: "Free to join. Built for people who want to be irreplaceable.",
   },
 } as const;
 
@@ -85,14 +86,14 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
       />
 
       <div className="relative z-10 max-w-[900px] mx-auto px-6 pt-40 pb-24 lg:pt-44 lg:pb-32 text-center">
 
-        {/* Live pill */}
+        {/* Status pill */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -101,7 +102,7 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
         >
           <span className="inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
           <span className="text-xs text-[#A0A0A0]">
-            <span className="text-white font-medium">Founding cohort</span> · Early access now open
+            <span className="text-white font-medium">Now open</span> · Free to join during early access
           </span>
         </motion.div>
 
@@ -137,7 +138,7 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           {copy.pillars.map((pillar) => (
             <div key={pillar.label} className="text-center">
               <p className="text-sm font-semibold text-white">{pillar.label}</p>
-              <p className="text-xs text-[#555555] mt-0.5">{pillar.desc}</p>
+              <p className="text-xs text-[#888888] mt-0.5">{pillar.desc}</p>
             </div>
           ))}
         </motion.div>
@@ -212,6 +213,21 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
         </motion.div>
 
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+      >
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-5 h-5 text-white/30" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

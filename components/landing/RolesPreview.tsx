@@ -154,7 +154,7 @@ function getThematicGroup(role: RoleSeedData): ThematicGroup {
 export { SLUG_TO_THEMATIC, type ThematicGroup };
 
 export function RolesPreview() {
-  const [activeTab, setActiveTab] = useState<ThematicGroup>("all");
+  const [activeTab, setActiveTab] = useState<ThematicGroup>("web3");
   const carouselRef = useRef<HTMLDivElement>(null);
   const isPaused = useRef(false);
   const isDragging = useRef(false);
@@ -182,7 +182,7 @@ export function RolesPreview() {
       } else {
         carousel.scrollBy({ left: 300, behavior: "smooth" });
       }
-    }, 2500);
+    }, 4000);
 
     return () => clearInterval(timer);
   }, [activeTab]);
