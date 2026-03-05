@@ -262,6 +262,13 @@ export function DiscoveryChat({
         </div>
       </div>
 
+      {/* Disclaimer */}
+      <div className="px-4 py-2 border-b border-white/[0.05] bg-white/[0.02]">
+        <p className="text-[10px] text-[#555555] text-center leading-snug">
+          We&apos;re still building — discovery results can occasionally be inaccurate. We&apos;re actively improving it.
+        </p>
+      </div>
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6">
         <div className="max-w-3xl mx-auto space-y-6">
