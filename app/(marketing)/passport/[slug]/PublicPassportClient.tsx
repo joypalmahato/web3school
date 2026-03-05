@@ -42,7 +42,14 @@ export function PublicPassportClient({
     .slice(0, 2);
 
   return (
-    <div className="min-h-screen bg-navy-deep flex items-center justify-center px-4 py-12">
+    <div className="relative min-h-screen flex items-center justify-center px-4 py-12">
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -171,18 +178,18 @@ export function PublicPassportClient({
           </p>
           <Button
             asChild
-            className="bg-purple-primary hover:bg-purple-light text-white rounded-xl px-8 py-5 text-lg font-semibold w-full"
+            className="bg-white text-black hover:opacity-85 rounded-xl px-8 py-5 text-lg font-semibold w-full"
           >
             <Link href="/signup">
-              Build Your Own Passport
+              Start Your Discovery
               <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
           </Button>
           <p className="text-text-muted text-xs">
-            Free AI-powered career discovery. No credit card required.
+            Free AI-powered career discovery. Always free.
           </p>
         </div>
       </motion.div>
     </div>
-  );
+    );
 }
