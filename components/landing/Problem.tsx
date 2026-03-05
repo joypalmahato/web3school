@@ -1,34 +1,34 @@
 /**
  * @component Problem
  * @part-of Web3School — Landing Page
- * @design Pain-first. Big stats. Numbered cards with red accent border-top.
+ * @design Pain-first. Three fundamental questions as stat cards.
  */
 "use client";
 
 import { motion } from "framer-motion";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
-const PROBLEMS = [
+const QUESTIONS = [
   {
     number: "01",
-    stat: "Lost",
-    statLabel: "— thousands of videos, threads, and free courses, but zero structure",
+    stat: "What?",
+    statLabel: "should I learn?",
     title: "No Clear Direction",
     description:
       "You learn random things and never know what actually matters for the career you want. Without a specific path, all that effort goes nowhere.",
   },
   {
     number: "02",
-    stat: "~5%",
-    statLabel: "average completion rate for online courses (MOOC research, 2023)",
-    title: "Generic Learning Doesn't Stick",
+    stat: "Order?",
+    statLabel: "what comes first, and what comes next?",
+    title: "No Learning Structure",
     description:
       "One-size-fits-all courses weren't built for you. Without a path that adapts to how you think and learn, motivation dies before you finish week two.",
   },
   {
     number: "03",
-    stat: "Invisible",
-    statLabel: "— months of self-teaching still leaves you with nothing to show a hiring manager",
+    stat: "How?",
+    statLabel: "do I actually stick with it?",
     title: "Skills Without Evidence",
     description:
       "You can spend months learning and still have nothing to show an employer. No portfolio. No credentials. No way to stand out in a world where everyone claims to know Web3.",
@@ -43,14 +43,13 @@ export function Problem() {
       <div className="max-w-[1200px] mx-auto px-6">
 
         {/* Header */}
-        <div className="text-center max-w-[760px] mx-auto mb-10">
+        <div className="text-center max-w-[760px] mx-auto mb-6">
           <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-4">
             The Problem
           </p>
           <h2 className="text-[28px] md:text-[40px] lg:text-[52px] font-bold text-white leading-[1.08] tracking-[-0.03em] font-heading">
-            Breaking Into Web3 Is Harder Than It Should Be.
-            <br />
-            <span className="text-[#A0A0A0]">And the same gaps keep showing up.</span>
+            The world has more learning resources than ever —{" "}
+            <span className="text-[#A0A0A0]">and people are more confused than ever.</span>
           </h2>
         </div>
 
@@ -63,7 +62,6 @@ export function Problem() {
           className="max-w-[760px] mx-auto mb-14 px-7 py-6 border border-white/[0.07] rounded-2xl bg-white/[0.02]"
         >
           <p className="text-base md:text-lg text-[#888888] leading-relaxed text-center">
-            The world has more learning resources than ever — and people are more confused than ever.
             The problem was never access to information.{" "}
             <span className="text-white font-medium">
               Nobody is helping them answer three fundamental questions: What should I learn? In what order? And how do I actually stick with it?
@@ -73,9 +71,9 @@ export function Problem() {
 
         {/* Cards */}
         <div className="grid gap-5 md:grid-cols-3 max-w-[1040px] mx-auto">
-          {PROBLEMS.map((problem, index) => (
+          {QUESTIONS.map((item, index) => (
             <motion.div
-              key={problem.number}
+              key={item.number}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -87,15 +85,15 @@ export function Problem() {
 
               {/* Number label */}
               <p className="text-xs font-mono text-[#333333] mb-6 tracking-widest">
-                {problem.number}
+                {item.number}
               </p>
 
               {/* Big stat */}
               <div className="mb-6">
                 <p className="text-[44px] font-bold text-white/10 leading-none tracking-tight font-heading group-hover:text-white/[0.15] transition-colors duration-300">
-                  {problem.stat}
+                  {item.stat}
                 </p>
-                <p className="text-xs text-[#555555] mt-1">{problem.statLabel}</p>
+                <p className="text-xs text-[#555555] mt-1">{item.statLabel}</p>
               </div>
 
               {/* Divider */}
@@ -103,10 +101,10 @@ export function Problem() {
 
               {/* Content */}
               <h3 className="text-lg font-semibold text-white mb-3 font-heading">
-                {problem.title}
+                {item.title}
               </h3>
               <p className="text-sm text-[#666666] leading-relaxed">
-                {problem.description}
+                {item.description}
               </p>
             </motion.div>
           ))}
