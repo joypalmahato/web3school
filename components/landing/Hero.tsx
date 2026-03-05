@@ -28,28 +28,28 @@ const LIVE_MATCHES = [
 
 const VARIANTS = {
   a: {
-    headline1: "The School That Finds Your Path.",
-    headline2: "Then Builds It With You.",
-    sub: "Web3School starts with a short AI conversation, matches you to the right role, then teaches it the way your brain works — at your pace, until you can prove it.",
+    headline1: "You know crypto.",
+    headline2: "Now turn it into a career.",
+    sub: "The Web3 career platform for the AI age.",
     pillars: [
-      { label: "Your role, found for you", desc: "Quick AI chat → precise role match" },
-      { label: "Learns how you learn", desc: "Adapts pace and style to you" },
-      { label: "Skill Passport you can show", desc: "Proof, not just a certificate" },
+      { label: "Match", desc: "Quick AI chat → precise role match" },
+      { label: "Learn", desc: "Adapts pace and style to you" },
+      { label: "Prove", desc: "A Skill Passport you can show" },
     ],
     cta: "Start Your Discovery",
-    microcopy: "Free to join. Built for your role, your pace, your proof.",
+    microcopy: "Match. Learn. Prove. Land your Web3 career.",
   },
   b: {
-    headline1: "Everyone Fears Being Replaced.",
-    headline2: "Become the Person They Can't Replace.",
-    sub: "AI is reshaping every field. Web3 is rewriting how value moves. Web3School finds your specific role, builds your path, and adapts until you're irreplaceable.",
+    headline1: "You know crypto.",
+    headline2: "Now turn it into a career.",
+    sub: "The Web3 career platform for the AI age.",
     pillars: [
-      { label: "AI + Web3 for your role", desc: "Not generic — built for your path" },
-      { label: "Adapts to how you learn", desc: "Fast or slow, the platform adjusts" },
-      { label: "Proof, not just certificates", desc: "A Skill Passport you can show" },
+      { label: "Match", desc: "Quick AI chat → precise role match" },
+      { label: "Learn", desc: "Adapts pace and style to you" },
+      { label: "Prove", desc: "A Skill Passport you can show" },
     ],
     cta: "Start Your Discovery",
-    microcopy: "Free to join. Built for people who want to be irreplaceable.",
+    microcopy: "Match. Learn. Prove. Land your Web3 career.",
   },
 } as const;
 
