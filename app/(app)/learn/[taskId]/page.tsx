@@ -25,6 +25,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { AITutorChat } from "@/components/app/AITutorChat";
+import { LessonContent } from "@/components/app/LessonContent";
 import { cn } from "@/lib/utils";
 
 interface TaskContent {
@@ -273,11 +274,7 @@ export default function TaskPage({
           animate={{ opacity: 1, y: 0 }}
           className="bg-navy-mid border border-border rounded-xl p-6"
         >
-          <div className="prose prose-invert prose-sm max-w-none text-text-primary [&_h1]:font-heading [&_h2]:font-heading [&_h3]:font-heading [&_h1]:text-text-primary [&_h2]:text-text-primary [&_h3]:text-text-primary [&_p]:text-text-secondary [&_li]:text-text-secondary [&_strong]:text-text-primary [&_code]:text-cyan-accent [&_code]:bg-navy-deep [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_pre]:bg-navy-deep [&_pre]:border [&_pre]:border-border [&_blockquote]:border-white/20 [&_a]:text-white">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {normalizeMarkdown(content.lesson_text ?? "")}
-            </ReactMarkdown>
-          </div>
+          <LessonContent markdown={normalizeMarkdown(content.lesson_text)} />
         </motion.div>
       )}
 
