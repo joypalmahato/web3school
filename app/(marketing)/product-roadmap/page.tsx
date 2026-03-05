@@ -32,6 +32,8 @@ const PHASE_2_ITEMS = [
   { label: "Enterprise & Teams", desc: "Upskill entire teams with custom roadmaps and org-level dashboards." },
   { label: "Mentor Marketplace", desc: "Connect with verified Web3 practitioners for 1:1 guidance." },
   { label: "OpenClaw Integration", desc: "Native OpenClaw support — bringing deeper on-chain tooling directly into your learning path." },
+  { label: "Voice Chat", desc: "Talk to your AI Tutor out loud — voice-based learning for hands-free, natural conversations." },
+  { label: "Infographic Lessons", desc: "Visual, bite-sized infographic lessons that break down complex concepts at a glance." },
 ];
 
 export default function RoadmapPage() {
