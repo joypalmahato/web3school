@@ -39,7 +39,7 @@ export function Footer() {
               Web3School
             </span>
             <p className="text-xs text-[#555555] mt-1.5 max-w-[200px] leading-relaxed">
-              Built by people who believe Web3 careers deserve a real path. Free to join.
+              Built by people who believe Web3 careers deserve a real path.
             </p>
           </div>
 

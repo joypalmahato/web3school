@@ -102,7 +102,7 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
         >
           <span className="inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
           <span className="text-xs text-[#A0A0A0]">
-            <span className="text-white font-medium">Now open</span> · Free to join during early access
+            <span className="text-white font-medium">Now open</span> · Free to join
           </span>
         </motion.div>
 

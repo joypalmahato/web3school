@@ -59,8 +59,8 @@ export default function TermsPage() {
         <section>
           <h2 className="text-white font-semibold text-lg mb-3">6. Early Access</h2>
           <p>
-            The platform is currently in early access. Features may change, be removed, or
-            be temporarily unavailable. We are not liable for interruptions during this period.
+            The platform is actively being developed. Features may change, be added, or be
+            temporarily unavailable. We are not liable for interruptions during this period.
           </p>
         </section>
 

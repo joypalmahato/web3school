@@ -12,7 +12,7 @@ const STATS = [
   { value: "89+", label: "Web3 Roles Covered" },
   { value: "1 Chat", label: "To Find Your Fit" },
   { value: "Adaptive", label: "Personalized Path" },
-  { value: "Free", label: "During Early Access" },
+  { value: "Free", label: "Always" },
 ];
 
 export function ProofBar() {
