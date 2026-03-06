@@ -52,7 +52,11 @@ export function useUser() {
 
   const signOut = async () => {
     const insforge = getInsforgeClient();
-    await insforge.auth.signOut();
+    try {
+      await insforge.auth.signOut();
+    } catch {
+      // ignore — still clear local state
+    }
     reset();
   };
 

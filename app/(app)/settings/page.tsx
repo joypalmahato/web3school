@@ -6,7 +6,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Loader2,
@@ -249,7 +248,6 @@ function MultiSelect({
 }
 
 export default function SettingsPage() {
-  const router = useRouter();
   const { profile, isLoading: userLoading, signOut, refreshProfile } = useUser();
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -349,7 +347,7 @@ export default function SettingsPage() {
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/login");
+    window.location.href = "/login";
   };
 
   if (userLoading) {
