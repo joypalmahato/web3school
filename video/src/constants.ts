@@ -1,13 +1,19 @@
 export const COLORS = {
   bg: "#0A0A0A",
-  card: "#111111",
-  primary: "#10B981",
-  primaryDim: "rgba(16, 185, 129, 0.15)",
-  primaryGlow: "rgba(16, 185, 129, 0.12)",
+  primary: "#059669",          // deep green — readable on light bg
+  primaryDim: "rgba(5,150,105,0.18)",
+  primaryGlow: "rgba(5,150,105,0.25)",
+  // Text on light background
+  text: "#0D1B2A",             // deep navy — main text
+  textMuted: "rgba(13,27,42,0.62)", // secondary text
+  textDim: "rgba(13,27,42,0.38)",   // tertiary / captions
+  // Overlay on top of bg image
+  overlay: "rgba(255,255,255,0.60)",
+  border: "rgba(13,27,42,0.12)",
+  // legacy (kept for any fallback)
   white: "#FFFFFF",
   muted: "rgba(255,255,255,0.55)",
   mutedDim: "rgba(255,255,255,0.35)",
-  border: "rgba(255,255,255,0.08)",
 } as const;
 
 export const FONTS = {
@@ -19,18 +25,17 @@ export const FPS = 30;
 export const W = 1920;
 export const H = 1080;
 
-// All scene durations in frames
 export const SCENE = {
-  hook: 4 * FPS,       // 120f
-  brand: 5 * FPS,      // 150f
-  features: 16 * FPS,  // 480f (4 features × 4s each)
-  cta: 5 * FPS,        // 150f
+  hook: 4 * FPS,
+  brand: 5 * FPS,
+  features: 16 * FPS,
+  cta: 5 * FPS,
 } as const;
 
 export const TOTAL_FRAMES =
-  SCENE.hook + SCENE.brand + SCENE.features + SCENE.cta; // 900f = 30s
+  SCENE.hook + SCENE.brand + SCENE.features + SCENE.cta;
 
-export const TRANSITION = 18; // frames for fade in/out within each scene
+export const TRANSITION = 18;
 
 export const FEATURES = [
   {

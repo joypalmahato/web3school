@@ -6,6 +6,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { COLORS, FONTS, TRANSITION } from "../constants";
+import { SceneBg } from "../SceneBg";
 
 type WordProps = {
   children: string;
@@ -13,7 +14,7 @@ type WordProps = {
   color?: string;
 };
 
-const Word = ({ children, delay, color = COLORS.white }: WordProps) => {
+const Word = ({ children, delay, color = COLORS.text }: WordProps) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -53,20 +54,12 @@ export const HookScene = () => {
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  const glowOpacity = interpolate(
-    frame,
-    [20, 60, 90, 120],
-    [0, 0.5, 0.7, 0.3],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-  );
-
   const line1Words = ["More", "resources", "than", "ever."];
   const line2Words = ["More", "confused", "than", "ever."];
 
   return (
     <AbsoluteFill
       style={{
-        backgroundColor: COLORS.bg,
         opacity: sceneOpacity,
         display: "flex",
         alignItems: "center",
@@ -74,83 +67,72 @@ export const HookScene = () => {
         flexDirection: "column",
       }}
     >
-      {/* Green glow */}
-      <div
-        style={{
-          position: "absolute",
-          width: 900,
-          height: 900,
-          borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(16,185,129,${glowOpacity * 0.15}) 0%, transparent 70%)`,
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          pointerEvents: "none",
-        }}
-      />
+      <SceneBg />
 
-      {/* Line 1 */}
-      <div
-        style={{
-          fontFamily: FONTS.heading,
-          fontSize: 172,
-          fontWeight: 800,
-          lineHeight: 1.1,
-          letterSpacing: "-0.04em",
-          marginBottom: 10,
-          textAlign: "center",
-        }}
-      >
-        {line1Words.map((word, i) => (
-          <Word key={word} delay={i * 6 + 10} color={COLORS.white}>
-            {word}
-          </Word>
-        ))}
+      <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        {/* Line 1 */}
+        <div
+          style={{
+            fontFamily: FONTS.heading,
+            fontSize: 172,
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "-0.04em",
+            marginBottom: 10,
+            textAlign: "center",
+          }}
+        >
+          {line1Words.map((word, i) => (
+            <Word key={word} delay={i * 6 + 10} color={COLORS.text}>
+              {word}
+            </Word>
+          ))}
+        </div>
+
+        {/* Line 2 — "confused" in green */}
+        <div
+          style={{
+            fontFamily: FONTS.heading,
+            fontSize: 172,
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "-0.04em",
+            textAlign: "center",
+          }}
+        >
+          {line2Words.map((word, i) => (
+            <Word
+              key={word}
+              delay={i * 6 + 35}
+              color={word === "confused" ? COLORS.primary : COLORS.text}
+            >
+              {word}
+            </Word>
+          ))}
+        </div>
+
+        {/* Green underline */}
+        {(() => {
+          const lineProgress = spring({
+            frame: frame - 80,
+            fps: 30,
+            config: { damping: 200 },
+            durationInFrames: 30,
+          });
+          const lineWidth = interpolate(lineProgress, [0, 1], [0, 320]);
+          return (
+            <div
+              style={{
+                marginTop: 48,
+                height: 5,
+                width: lineWidth,
+                backgroundColor: COLORS.primary,
+                borderRadius: 3,
+              }}
+            />
+          );
+        })()}
       </div>
-
-      {/* Line 2 — "confused" in green */}
-      <div
-        style={{
-          fontFamily: FONTS.heading,
-          fontSize: 172,
-          fontWeight: 800,
-          lineHeight: 1.1,
-          letterSpacing: "-0.04em",
-          textAlign: "center",
-        }}
-      >
-        {line2Words.map((word, i) => (
-          <Word
-            key={word}
-            delay={i * 6 + 35}
-            color={word === "confused" ? COLORS.primary : COLORS.white}
-          >
-            {word}
-          </Word>
-        ))}
-      </div>
-
-      {/* Green underline */}
-      {(() => {
-        const lineProgress = spring({
-          frame: frame - 80,
-          fps: 30,
-          config: { damping: 200 },
-          durationInFrames: 30,
-        });
-        const lineWidth = interpolate(lineProgress, [0, 1], [0, 320]);
-        return (
-          <div
-            style={{
-              marginTop: 48,
-              height: 4,
-              width: lineWidth,
-              backgroundColor: COLORS.primary,
-              borderRadius: 2,
-            }}
-          />
-        );
-      })()}
     </AbsoluteFill>
   );
 };
