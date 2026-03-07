@@ -141,7 +141,7 @@ export const CTAScene = () => {
         style={{
           opacity: subOpacity,
           fontFamily: FONTS.body,
-          fontSize: 40,
+          fontSize: 56,
           fontWeight: 400,
           color: COLORS.muted,
           textAlign: "center",
@@ -181,7 +181,7 @@ export const CTAScene = () => {
           opacity: urlOpacity,
           transform: `translateY(${urlY}px)`,
           fontFamily: FONTS.body,
-          fontSize: 36,
+          fontSize: 48,
           fontWeight: 500,
           color: COLORS.mutedDim,
           letterSpacing: "0.02em",

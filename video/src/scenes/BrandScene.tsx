@@ -153,7 +153,7 @@ export const BrandScene = () => {
           opacity: taglineOpacity,
           transform: `translateY(${taglineY}px)`,
           fontFamily: FONTS.heading,
-          fontSize: 62,
+          fontSize: 88,
           fontWeight: 600,
           letterSpacing: "-0.02em",
           color: COLORS.primary,
@@ -167,10 +167,10 @@ export const BrandScene = () => {
         style={{
           opacity: subtextOpacity,
           fontFamily: FONTS.body,
-          fontSize: 36,
+          fontSize: 56,
           fontWeight: 400,
           color: COLORS.muted,
-          marginTop: 16,
+          marginTop: 20,
           letterSpacing: "0.01em",
         }}
       >

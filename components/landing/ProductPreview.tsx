@@ -27,8 +27,8 @@ export function ProductPreview() {
   }, []);
 
   return (
-    <AnimatedSection className="py-12 md:py-20 lg:py-24 px-6" delay={0.2}>
-      <div className="text-center mb-10">
+    <AnimatedSection className="py-12 md:py-20 lg:py-24 px-0 md:px-6" delay={0.2}>
+      <div className="text-center mb-10 px-6 md:px-0">
         <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-3">
           How It Works
         </p>
@@ -38,7 +38,7 @@ export function ProductPreview() {
       </div>
       <div
         ref={containerRef}
-        className="max-w-[960px] mx-auto border border-white/10 rounded-xl overflow-hidden bg-[#111111] aspect-video relative"
+        className="max-w-[960px] mx-auto border-y md:border border-white/10 rounded-none md:rounded-xl overflow-hidden bg-[#111111] aspect-video relative"
         style={{ boxShadow: "0 0 80px rgba(16,185,129,0.08)" }}
       >
         {/* Loading skeleton — shown before video loads */}
