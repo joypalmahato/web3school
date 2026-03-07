@@ -151,10 +151,10 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 100,
-          maxWidth: 1400,
+          gap: 60,
+          maxWidth: 1700,
           width: "100%",
-          padding: "0 120px",
+          padding: "0 60px",
         }}
       >
         {/* Left: step number */}
@@ -189,7 +189,7 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
             backgroundColor: COLORS.card,
             borderRadius: 32,
             border: `1px solid ${COLORS.border}`,
-            padding: "64px 72px",
+            padding: "44px 52px",
             position: "relative",
             overflow: "hidden",
           }}
@@ -225,12 +225,12 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
               opacity: titleOpacity,
               transform: `translateY(${titleY}px)`,
               fontFamily: FONTS.heading,
-              fontSize: 70,
+              fontSize: 96,
               fontWeight: 800,
               letterSpacing: "-0.03em",
               color: COLORS.white,
               lineHeight: 1.1,
-              marginBottom: 20,
+              marginBottom: 16,
             }}
           >
             {feature.title}
@@ -241,12 +241,12 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
             style={{
               opacity: descOpacity,
               fontFamily: FONTS.body,
-              fontSize: 30,
+              fontSize: 40,
               fontWeight: 400,
               color: COLORS.muted,
               lineHeight: 1.6,
-              marginBottom: 36,
-              maxWidth: 620,
+              marginBottom: 28,
+              maxWidth: 740,
             }}
           >
             {feature.description}
@@ -269,7 +269,7 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
             <span
               style={{
                 fontFamily: FONTS.heading,
-                fontSize: 34,
+                fontSize: 44,
                 fontWeight: 800,
                 color: COLORS.primary,
                 letterSpacing: "-0.02em",
@@ -280,7 +280,7 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
             <span
               style={{
                 fontFamily: FONTS.body,
-                fontSize: 22,
+                fontSize: 28,
                 fontWeight: 400,
                 color: COLORS.muted,
               }}

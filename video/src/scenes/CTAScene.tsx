@@ -103,12 +103,12 @@ export const CTAScene = () => {
             style={{
               opacity: markOpacity,
               fontFamily: FONTS.heading,
-              fontSize: 28,
+              fontSize: 36,
               fontWeight: 700,
               color: COLORS.primary,
               letterSpacing: "0.06em",
               textTransform: "uppercase",
-              marginBottom: 40,
+              marginBottom: 32,
             }}
           >
             Web3School
@@ -122,14 +122,14 @@ export const CTAScene = () => {
           opacity: taglineOpacity,
           transform: `scale(${taglineScale})`,
           fontFamily: FONTS.heading,
-          fontSize: 116,
+          fontSize: 156,
           fontWeight: 800,
           letterSpacing: "-0.04em",
-          lineHeight: 1.1,
+          lineHeight: 1.05,
           color: COLORS.white,
           textAlign: "center",
-          maxWidth: 1200,
-          marginBottom: 20,
+          maxWidth: 1600,
+          marginBottom: 16,
         }}
       >
         From confusion to{" "}
@@ -141,11 +141,11 @@ export const CTAScene = () => {
         style={{
           opacity: subOpacity,
           fontFamily: FONTS.body,
-          fontSize: 30,
+          fontSize: 40,
           fontWeight: 400,
           color: COLORS.muted,
           textAlign: "center",
-          marginBottom: 56,
+          marginBottom: 48,
           letterSpacing: "0.01em",
         }}
       >
@@ -160,10 +160,10 @@ export const CTAScene = () => {
           backgroundColor: COLORS.white,
           color: "#000",
           fontFamily: FONTS.heading,
-          fontSize: 32,
+          fontSize: 42,
           fontWeight: 700,
           letterSpacing: "-0.01em",
-          padding: "28px 72px",
+          padding: "32px 88px",
           borderRadius: 100,
           display: "inline-flex",
           alignItems: "center",
@@ -181,7 +181,7 @@ export const CTAScene = () => {
           opacity: urlOpacity,
           transform: `translateY(${urlY}px)`,
           fontFamily: FONTS.body,
-          fontSize: 28,
+          fontSize: 36,
           fontWeight: 500,
           color: COLORS.mutedDim,
           letterSpacing: "0.02em",

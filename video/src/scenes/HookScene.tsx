@@ -95,11 +95,11 @@ export const HookScene = () => {
       <div
         style={{
           fontFamily: FONTS.heading,
-          fontSize: 116,
+          fontSize: 160,
           fontWeight: 800,
-          lineHeight: 1.15,
-          letterSpacing: "-0.03em",
-          marginBottom: 12,
+          lineHeight: 1.1,
+          letterSpacing: "-0.04em",
+          marginBottom: 8,
         }}
       >
         {line1Words.map((word, i) => (
@@ -113,10 +113,10 @@ export const HookScene = () => {
       <div
         style={{
           fontFamily: FONTS.heading,
-          fontSize: 116,
+          fontSize: 160,
           fontWeight: 800,
-          lineHeight: 1.15,
-          letterSpacing: "-0.03em",
+          lineHeight: 1.1,
+          letterSpacing: "-0.04em",
         }}
       >
         {line2Words.map((word, i) => (
