@@ -95,7 +95,7 @@ export const HookScene = () => {
       <div
         style={{
           fontFamily: FONTS.heading,
-          fontSize: 92,
+          fontSize: 116,
           fontWeight: 800,
           lineHeight: 1.15,
           letterSpacing: "-0.03em",
@@ -113,7 +113,7 @@ export const HookScene = () => {
       <div
         style={{
           fontFamily: FONTS.heading,
-          fontSize: 92,
+          fontSize: 116,
           fontWeight: 800,
           lineHeight: 1.15,
           letterSpacing: "-0.03em",

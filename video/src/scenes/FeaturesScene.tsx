@@ -225,7 +225,7 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
               opacity: titleOpacity,
               transform: `translateY(${titleY}px)`,
               fontFamily: FONTS.heading,
-              fontSize: 56,
+              fontSize: 70,
               fontWeight: 800,
               letterSpacing: "-0.03em",
               color: COLORS.white,
@@ -241,7 +241,7 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
             style={{
               opacity: descOpacity,
               fontFamily: FONTS.body,
-              fontSize: 24,
+              fontSize: 30,
               fontWeight: 400,
               color: COLORS.muted,
               lineHeight: 1.6,
@@ -269,7 +269,7 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
             <span
               style={{
                 fontFamily: FONTS.heading,
-                fontSize: 28,
+                fontSize: 34,
                 fontWeight: 800,
                 color: COLORS.primary,
                 letterSpacing: "-0.02em",
@@ -280,7 +280,7 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
             <span
               style={{
                 fontFamily: FONTS.body,
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: 400,
                 color: COLORS.muted,
               }}
