@@ -1,0 +1,23 @@
+{
+  "name": "web3school-video",
+  "version": "1.0.0",
+  "description": "Web3School promo video",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render Promo out/promo.mp4 --gl=swangle",
+    "render:hq": "remotion render Promo out/promo.mp4 --gl=swangle --crf=18",
+    "still": "remotion still Promo 0 out/thumbnail.png"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.291",
+    "@remotion/google-fonts": "4.0.291",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.291"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.4.5"
+  }
+}
