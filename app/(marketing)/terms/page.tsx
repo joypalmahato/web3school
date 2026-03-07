@@ -86,7 +86,7 @@ export default function TermsPage() {
           <p>
             Questions? Reach us on{" "}
             <a
-              href="https://twitter.com/web3school"
+              href="https://x.com/Web3School_"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#10B981] hover:underline"
