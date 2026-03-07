@@ -8,7 +8,7 @@ import {
 } from "remotion";
 import { COLORS, FONTS, FEATURES, TRANSITION, FPS } from "../constants";
 
-const FEATURE_DURATION = 4 * FPS; // 120 frames per feature
+const FEATURE_DURATION = 4 * FPS;
 
 type FeatureData = (typeof FEATURES)[number];
 
@@ -28,55 +28,46 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Step number entrance
+  // Step badge
   const stepSpring = spring({
     frame: frame - 5,
     fps,
     config: { damping: 200 },
-    durationInFrames: 30,
+    durationInFrames: 25,
   });
   const stepOpacity = interpolate(stepSpring, [0, 1], [0, 1]);
-  const stepX = interpolate(stepSpring, [0, 1], [-60, 0]);
+  const stepY = interpolate(stepSpring, [0, 1], [-20, 0]);
 
-  // Card slide in from right
-  const cardSpring = spring({
+  // Icon
+  const iconSpring = spring({
     frame: frame - 15,
     fps,
-    config: { damping: 20, stiffness: 150 },
-    durationInFrames: 45,
-  });
-  const cardX = interpolate(cardSpring, [0, 1], [120, 0]);
-  const cardOpacity = interpolate(cardSpring, [0, 1], [0, 1]);
-
-  // Icon bounce
-  const iconSpring = spring({
-    frame: frame - 30,
-    fps,
-    config: { damping: 8 },
+    config: { damping: 10 },
     durationInFrames: 35,
   });
   const iconScale = interpolate(iconSpring, [0, 1], [0, 1]);
 
-  // Title entrance
+  // Title
   const titleSpring = spring({
-    frame: frame - 40,
+    frame: frame - 30,
     fps,
     config: { damping: 200 },
-    durationInFrames: 25,
+    durationInFrames: 30,
   });
-  const titleY = interpolate(titleSpring, [0, 1], [20, 0]);
+  const titleY = interpolate(titleSpring, [0, 1], [40, 0]);
   const titleOpacity = interpolate(titleSpring, [0, 1], [0, 1]);
 
-  // Description entrance
+  // Description
   const descSpring = spring({
-    frame: frame - 55,
+    frame: frame - 50,
     fps,
     config: { damping: 200 },
-    durationInFrames: 25,
+    durationInFrames: 30,
   });
   const descOpacity = interpolate(descSpring, [0, 1], [0, 1]);
+  const descY = interpolate(descSpring, [0, 1], [30, 0]);
 
-  // Stat entrance
+  // Stat
   const statSpring = spring({
     frame: frame - 65,
     fps,
@@ -84,16 +75,16 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
     durationInFrames: 25,
   });
   const statOpacity = interpolate(statSpring, [0, 1], [0, 1]);
-  const statY = interpolate(statSpring, [0, 1], [16, 0]);
+  const statScale = interpolate(statSpring, [0, 1], [0.8, 1]);
 
-  // Accent bar width
+  // Green bar under title
   const barProgress = spring({
-    frame: frame - 20,
+    frame: frame - 35,
     fps,
     config: { damping: 200 },
-    durationInFrames: 40,
+    durationInFrames: 35,
   });
-  const barWidth = interpolate(barProgress, [0, 1], [0, 280]);
+  const barWidth = interpolate(barProgress, [0, 1], [0, 200]);
 
   return (
     <AbsoluteFill
@@ -103,17 +94,18 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        flexDirection: "column",
+        padding: "0 180px",
       }}
     >
-      {/* Background glow centered on card */}
+      {/* Subtle green glow */}
       <div
         style={{
           position: "absolute",
-          width: 800,
-          height: 800,
+          width: 1000,
+          height: 1000,
           borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 60%)",
+          background: "radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 60%)",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
@@ -121,174 +113,143 @@ const FeatureSlide = ({ feature, index }: FeatureSlideProps) => {
         }}
       />
 
-      {/* Progress dots — bottom */}
+      {/* Step badge */}
       <div
         style={{
-          position: "absolute",
-          bottom: 80,
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          gap: 12,
-        }}
-      >
-        {FEATURES.map((_, i) => (
-          <div
-            key={i}
-            style={{
-              width: i === index ? 32 : 10,
-              height: 10,
-              borderRadius: 5,
-              backgroundColor: i === index ? COLORS.primary : COLORS.border,
-              transition: "none",
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Main layout: step number left | card right */}
-      <div
-        style={{
+          opacity: stepOpacity,
+          transform: `translateY(${stepY}px)`,
           display: "flex",
           alignItems: "center",
-          gap: 60,
-          maxWidth: 1700,
-          width: "100%",
-          padding: "0 60px",
+          gap: 16,
+          marginBottom: 36,
         }}
       >
-        {/* Left: step number */}
         <div
           style={{
-            opacity: stepOpacity,
-            transform: `translateX(${stepX}px)`,
-            flexShrink: 0,
+            backgroundColor: COLORS.primaryDim,
+            border: `1px solid rgba(16,185,129,0.3)`,
+            borderRadius: 100,
+            padding: "10px 32px",
+            fontFamily: FONTS.heading,
+            fontSize: 42,
+            fontWeight: 700,
+            color: COLORS.primary,
+            letterSpacing: "0.04em",
           }}
         >
-          <div
-            style={{
-              fontFamily: FONTS.heading,
-              fontSize: 180,
-              fontWeight: 900,
-              letterSpacing: "-0.06em",
-              lineHeight: 1,
-              color: "rgba(99,102,241,0.12)",
-              userSelect: "none",
-            }}
-          >
-            {feature.step}
-          </div>
+          {feature.step} / 04
         </div>
 
-        {/* Right: feature card */}
-        <div
+        {/* Progress dots */}
+        <div style={{ display: "flex", gap: 10 }}>
+          {FEATURES.map((_, i) => (
+            <div
+              key={i}
+              style={{
+                width: i === index ? 36 : 12,
+                height: 12,
+                borderRadius: 6,
+                backgroundColor: i === index ? COLORS.primary : COLORS.border,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Icon */}
+      <div
+        style={{
+          transform: `scale(${iconScale})`,
+          fontSize: 110,
+          marginBottom: 32,
+          lineHeight: 1,
+        }}
+      >
+        {feature.icon}
+      </div>
+
+      {/* Title */}
+      <div
+        style={{
+          opacity: titleOpacity,
+          transform: `translateY(${titleY}px)`,
+          fontFamily: FONTS.heading,
+          fontSize: 168,
+          fontWeight: 800,
+          letterSpacing: "-0.04em",
+          color: COLORS.white,
+          lineHeight: 1.0,
+          textAlign: "center",
+          marginBottom: 12,
+        }}
+      >
+        {feature.title}
+      </div>
+
+      {/* Green accent bar */}
+      <div
+        style={{
+          height: 4,
+          width: barWidth,
+          backgroundColor: COLORS.primary,
+          borderRadius: 2,
+          marginBottom: 36,
+        }}
+      />
+
+      {/* Description */}
+      <div
+        style={{
+          opacity: descOpacity,
+          transform: `translateY(${descY}px)`,
+          fontFamily: FONTS.body,
+          fontSize: 64,
+          fontWeight: 400,
+          color: COLORS.muted,
+          lineHeight: 1.5,
+          textAlign: "center",
+          maxWidth: 1400,
+          marginBottom: 48,
+        }}
+      >
+        {feature.description}
+      </div>
+
+      {/* Stat pill */}
+      <div
+        style={{
+          opacity: statOpacity,
+          transform: `scale(${statScale})`,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 16,
+          backgroundColor: COLORS.primaryDim,
+          border: `1px solid rgba(16,185,129,0.3)`,
+          borderRadius: 100,
+          padding: "16px 48px",
+        }}
+      >
+        <span
           style={{
-            opacity: cardOpacity,
-            transform: `translateX(${cardX}px)`,
-            flex: 1,
-            backgroundColor: COLORS.card,
-            borderRadius: 32,
-            border: `1px solid ${COLORS.border}`,
-            padding: "44px 52px",
-            position: "relative",
-            overflow: "hidden",
+            fontFamily: FONTS.heading,
+            fontSize: 56,
+            fontWeight: 800,
+            color: COLORS.primary,
+            letterSpacing: "-0.02em",
           }}
         >
-          {/* Top accent bar */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 72,
-              height: 3,
-              width: barWidth,
-              backgroundColor: COLORS.primary,
-              borderRadius: "0 0 3px 3px",
-            }}
-          />
-
-          {/* Icon */}
-          <div
-            style={{
-              transform: `scale(${iconScale})`,
-              fontSize: 72,
-              marginBottom: 28,
-              display: "inline-block",
-            }}
-          >
-            {feature.icon}
-          </div>
-
-          {/* Title */}
-          <div
-            style={{
-              opacity: titleOpacity,
-              transform: `translateY(${titleY}px)`,
-              fontFamily: FONTS.heading,
-              fontSize: 130,
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
-              color: COLORS.white,
-              lineHeight: 1.1,
-              marginBottom: 20,
-            }}
-          >
-            {feature.title}
-          </div>
-
-          {/* Description */}
-          <div
-            style={{
-              opacity: descOpacity,
-              fontFamily: FONTS.body,
-              fontSize: 58,
-              fontWeight: 400,
-              color: COLORS.muted,
-              lineHeight: 1.5,
-              marginBottom: 28,
-              maxWidth: 900,
-            }}
-          >
-            {feature.description}
-          </div>
-
-          {/* Stat pill */}
-          <div
-            style={{
-              opacity: statOpacity,
-              transform: `translateY(${statY}px)`,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 12,
-              backgroundColor: COLORS.primaryDim,
-              border: `1px solid rgba(99,102,241,0.25)`,
-              borderRadius: 100,
-              padding: "12px 28px",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: FONTS.heading,
-                fontSize: 56,
-                fontWeight: 800,
-                color: COLORS.primary,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              {feature.stat}
-            </span>
-            <span
-              style={{
-                fontFamily: FONTS.body,
-                fontSize: 40,
-                fontWeight: 400,
-                color: COLORS.muted,
-              }}
-            >
-              {feature.statLabel}
-            </span>
-          </div>
-        </div>
+          {feature.stat}
+        </span>
+        <span
+          style={{
+            fontFamily: FONTS.body,
+            fontSize: 44,
+            fontWeight: 400,
+            color: COLORS.muted,
+          }}
+        >
+          {feature.statLabel}
+        </span>
       </div>
     </AbsoluteFill>
   );

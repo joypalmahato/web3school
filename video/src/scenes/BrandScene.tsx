@@ -20,7 +20,6 @@ export const BrandScene = () => {
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Logo scale entrance
   const logoSpring = spring({
     frame: frame - 10,
     fps,
@@ -30,7 +29,6 @@ export const BrandScene = () => {
   const logoScale = interpolate(logoSpring, [0, 1], [0.6, 1]);
   const logoOpacity = interpolate(logoSpring, [0, 1], [0, 1]);
 
-  // Tagline slide up
   const taglineSpring = spring({
     frame: frame - 35,
     fps,
@@ -40,7 +38,6 @@ export const BrandScene = () => {
   const taglineY = interpolate(taglineSpring, [0, 1], [30, 0]);
   const taglineOpacity = interpolate(taglineSpring, [0, 1], [0, 1]);
 
-  // Subtext
   const subtextSpring = spring({
     frame: frame - 55,
     fps,
@@ -49,13 +46,11 @@ export const BrandScene = () => {
   });
   const subtextOpacity = interpolate(subtextSpring, [0, 1], [0, 1]);
 
-  // Glow pulse
   const glowPulse = interpolate(frame, [0, 75, 150], [0.6, 1, 0.7], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  // Badge entrance
   const badgeSpring = spring({
     frame: frame - 20,
     fps,
@@ -76,14 +71,14 @@ export const BrandScene = () => {
         flexDirection: "column",
       }}
     >
-      {/* Background glow */}
+      {/* Green glow */}
       <div
         style={{
           position: "absolute",
-          width: 900,
-          height: 900,
+          width: 1000,
+          height: 1000,
           borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(99,102,241,${0.07 * glowPulse}) 0%, transparent 65%)`,
+          background: `radial-gradient(circle, rgba(16,185,129,${0.08 * glowPulse}) 0%, transparent 65%)`,
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
@@ -96,12 +91,12 @@ export const BrandScene = () => {
         style={{
           opacity: badgeOpacity,
           transform: `scale(${badgeScale})`,
-          marginBottom: 32,
-          width: 96,
-          height: 96,
-          borderRadius: 24,
+          marginBottom: 36,
+          width: 120,
+          height: 120,
+          borderRadius: 28,
           overflow: "hidden",
-          boxShadow: `0 0 40px rgba(99,102,241,0.4)`,
+          boxShadow: `0 0 60px rgba(16,185,129,0.5)`,
         }}
       >
         <Img
@@ -110,13 +105,13 @@ export const BrandScene = () => {
         />
       </div>
 
-      {/* Logo wordmark */}
+      {/* Wordmark */}
       <div
         style={{
           opacity: logoOpacity,
           transform: `scale(${logoScale})`,
           fontFamily: FONTS.heading,
-          fontSize: 164,
+          fontSize: 172,
           fontWeight: 800,
           letterSpacing: "-0.04em",
           color: COLORS.white,
@@ -126,7 +121,7 @@ export const BrandScene = () => {
         Web3School
       </div>
 
-      {/* Divider line */}
+      {/* Divider */}
       {(() => {
         const lineProgress = spring({
           frame: frame - 30,
@@ -134,14 +129,15 @@ export const BrandScene = () => {
           config: { damping: 200 },
           durationInFrames: 25,
         });
-        const lineWidth = interpolate(lineProgress, [0, 1], [0, 380]);
+        const lineWidth = interpolate(lineProgress, [0, 1], [0, 480]);
         return (
           <div
             style={{
-              margin: "28px 0",
-              height: 1,
+              margin: "36px 0",
+              height: 2,
               width: lineWidth,
-              backgroundColor: COLORS.border,
+              backgroundColor: COLORS.primary,
+              borderRadius: 2,
             }}
           />
         );
@@ -154,9 +150,10 @@ export const BrandScene = () => {
           transform: `translateY(${taglineY}px)`,
           fontFamily: FONTS.heading,
           fontSize: 88,
-          fontWeight: 600,
-          letterSpacing: "-0.02em",
+          fontWeight: 700,
+          letterSpacing: "-0.03em",
           color: COLORS.primary,
+          textAlign: "center",
         }}
       >
         From confusion to irreplaceable.
@@ -170,8 +167,9 @@ export const BrandScene = () => {
           fontSize: 56,
           fontWeight: 400,
           color: COLORS.muted,
-          marginTop: 20,
+          marginTop: 24,
           letterSpacing: "0.01em",
+          textAlign: "center",
         }}
       >
         AI-powered Web3 career discovery

@@ -18,50 +18,49 @@ export const CTAScene = () => {
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // Tagline entrance
   const taglineSpring = spring({
     frame: frame - 10,
     fps,
     config: { damping: 200 },
     durationInFrames: 35,
   });
-  const taglineScale = interpolate(taglineSpring, [0, 1], [0.88, 1]);
+  const taglineScale = interpolate(taglineSpring, [0, 1], [0.9, 1]);
   const taglineOpacity = interpolate(taglineSpring, [0, 1], [0, 1]);
 
-  // Button entrance
   const btnSpring = spring({
-    frame: frame - 35,
+    frame: frame - 40,
     fps,
-    config: { damping: 20, stiffness: 200 },
+    config: { damping: 18, stiffness: 200 },
     durationInFrames: 30,
   });
   const btnScale = interpolate(btnSpring, [0, 1], [0.7, 1]);
   const btnOpacity = interpolate(btnSpring, [0, 1], [0, 1]);
 
-  // URL entrance
   const urlSpring = spring({
-    frame: frame - 55,
+    frame: frame - 60,
     fps,
     config: { damping: 200 },
     durationInFrames: 25,
   });
   const urlOpacity = interpolate(urlSpring, [0, 1], [0, 1]);
-  const urlY = interpolate(urlSpring, [0, 1], [12, 0]);
+  const urlY = interpolate(urlSpring, [0, 1], [16, 0]);
 
-  // Subtext
   const subSpring = spring({
-    frame: frame - 25,
+    frame: frame - 28,
     fps,
     config: { damping: 200 },
     durationInFrames: 25,
   });
   const subOpacity = interpolate(subSpring, [0, 1], [0, 1]);
 
-  // Glow ring pulse
   const ringProgress = interpolate(frame, [0, 150], [0, 1], {
     extrapolateRight: "clamp",
   });
-  const ringOpacity = interpolate(Math.sin(ringProgress * Math.PI * 4), [-1, 1], [0.04, 0.12]);
+  const ringOpacity = interpolate(
+    Math.sin(ringProgress * Math.PI * 4),
+    [-1, 1],
+    [0.05, 0.18]
+  );
 
   return (
     <AbsoluteFill
@@ -72,16 +71,17 @@ export const CTAScene = () => {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
+        padding: "0 160px",
       }}
     >
-      {/* Animated glow backdrop */}
+      {/* Animated green glow */}
       <div
         style={{
           position: "absolute",
-          width: 1000,
-          height: 1000,
+          width: 1200,
+          height: 1200,
           borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(99,102,241,${ringOpacity}) 0%, transparent 60%)`,
+          background: `radial-gradient(circle, rgba(16,185,129,${ringOpacity}) 0%, transparent 60%)`,
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
@@ -103,12 +103,12 @@ export const CTAScene = () => {
             style={{
               opacity: markOpacity,
               fontFamily: FONTS.heading,
-              fontSize: 36,
+              fontSize: 40,
               fontWeight: 700,
               color: COLORS.primary,
-              letterSpacing: "0.06em",
+              letterSpacing: "0.1em",
               textTransform: "uppercase",
-              marginBottom: 32,
+              marginBottom: 44,
             }}
           >
             Web3School
@@ -122,14 +122,14 @@ export const CTAScene = () => {
           opacity: taglineOpacity,
           transform: `scale(${taglineScale})`,
           fontFamily: FONTS.heading,
-          fontSize: 156,
+          fontSize: 164,
           fontWeight: 800,
           letterSpacing: "-0.04em",
           lineHeight: 1.05,
           color: COLORS.white,
           textAlign: "center",
           maxWidth: 1600,
-          marginBottom: 16,
+          marginBottom: 24,
         }}
       >
         From confusion to{" "}
@@ -141,11 +141,11 @@ export const CTAScene = () => {
         style={{
           opacity: subOpacity,
           fontFamily: FONTS.body,
-          fontSize: 56,
+          fontSize: 60,
           fontWeight: 400,
           color: COLORS.muted,
           textAlign: "center",
-          marginBottom: 48,
+          marginBottom: 64,
           letterSpacing: "0.01em",
         }}
       >
@@ -157,19 +157,19 @@ export const CTAScene = () => {
         style={{
           opacity: btnOpacity,
           transform: `scale(${btnScale})`,
-          backgroundColor: COLORS.white,
+          backgroundColor: COLORS.primary,
           color: "#000",
           fontFamily: FONTS.heading,
-          fontSize: 42,
+          fontSize: 48,
           fontWeight: 700,
           letterSpacing: "-0.01em",
-          padding: "32px 88px",
+          padding: "32px 100px",
           borderRadius: 100,
           display: "inline-flex",
           alignItems: "center",
-          gap: 12,
-          marginBottom: 48,
-          boxShadow: "0 0 60px rgba(99,102,241,0.3)",
+          gap: 16,
+          marginBottom: 52,
+          boxShadow: "0 0 80px rgba(16,185,129,0.4)",
         }}
       >
         Get early access →
@@ -181,10 +181,10 @@ export const CTAScene = () => {
           opacity: urlOpacity,
           transform: `translateY(${urlY}px)`,
           fontFamily: FONTS.body,
-          fontSize: 48,
+          fontSize: 44,
           fontWeight: 500,
           color: COLORS.mutedDim,
-          letterSpacing: "0.02em",
+          letterSpacing: "0.04em",
         }}
       >
         web3school.study
