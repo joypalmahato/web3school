@@ -7,14 +7,16 @@
  */
 import { getInsforgeServerClient } from "@/lib/insforge/server";
 
+type DatabaseClient = ReturnType<typeof getInsforgeServerClient>["database"];
+type QueryBuilder = ReturnType<DatabaseClient["from"]>;
+
 /**
  * Returns a query builder for the given table via InsForge.
  *
  * Usage:
  *   const { data, error } = await db("profiles").select("*").eq("id", userId).single();
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function db(table: string): any {
+export function db(table: string): QueryBuilder {
   const client = getInsforgeServerClient();
   return client.database.from(table);
 }

@@ -4,12 +4,8 @@ import { db } from "@/lib/db";
 import { APP_URL } from "@/lib/utils/constants";
 
 function generateSlug(): string {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-  let slug = "";
-  for (let i = 0; i < 8; i++) {
-    slug += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return slug;
+  // crypto.randomUUID() uses a CSPRNG — no collision risk from weak randomness
+  return crypto.randomUUID().replace(/-/g, "").slice(0, 8);
 }
 
 export async function POST(request: Request) {

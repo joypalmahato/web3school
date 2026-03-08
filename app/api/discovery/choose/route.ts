@@ -30,10 +30,12 @@ export async function POST(request: Request) {
     }
 
     // Update user profile with chosen role
+    // discovery_completed must also be set so the waitlist router sends them to /learn
     await db("profiles")
       .update({
         current_role_id: role.id,
         onboarding_completed: true,
+        discovery_completed: true,
       })
       .eq("user_id", userId);
 

@@ -5,12 +5,7 @@ import { INITIAL_SKILLS } from "@/data/skills";
 import { z } from "zod";
 
 function generateSlug(): string {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-  let slug = "";
-  for (let i = 0; i < 10; i++) {
-    slug += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return slug;
+  return crypto.randomUUID().replace(/-/g, "").slice(0, 10);
 }
 
 export async function GET() {

@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
@@ -69,7 +69,7 @@ export default function LearnPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const fetchToday = async () => {
+  const fetchToday = useCallback(async () => {
     try {
       const res = await fetch("/api/tasks/today");
       if (!res.ok) {
@@ -86,11 +86,11 @@ export default function LearnPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchToday();
-  }, []);
+  }, [fetchToday]);
 
   const handleGenerateRoadmap = async () => {
     setIsGenerating(true);

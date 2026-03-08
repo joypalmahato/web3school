@@ -85,7 +85,8 @@ export default function LoginPage() {
       return;
     }
     if (result.data?.codeVerifier) {
-      document.cookie = `insforge_pkce=${result.data.codeVerifier}; path=/; max-age=600; SameSite=Lax`;
+      const secure = window.location.protocol === "https:" ? "; Secure" : "";
+      document.cookie = `insforge_pkce=${result.data.codeVerifier}; path=/; max-age=600; SameSite=Lax${secure}`;
     }
     if (result.data?.url) {
       window.location.href = result.data.url;
