@@ -65,35 +65,8 @@ export default function LoginPage() {
       });
     }
 
-    // Check approval + three-tier redirect based on progress.
-    // The client-side DB query may fail (RLS blocks browser clients),
-    // so default to /waitlist and let server pages handle cascading redirects.
-    try {
-      const { data: profile } = await insforge.database
-        .from("profiles")
-        .select("onboarding_completed, discovery_completed, is_approved")
-        .eq("user_id", user?.id)
-        .single();
-
-      if (!profile?.is_approved) {
-        window.location.href = "/waitlist";
-        return;
-      }
-
-      if (profile?.discovery_completed) {
-        window.location.href = "/learn";
-        return;
-      } else if (profile?.onboarding_completed) {
-        window.location.href = "/discover";
-        return;
-      } else {
-        window.location.href = "/onboarding";
-        return;
-      }
-    } catch {
-      // RLS or network error — fall through to default
-    }
-
+    // Let the server-side /waitlist page handle the redirect chain.
+    // It checks is_approved and routes to /onboarding, /discover, or /learn.
     window.location.href = "/waitlist";
   };
 

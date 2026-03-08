@@ -23,19 +23,17 @@ export async function GET() {
     }
 
     // Count how many people ahead are still waiting
-    const { data: aheadData } = await db("waitlist")
-      .select("id")
+    const { count: totalAhead } = await db("waitlist")
+      .select("*", { count: "exact", head: true })
       .lt("waitlist_position", entry.waitlist_position)
       .eq("status", "waiting");
-
-    const totalAhead = aheadData?.length ?? 0;
 
     return NextResponse.json({
       position: entry.waitlist_position,
       referral_code: entry.referral_code,
       referral_count: entry.referral_count,
       status: entry.status,
-      total_ahead: totalAhead,
+      total_ahead: totalAhead ?? 0,
     });
   } catch (err) {
     console.error("Waitlist status error:", err);

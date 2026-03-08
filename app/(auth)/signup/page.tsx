@@ -92,20 +92,16 @@ function SignupForm() {
       });
     }
 
-    // Create profile row + waitlist entry (InsForge has no auto-trigger)
-    try {
-      await fetch("/api/profile/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: data.email,
-          full_name: data.full_name,
-          referral_code: data.referral_code || undefined,
-        }),
-      });
-    } catch {
-      // Profile creation failure is non-fatal — can retry later
-    }
+    // Fire-and-forget profile creation — don't block the redirect
+    fetch("/api/profile/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: data.email,
+        full_name: data.full_name,
+        referral_code: data.referral_code || undefined,
+      }),
+    }).catch(() => {});
 
     window.location.href = "/waitlist";
   };

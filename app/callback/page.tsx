@@ -77,9 +77,6 @@ export default function CallbackPage() {
       }
 
       // Case 2: SDK's detectAuthCallback might have already handled it
-      // Wait a moment for it to complete, then check for user
-      await new Promise((r) => setTimeout(r, 1000));
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data }: any = await insforge.auth.getCurrentUser();
       if (data?.user) {
@@ -98,44 +95,11 @@ export default function CallbackPage() {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async function ensureProfileAndRedirect(insforge: any, user: any) {
-      try {
-        await fetch("/api/profile/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: user.email,
-            full_name: user.profile?.name || "",
-          }),
-        });
-      } catch {
-        // Non-fatal
-      }
-
-      try {
-        const { data: profile } = await insforge.database
-          .from("profiles")
-          .select("onboarding_completed, discovery_completed, is_approved")
-          .eq("user_id", user.id)
-          .single();
-
-        if (profile?.is_approved === false) {
-          window.location.href = "/waitlist";
-          return;
-        }
-
-        if (profile?.discovery_completed) {
-          window.location.href = "/learn";
-          return;
-        } else if (profile?.onboarding_completed) {
-          window.location.href = "/discover";
-          return;
-        }
-      } catch {
-        // RLS or network error — fall through to default
-      }
-
-      window.location.href = "/onboarding";
+    async function ensureProfileAndRedirect(_insforge: any, _user: any) {
+      // /api/auth/callback already created the profile server-side.
+      // Let the server-side /waitlist page handle the redirect chain
+      // (it checks is_approved and routes to /onboarding, /discover, or /learn).
+      window.location.href = "/waitlist";
     }
 
     handleCallback();
