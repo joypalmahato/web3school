@@ -132,16 +132,17 @@ export function WaitlistStatus({
           {/* Tweet preview */}
           <div className="bg-black/30 border border-white/10 rounded-lg p-4">
             <p className="text-white/70 text-xs leading-relaxed">
-              I&apos;m exploring my Web3 career with AI on{" "}
-              <span className="text-white font-medium">@Web3School_</span> 🚀
+              Just signed up on{" "}
+              <span className="text-white font-medium">@Web3School_</span> to
+              find my Web3 career path 🚀
               <br />
               <br />
-              It matched me to a Web3 role in minutes — no guessing, no wasted
-              months.
+              Using AI to discover which Web3 role actually fits me — then I
+              get a personalized roadmap + skill passport to prove it.
               <br />
               <br />
-              If you&apos;re in crypto or trying to break into Web3, grab your
-              spot before it fills up 👇
+              If you&apos;re in crypto or trying to break into Web3, join early
+              and build yours too 👇
               <br />
               <span className="text-green-400 text-xs mt-1 block truncate">
                 {referralLink}

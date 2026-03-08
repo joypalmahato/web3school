@@ -8,11 +8,11 @@ interface ShareButtonsProps {
   referralLink: string;
 }
 
-const TWEET_TEXT = `I'm exploring my Web3 career with AI on @Web3School_ 🚀
+const TWEET_TEXT = `Just signed up on @Web3School_ to find my Web3 career path 🚀
 
-It matched me to a Web3 role in minutes — no guessing, no wasted months.
+Using AI to discover which Web3 role actually fits me — then I get a personalized roadmap + skill passport to prove it.
 
-If you're in crypto or trying to break into Web3, grab your spot before it fills up 👇`;
+If you're in crypto or trying to break into Web3, join early and build yours too 👇`;
 
 export function ShareButtons({ referralLink }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);

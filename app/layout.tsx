@@ -63,6 +63,12 @@ export default async function RootLayout({
       <body
         className={`${plusJakartaSans.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
+        {/* Global background — hero image + dark overlay, fixed behind all pages */}
+        <div
+          className="fixed inset-0 -z-20 bg-cover bg-bottom"
+          style={{ backgroundImage: "url('/hero-bg.png')" }}
+        />
+        <div className="fixed inset-0 -z-10 bg-black/78" />
         <Providers initialState={initialState}>
           {children}
         </Providers>

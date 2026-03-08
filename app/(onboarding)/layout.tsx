@@ -7,7 +7,7 @@ export default function OnboardingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-navy-deep flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <div className="p-6">
         <Link href="/">
           <Logo size="md" />

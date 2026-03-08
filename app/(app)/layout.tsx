@@ -10,7 +10,7 @@ import { BottomNav } from "@/components/app/BottomNav";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-navy-deep">
+    <div className="flex min-h-screen">
       {/* Desktop sidebar */}
       <Sidebar />
 
