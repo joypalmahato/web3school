@@ -21,7 +21,7 @@ export function ProductPreview() {
           observer.disconnect();
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "600px" }
     );
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
@@ -113,7 +113,7 @@ export function ProductPreview() {
           muted
           loop
           playsInline
-          preload="none"
+          preload="auto"
           className={`w-full h-full object-cover ${load ? "opacity-100" : "opacity-0"}`}
         />
       </div>
