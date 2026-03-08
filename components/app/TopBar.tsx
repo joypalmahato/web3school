@@ -60,6 +60,8 @@ export function TopBar() {
 
   const handleSignOut = async () => {
     await signOut();
+    // Clear the httpOnly auth cookie so middleware no longer sees the user as authenticated
+    await fetch("/api/auth", { method: "DELETE" }).catch(() => {});
     window.location.href = "/login";
   };
 
