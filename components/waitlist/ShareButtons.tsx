@@ -10,9 +10,9 @@ interface ShareButtonsProps {
 
 const TWEET_TEXT = `Just signed up on @Web3School_ to find my Web3 career path 🚀
 
-Using AI to discover which Web3 role actually fits me — then I get a personalized roadmap + skill passport to prove it.
+AI matches me to the right Web3 role → adaptive learning with the latest tools & tech → skill passport to prove it.
 
-If you're in crypto or trying to break into Web3, join early and build yours too 👇`;
+If you're in crypto or trying to break in, join early and build yours too 👇`;
 
 export function ShareButtons({ referralLink }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
