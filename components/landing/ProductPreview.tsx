@@ -10,6 +10,7 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 
 export function ProductPreview() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [load, setLoad] = useState(false);
 
   useEffect(() => {
@@ -25,6 +26,16 @@ export function ProductPreview() {
     if (containerRef.current) observer.observe(containerRef.current);
     return () => observer.disconnect();
   }, []);
+
+  // Imperatively call play() once src is set — required for mobile browsers
+  // that ignore the autoPlay attribute on dynamically rendered elements
+  useEffect(() => {
+    if (load && videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked — video stays paused, user can tap to play
+      });
+    }
+  }, [load]);
 
   return (
     <AnimatedSection className="py-12 md:py-20 lg:py-24" delay={0.2}>
@@ -84,7 +95,7 @@ export function ProductPreview() {
           style={{ boxShadow: "inset 0 0 60px rgba(16,185,129,0.06)" }}
         />
 
-        {/* Loading skeleton */}
+        {/* Loading skeleton — shown until video is ready */}
         {!load && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[#0A0A0A]">
             <div className="w-14 h-14 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
@@ -94,16 +105,17 @@ export function ProductPreview() {
           </div>
         )}
 
-        {load && (
-          <video
-            src="/product-demo.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          />
-        )}
+        {/* Video — always in DOM once loaded, play() called imperatively for mobile */}
+        <video
+          ref={videoRef}
+          src={load ? "/product-demo.mp4" : undefined}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none"
+          className={`w-full h-full object-cover ${load ? "opacity-100" : "opacity-0"}`}
+        />
       </div>
     </AnimatedSection>
   );
