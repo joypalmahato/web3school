@@ -78,7 +78,7 @@ export function Problem() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.12, ease }}
-              className="group relative bg-[#111111]/60 backdrop-blur-md border border-white/[0.07] rounded-xl p-8 overflow-hidden hover:border-white/[0.14] transition-colors duration-300"
+              className="group relative bg-[#111111]/60 backdrop-blur-md border border-white/[0.07] rounded-xl p-5 md:p-8 overflow-hidden hover:border-white/[0.14] transition-colors duration-300"
             >
               {/* Red top accent */}
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent" />
@@ -90,7 +90,7 @@ export function Problem() {
 
               {/* Big stat */}
               <div className="mb-6">
-                <p className="text-[44px] font-bold text-white/10 leading-none tracking-tight font-heading group-hover:text-white/[0.15] transition-colors duration-300">
+                <p className="text-[32px] md:text-[44px] font-bold text-white/10 leading-none tracking-tight font-heading group-hover:text-white/[0.15] transition-colors duration-300">
                   {item.stat}
                 </p>
                 <p className="text-xs text-[#555555] mt-1">{item.statLabel}</p>

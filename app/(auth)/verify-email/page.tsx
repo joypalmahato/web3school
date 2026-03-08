@@ -113,7 +113,7 @@ function VerifyEmailForm() {
         </p>
       </div>
 
-      <div className="bg-navy-mid border border-border rounded-xl p-8">
+      <div className="bg-navy-mid border border-border rounded-xl p-5 sm:p-8">
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="code" className="text-text-primary">

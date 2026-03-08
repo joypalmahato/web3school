@@ -86,11 +86,11 @@ export function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.08, ease }}
-              className="flex items-start gap-6 group"
+              className="flex items-start gap-4 md:gap-6 group"
             >
               {/* Left: number + connecting line */}
-              <div className="flex flex-col items-center min-w-[64px]">
-                <span className="text-[40px] md:text-[48px] font-bold text-[#10B981] leading-none font-heading">
+              <div className="flex flex-col items-center min-w-[44px] md:min-w-[64px]">
+                <span className="text-[28px] md:text-[48px] font-bold text-[#10B981] leading-none font-heading">
                   {step.number}
                 </span>
                 {index < STEPS.length - 1 && (

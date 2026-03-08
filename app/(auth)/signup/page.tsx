@@ -141,7 +141,7 @@ function SignupForm() {
         </p>
       </div>
 
-      <div className="bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-xl p-8">
+      <div className="bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-xl p-5 sm:p-8">
         {/* OAuth buttons */}
         <div className="space-y-3">
           <Button

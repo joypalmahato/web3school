@@ -28,7 +28,7 @@ export function ProofBar() {
         {STATS.map((stat, index) => (
           <div key={stat.label} className="flex items-center">
             {index > 0 && (
-              <div className="hidden sm:block w-px h-12 bg-white/10 mx-12" />
+              <div className="hidden sm:block w-px h-12 bg-white/10 mx-6 md:mx-12" />
             )}
             <div className="text-center">
               <p className="text-2xl md:text-4xl font-bold text-white font-heading">
