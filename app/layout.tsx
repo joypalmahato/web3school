@@ -61,7 +61,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${plusJakartaSans.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${plusJakartaSans.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased overflow-x-hidden`}
       >
         {/* Global background — hero image blurred + dark overlay, fixed behind all pages */}
         <div
