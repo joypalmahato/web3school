@@ -53,15 +53,11 @@ export default async function WaitlistPage() {
   const referralCode = typedProfile?.referral_code || typedEntry?.referral_code || "";
 
   return (
-    <>
-      {/* Override auth layout hero bg — waitlist uses plain site background */}
-      <div className="fixed inset-0" style={{ background: "#0A0A0A", zIndex: -5 }} />
-      <WaitlistStatus
-        position={typedEntry?.waitlist_position ?? 0}
-        referralCode={referralCode}
-        referralCount={typedEntry?.referral_count ?? 0}
-        appUrl={appUrl}
-      />
-    </>
+    <WaitlistStatus
+      position={typedEntry?.waitlist_position ?? 0}
+      referralCode={referralCode}
+      referralCount={typedEntry?.referral_count ?? 0}
+      appUrl={appUrl}
+    />
   );
 }

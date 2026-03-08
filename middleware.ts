@@ -12,6 +12,9 @@ const insforgeHandler = InsforgeMiddleware({
 export default function middleware(request: NextRequest) {
   const response = insforgeHandler(request) as NextResponse;
 
+  // Forward pathname to server components so layouts can avoid redirect loops
+  response.headers.set("x-pathname", request.nextUrl.pathname);
+
   // A/B test: assign hero variant cookie on homepage first visit (30-day window)
   if (
     request.nextUrl.pathname === "/" &&
