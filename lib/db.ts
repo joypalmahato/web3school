@@ -7,16 +7,17 @@
  */
 import { getInsforgeServerClient } from "@/lib/insforge/server";
 
-type DatabaseClient = ReturnType<typeof getInsforgeServerClient>["database"];
-type QueryBuilder = ReturnType<DatabaseClient["from"]>;
-
 /**
  * Returns a query builder for the given table via InsForge.
  *
  * Usage:
  *   const { data, error } = await db("profiles").select("*").eq("id", userId).single();
+ *
+ * Note: properly typed return requires generated schema types (à la `supabase gen types`).
+ * Until InsForge provides a type-gen CLI, `any` is intentional here.
  */
-export function db(table: string): QueryBuilder {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function db(table: string): any {
   const client = getInsforgeServerClient();
   return client.database.from(table);
 }

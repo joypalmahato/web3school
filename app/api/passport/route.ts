@@ -30,7 +30,8 @@ export async function GET() {
     }
 
     // Create passport if needed
-    let passport = (passportRes.data as unknown[])?.[0] ?? null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let passport = (passportRes.data as any[])?.[0] ?? null;
     if (!passport) {
       const { data: newPassport } = await db("skill_passports")
         .insert({
@@ -48,7 +49,8 @@ export async function GET() {
     }
 
     // Parallel fetch: tasks + role (depend on profile/roadmap)
-    const roadmap = (roadmapRes.data as unknown[])?.[0] ?? null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const roadmap = (roadmapRes.data as any[])?.[0] ?? null;
     const [tasksRes, roleRes] = await Promise.all([
       roadmap
         ? db("daily_tasks").select("title, task_type, status").eq("roadmap_id", roadmap.id)
@@ -137,7 +139,8 @@ export async function GET() {
       skills: [...skillNodes, ...generalSkills],
       projects: completedProjects,
       completion_percent: completionPercent,
-      traits: ((discoveryRes.data as unknown[])?.[0] as { extracted_traits?: unknown })?.extracted_traits || null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      traits: (discoveryRes.data as any[])?.[0]?.extracted_traits || null,
     });
 
     res.headers.set("Cache-Control", "private, max-age=60");
