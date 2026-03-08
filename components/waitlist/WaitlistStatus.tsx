@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users, Hash, Gift } from "lucide-react";
+import { Users, Gift, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ShareButtons } from "./ShareButtons";
 
 interface WaitlistStatusProps {
@@ -10,6 +11,8 @@ interface WaitlistStatusProps {
   referralCount: number;
   appUrl: string;
 }
+
+const X_FOLLOW_URL = "https://x.com/Web3School_";
 
 export function WaitlistStatus({
   position,
@@ -21,80 +24,169 @@ export function WaitlistStatus({
 
   return (
     <div className="w-full max-w-lg">
+      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="text-center mb-8"
       >
-        <div className="w-20 h-20 bg-white/5 border border-border rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <Hash className="w-10 h-10 text-white" />
+        <div className="w-16 h-16 bg-green-500/10 border border-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <Zap className="w-8 h-8 text-green-400" />
         </div>
-        <h1 className="text-3xl font-heading font-bold text-text-primary">
-          You&apos;re on the waitlist!
+        <h1 className="text-3xl font-heading font-bold text-white">
+          You&apos;re in the queue!
         </h1>
-        <p className="text-text-secondary mt-2">
-          We&apos;re opening spots gradually. Hang tight.
+        <p className="text-white/50 mt-2 text-sm">
+          We&apos;re onboarding testers now. Do the steps below to move up fast.
         </p>
       </motion.div>
 
+      {/* Position badge */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.05 }}
+        className="bg-white/[0.03] border border-white/10 rounded-xl p-5 mb-4 text-center"
+      >
+        <p className="text-white/40 text-xs uppercase tracking-widest mb-1">
+          Your position
+        </p>
+        <p className="text-5xl font-heading font-bold text-white">
+          #{position}
+        </p>
+        <p className="text-white/40 text-xs mt-2">
+          {referralCount > 0
+            ? `You moved up ${referralCount} spot${referralCount === 1 ? "" : "s"} with referrals`
+            : "Complete the steps below to move up"}
+        </p>
+      </motion.div>
+
+      {/* Get access faster card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="bg-navy-mid border border-border rounded-xl p-8 space-y-6"
+        className="bg-white/[0.03] border border-white/10 rounded-xl p-6 space-y-6"
       >
-        {/* Position badge */}
-        <div className="text-center py-4 bg-navy-deep rounded-xl border border-border">
-          <p className="text-text-muted text-sm mb-1">Your position</p>
-          <p className="text-5xl font-heading font-bold text-white">
-            #{position}
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <Zap className="w-3 h-3 text-green-400" />
+          </div>
+          <p className="text-white font-semibold text-sm">
+            Get early access faster — 2 steps
           </p>
         </div>
 
-        {/* Referral link */}
+        {/* Step 1: Follow */}
         <div className="space-y-3">
-          <p className="text-text-primary font-medium text-sm">
-            Share your link to move up the list
-          </p>
-          <div className="bg-navy-deep border border-border rounded-lg px-4 py-3 flex items-center gap-2">
-            <code className="text-sm text-text-secondary truncate flex-1">
-              {referralLink}
-            </code>
+          <div className="flex items-center gap-3">
+            <span className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 text-xs font-bold flex-shrink-0">
+              1
+            </span>
+            <div>
+              <p className="text-white text-sm font-medium">
+                Follow us on X
+              </p>
+              <p className="text-white/40 text-xs">
+                Stay updated as we open more spots
+              </p>
+            </div>
           </div>
+          <Button
+            asChild
+            className="w-full bg-white/5 border border-white/10 text-white hover:bg-white/10 font-medium rounded-lg"
+          >
+            <a href={X_FOLLOW_URL} target="_blank" rel="noopener noreferrer">
+              <svg
+                className="w-4 h-4 mr-2"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+              Follow @Web3School_
+            </a>
+          </Button>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-white/5" />
+
+        {/* Step 2: Tweet */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <span className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 text-xs font-bold flex-shrink-0">
+              2
+            </span>
+            <div>
+              <p className="text-white text-sm font-medium">
+                Tweet about exploring your Web3 career
+              </p>
+              <p className="text-white/40 text-xs">
+                Every signup from your link moves you up the queue
+              </p>
+            </div>
+          </div>
+
+          {/* Tweet preview */}
+          <div className="bg-black/30 border border-white/10 rounded-lg p-4">
+            <p className="text-white/70 text-xs leading-relaxed">
+              I&apos;m exploring my Web3 career with AI on{" "}
+              <span className="text-white font-medium">@Web3School_</span> 🚀
+              <br />
+              <br />
+              It matched me to a Web3 role in minutes — no guessing, no wasted
+              months.
+              <br />
+              <br />
+              If you&apos;re in crypto or trying to break into Web3, grab your
+              spot before it fills up 👇
+              <br />
+              <span className="text-green-400 text-xs mt-1 block truncate">
+                {referralLink}
+              </span>
+            </p>
+          </div>
+
           <ShareButtons referralLink={referralLink} />
         </div>
 
         {/* Referral count */}
-        <div className="flex items-center gap-3 bg-navy-deep rounded-xl border border-border px-4 py-3">
-          <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center">
-            <Users className="w-5 h-5 text-text-secondary" />
-          </div>
-          <div>
-            <p className="text-text-primary font-medium text-sm">
-              {referralCount === 0
-                ? "No referrals yet"
-                : `You've referred ${referralCount} friend${referralCount === 1 ? "" : "s"}`}
-            </p>
-            <p className="text-text-muted text-xs">
-              Every friend who joins moves you closer to the front
-            </p>
-          </div>
-          {referralCount > 0 && (
+        {referralCount > 0 && (
+          <div className="flex items-center gap-3 bg-green-500/5 rounded-xl border border-green-500/20 px-4 py-3">
+            <div className="w-9 h-9 bg-green-500/10 rounded-lg flex items-center justify-center">
+              <Users className="w-4 h-4 text-green-400" />
+            </div>
+            <div>
+              <p className="text-white text-sm font-medium">
+                {referralCount} friend{referralCount === 1 ? "" : "s"} joined
+                via your link
+              </p>
+              <p className="text-white/40 text-xs">
+                You moved up {referralCount} spot
+                {referralCount === 1 ? "" : "s"} — keep going
+              </p>
+            </div>
             <div className="ml-auto flex items-center gap-1">
               <Gift className="w-4 h-4 text-green-400" />
-              <span className="text-green-400 font-semibold text-sm">
-                {referralCount}
+              <span className="text-green-400 font-bold text-sm">
+                +{referralCount}
               </span>
             </div>
-          )}
-        </div>
-
-        {/* Footer text */}
-        <p className="text-text-muted text-sm text-center">
-          We&apos;ll send you an email when it&apos;s your turn.
-        </p>
+          </div>
+        )}
       </motion.div>
+
+      {/* Footer */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="text-white/30 text-xs text-center mt-6"
+      >
+        We&apos;ll email you when your spot is ready. No spam.
+      </motion.p>
     </div>
   );
 }
