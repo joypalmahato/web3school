@@ -46,9 +46,8 @@ interface ProgressData {
   };
   heatmap: { date: string; count: number }[];
   recent_xp: {
-    amount: number;
-    source: string;
-    description: string;
+    xp_amount: number;
+    action: string;
     created_at: string;
   }[];
   traits: TraitScores | null;
@@ -236,10 +235,10 @@ export default function ProgressPage() {
                   className="flex items-center justify-between text-xs"
                 >
                   <span className="text-text-secondary truncate">
-                    {xp.description}
+                    {xp.action.replace(/_/g, " ")}
                   </span>
                   <span className="text-violet-400 font-semibold flex-shrink-0 ml-2">
-                    +{xp.amount}
+                    +{xp.xp_amount}
                   </span>
                 </div>
               ))}

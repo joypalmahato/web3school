@@ -14,7 +14,7 @@ export async function PATCH(request: Request) {
     const body = await request.json();
     const { step, data } = body;
 
-    if (typeof step !== "number" || step < 1 || step > 5) {
+    if (typeof step !== "number" || !Number.isInteger(step) || step < 1 || step > 5) {
       return Response.json({ error: "Invalid step" }, { status: 400 });
     }
 

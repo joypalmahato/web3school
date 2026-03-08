@@ -45,7 +45,14 @@ export async function POST(request: Request) {
 
     const client = getInsforgeServerClient();
     const bucketName = type === "avatar" ? "avatars" : "resumes";
-    const ext = file.name.split(".").pop() || (type === "avatar" ? "jpg" : "pdf");
+    const MIME_TO_EXT: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/webp": "webp",
+      "image/gif": "gif",
+      "application/pdf": "pdf",
+    };
+    const ext = MIME_TO_EXT[file.type] ?? (type === "avatar" ? "jpg" : "pdf");
     const path = `${userId}/${Date.now()}.${ext}`;
 
     const { data, error } = await client.storage

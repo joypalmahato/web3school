@@ -18,7 +18,7 @@ export default async function DiscoverPage() {
 
   if (userId) {
     const { data: profile } = await db("profiles")
-      .select("onboarding_completed, is_approved")
+      .select("onboarding_completed, is_approved, discovery_completed")
       .eq("user_id", userId)
       .single();
 
@@ -29,6 +29,12 @@ export default async function DiscoverPage() {
     if (!profile || !profile.onboarding_completed) {
       redirect("/onboarding");
     }
+
+    if (profile.discovery_completed) {
+      redirect("/results");
+    }
+  } else {
+    redirect("/login");
   }
 
   // Load the latest in-progress session so the chat resumes where they left off

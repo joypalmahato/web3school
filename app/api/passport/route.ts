@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
 import { INITIAL_SKILLS } from "@/data/skills";
+import { z } from "zod";
 
 function generateSlug(): string {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -23,9 +24,9 @@ export async function GET() {
     // Parallel fetch: profile, passport, roadmap, discovery
     const [profileRes, passportRes, roadmapRes, discoveryRes] = await Promise.all([
       db("profiles").select("*").eq("user_id", userId).single(),
-      db("skill_passports").select("*").eq("user_id", userId).single(),
-      db("roadmaps").select("id, current_week, total_weeks").eq("user_id", userId).eq("status", "active").single(),
-      db("discovery_sessions").select("extracted_traits").eq("user_id", userId).eq("status", "completed").order("completed_at", { ascending: false }).limit(1).single(),
+      db("skill_passports").select("*").eq("user_id", userId).limit(1),
+      db("roadmaps").select("id, current_week, total_weeks").eq("user_id", userId).eq("status", "active").limit(1),
+      db("discovery_sessions").select("extracted_traits").eq("user_id", userId).eq("status", "completed").order("completed_at", { ascending: false }).limit(1),
     ]);
 
     const profile = profileRes.data;
@@ -34,7 +35,7 @@ export async function GET() {
     }
 
     // Create passport if needed
-    let passport = passportRes.data;
+    let passport = (passportRes.data as unknown[])?.[0] ?? null;
     if (!passport) {
       const { data: newPassport } = await db("skill_passports")
         .insert({
@@ -52,7 +53,7 @@ export async function GET() {
     }
 
     // Parallel fetch: tasks + role (depend on profile/roadmap)
-    const roadmap = roadmapRes.data;
+    const roadmap = (roadmapRes.data as unknown[])?.[0] ?? null;
     const [tasksRes, roleRes] = await Promise.all([
       roadmap
         ? db("daily_tasks").select("title, task_type, status").eq("roadmap_id", roadmap.id)
@@ -141,7 +142,7 @@ export async function GET() {
       skills: [...skillNodes, ...generalSkills],
       projects: completedProjects,
       completion_percent: completionPercent,
-      traits: discoveryRes.data?.extracted_traits || null,
+      traits: ((discoveryRes.data as unknown[])?.[0] as { extracted_traits?: unknown })?.extracted_traits || null,
     });
 
     res.headers.set("Cache-Control", "private, max-age=60");
@@ -163,13 +164,17 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { is_public } = await request.json();
+    const body = await request.json();
+    const parsed = z.object({ is_public: z.boolean() }).safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: "is_public must be a boolean" }, { status: 400 });
+    }
 
     await db("skill_passports")
-      .update({ is_public })
+      .update({ is_public: parsed.data.is_public })
       .eq("user_id", userId);
 
-    return NextResponse.json({ success: true, is_public });
+    return NextResponse.json({ success: true, is_public: parsed.data.is_public });
   } catch (err) {
     console.error("Passport update error:", err);
     return NextResponse.json(

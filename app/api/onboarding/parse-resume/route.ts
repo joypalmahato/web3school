@@ -9,11 +9,15 @@ export async function POST(request: Request) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { resume_url } = body;
+    // Read resume_url from the authenticated user's profile — never trust client-supplied URLs
+    const { data: profileRow } = await db("profiles")
+      .select("resume_url")
+      .eq("user_id", userId)
+      .single();
 
+    const resume_url = profileRow?.resume_url;
     if (!resume_url || typeof resume_url !== "string") {
-      return Response.json({ error: "resume_url is required" }, { status: 400 });
+      return Response.json({ error: "No resume uploaded yet" }, { status: 400 });
     }
 
     // Download the PDF

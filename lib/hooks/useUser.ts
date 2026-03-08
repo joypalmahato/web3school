@@ -25,25 +25,29 @@ export function useUser() {
     const insforge = getInsforgeClient();
     setLoading(true);
 
-    const { data: userData } = await insforge.auth.getCurrentUser();
+    try {
+      const { data: userData } = await insforge.auth.getCurrentUser();
 
-    if (!userData?.user) {
-      reset();
-      return;
+      if (!userData?.user) {
+        reset();
+        return;
+      }
+
+      const { data, error } = await insforge.database
+        .from("profiles")
+        .select("*")
+        .eq("user_id", userData.user.id)
+        .single();
+
+      if (error || !data) {
+        reset();
+        return;
+      }
+
+      setProfile(data as Profile);
+    } finally {
+      setLoading(false);
     }
-
-    const { data, error } = await insforge.database
-      .from("profiles")
-      .select("*")
-      .eq("user_id", userData.user.id)
-      .single();
-
-    if (error || !data) {
-      reset();
-      return;
-    }
-
-    setProfile(data as Profile);
   }, [profile, lastFetched, setProfile, setLoading, reset]);
 
   useEffect(() => {

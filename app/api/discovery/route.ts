@@ -20,7 +20,10 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { message, conversation_history = [], session_id } = body;
+    const { message, session_id } = body;
+    const conversation_history: { role: string; content: string }[] = Array.isArray(body.conversation_history)
+      ? body.conversation_history.slice(0, 40)
+      : [];
 
     if (!message || typeof message !== "string" || message.trim().length === 0) {
       return new Response(JSON.stringify({ error: "Message is required" }), {

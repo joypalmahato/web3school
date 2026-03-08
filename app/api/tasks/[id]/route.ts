@@ -194,9 +194,15 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     // Update streak
     const today = new Date().toISOString().split("T")[0];
     const { data: existingStreak } = await db("streak_history")
-      .select("id")
+      .select("id, tasks_completed")
       .eq("user_id", userId)
       .eq("date", today)
+      .single();
+
+    // Fetch profile for streak/XP calculations
+    const { data: profile } = await db("profiles")
+      .select("streak_count, longest_streak, xp_total")
+      .eq("user_id", userId)
       .single();
 
     if (!existingStreak) {
@@ -217,11 +223,6 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         .eq("date", yesterdayStr)
         .single();
 
-      const { data: profile } = await db("profiles")
-        .select("streak_count, longest_streak, xp_total")
-        .eq("user_id", userId)
-        .single();
-
       const currentStreak = yesterdayStreak
         ? (profile?.streak_count || 0) + 1
         : 1;
@@ -237,38 +238,23 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         xp_amount: streakBonus,
         action: "streak_maintained",
       });
-
       xpAmount += streakBonus;
 
-      // Update profile
+      // Update streak fields only — XP written once at the end
       await db("profiles")
         .update({
           streak_count: currentStreak,
           longest_streak: longestStreak,
-          xp_total: (profile?.xp_total || 0) + xpAmount,
-          last_active_at: new Date().toISOString(),
         })
         .eq("user_id", userId);
     } else {
-      // Already have streak entry for today — just update XP
-      const streakRecord = existingStreak as unknown as { id: string; tasks_completed?: number };
+      // Already have streak entry for today — increment task count
+      const streakRecord = existingStreak as { id: string; tasks_completed?: number };
       await db("streak_history")
         .update({
           tasks_completed: (streakRecord.tasks_completed || 0) + 1,
         })
         .eq("id", streakRecord.id);
-
-      const { data: profile } = await db("profiles")
-        .select("xp_total")
-        .eq("user_id", userId)
-        .single();
-
-      await db("profiles")
-        .update({
-          xp_total: (profile?.xp_total || 0) + xpAmount,
-          last_active_at: new Date().toISOString(),
-        })
-        .eq("user_id", userId);
     }
 
     // Check for week completion
@@ -285,14 +271,21 @@ export async function PATCH(request: Request, { params }: RouteParams) {
         xp_amount: XP_REWARDS.WEEK_COMPLETED,
         action: "week_completed",
       });
+      xpAmount += XP_REWARDS.WEEK_COMPLETED;
 
       // Advance to next week
       await db("roadmaps")
         .update({ current_week: task.week_number + 1 })
         .eq("id", task.roadmap_id);
-
-      xpAmount += XP_REWARDS.WEEK_COMPLETED;
     }
+
+    // Single profile XP update — captures task + streak + week bonus
+    await db("profiles")
+      .update({
+        xp_total: (profile?.xp_total || 0) + xpAmount,
+        last_active_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId);
 
     return NextResponse.json({
       success: true,
