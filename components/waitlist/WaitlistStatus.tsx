@@ -137,8 +137,7 @@ export function WaitlistStatus({
               find my Web3 career path 🚀
               <br />
               <br />
-              AI matches me to the right Web3 role → adaptive learning with the
-              latest tools &amp; tech → skill passport to prove it.
+              AI matches me to the right Web3 role → adaptive learning with  tools &amp; tech → skill passport to prove it.
               <br />
               <br />
               If you&apos;re in crypto or trying to break in, join early and
