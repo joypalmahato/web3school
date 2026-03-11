@@ -5,12 +5,13 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, type ChangeEvent } from "react";
 import { motion } from "framer-motion";
 import {
   Loader2,
   Save,
   User,
+  Camera,
   Bell,
   BookOpen,
   Shield,
@@ -35,6 +36,7 @@ import type { SocialLinks } from "@/lib/types";
 interface SettingsData {
   full_name: string;
   email: string;
+  avatar_url: string;
   timezone: string;
   // Onboarding: About You
   display_name: string;
@@ -131,6 +133,9 @@ const GOAL_OPTIONS = [
   "Get a Web3 job", "Build a project", "Earn crypto",
   "Start a DAO", "Freelance in Web3", "Learn for fun",
 ];
+
+const AVATAR_ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const MAX_AVATAR_SIZE_BYTES = 5 * 1024 * 1024;
 
 function CollapsibleSection({
   icon: Icon,
@@ -249,11 +254,15 @@ function MultiSelect({
 
 export default function SettingsPage() {
   const { profile, isLoading: userLoading, signOut, refreshProfile } = useUser();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [settings, setSettings] = useState<SettingsData>({
     full_name: "",
     email: "",
+    avatar_url: "",
     timezone: "UTC",
     display_name: "",
     location: "",
@@ -283,6 +292,7 @@ export default function SettingsPage() {
       ...prev,
       full_name: profile.full_name || "",
       email: profile.email || "",
+      avatar_url: profile.avatar_url || "",
       timezone: profile.timezone || "UTC",
       display_name: profile.display_name || "",
       location: profile.location || "",
@@ -302,6 +312,68 @@ export default function SettingsPage() {
     }));
   }, [profile]);
 
+  const avatarName = settings.display_name || settings.full_name || profile?.full_name || "User";
+  const avatarInitials = avatarName
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!AVATAR_ACCEPTED_TYPES.includes(file.type)) {
+      setAvatarError("Use a JPEG, PNG, WebP, or GIF image.");
+      event.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_AVATAR_SIZE_BYTES) {
+      setAvatarError("Profile photos must be 5MB or smaller.");
+      event.target.value = "";
+      return;
+    }
+
+    setAvatarError(null);
+    setIsUploadingAvatar(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("type", "avatar");
+
+      const response = await fetch("/api/onboarding/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.url) {
+        throw new Error(result.error || "Failed to upload image");
+      }
+
+      setSettings((current) => ({
+        ...current,
+        avatar_url: result.url as string,
+      }));
+      await refreshProfile();
+    } catch (err) {
+      console.error("Avatar upload error:", err);
+      setAvatarError(
+        err instanceof Error ? err.message : "Failed to upload image"
+      );
+    } finally {
+      setIsUploadingAvatar(false);
+      event.target.value = "";
+    }
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     setSaved(false);
@@ -315,6 +387,7 @@ export default function SettingsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           full_name: settings.full_name,
+          avatar_url: settings.avatar_url || null,
           timezone: settings.timezone,
           display_name: settings.display_name || null,
           location: settings.location || null,
@@ -336,7 +409,7 @@ export default function SettingsPage() {
 
       if (!res.ok) throw new Error("Failed to save");
       setSaved(true);
-      refreshProfile();
+      await refreshProfile();
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
       console.error("Save error:", err);
@@ -372,6 +445,80 @@ export default function SettingsPage() {
         </div>
 
         <div className="bg-navy-mid border border-border rounded-xl p-6 space-y-4">
+          <div className="rounded-xl border border-white/10 bg-navy-deep/60 p-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploadingAvatar}
+                  className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/5 text-lg font-semibold text-white transition hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {settings.avatar_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={settings.avatar_url}
+                      alt={avatarName}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    avatarInitials
+                  )}
+                  <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-black/60 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white">
+                    <Camera className="mr-1 h-3 w-3" />
+                    Edit
+                  </span>
+                  {isUploadingAvatar && (
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/60">
+                      <Loader2 className="h-5 w-5 animate-spin text-white" />
+                    </span>
+                  )}
+                </button>
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-text-primary">
+                    Profile photo
+                  </p>
+                  <p className="text-xs text-text-muted">
+                    Shows up across your account and passport.
+                  </p>
+                  <p className="text-xs text-text-muted">
+                    JPEG, PNG, WebP, or GIF up to 5MB.
+                  </p>
+                  {avatarError && (
+                    <p className="text-xs text-red-400">{avatarError}</p>
+                  )}
+                </div>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploadingAvatar}
+                className="border-white/15 bg-transparent text-white hover:bg-white/5 hover:text-white rounded-xl"
+              >
+                {isUploadingAvatar ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : settings.avatar_url ? (
+                  "Change Image"
+                ) : (
+                  "Upload Image"
+                )}
+              </Button>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={AVATAR_ACCEPTED_TYPES.join(",")}
+              onChange={handleAvatarUpload}
+              className="hidden"
+            />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="full_name" className="text-text-secondary text-sm">
               Full Name
