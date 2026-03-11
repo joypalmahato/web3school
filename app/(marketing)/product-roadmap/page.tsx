@@ -38,7 +38,7 @@ const PHASE_2_ITEMS = [
 
 export default function RoadmapPage() {
   return (
-    <div className="min-h-screen pt-24 pb-16">
+    <div className="min-h-screen pt-32 pb-16">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
 
         {/* Header */}

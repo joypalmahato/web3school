@@ -59,6 +59,27 @@ export function Navbar() {
           : "bg-transparent"
       )}
     >
+      <div className="border-b border-amber-300/15 bg-[linear-gradient(90deg,rgba(245,158,11,0.12),rgba(239,68,68,0.10),rgba(245,158,11,0.12))] backdrop-blur-xl">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+          <p className="min-h-10 py-2 text-center text-[11px] leading-4 text-amber-50 sm:text-xs sm:leading-5">
+            <span className="mr-2 font-semibold uppercase tracking-[0.18em] text-amber-200/85">
+              Security Notice
+            </span>
+            Web3School does not have a token. Do not trust or buy any token
+            claiming to represent us. Always verify updates through our
+            official X account{" "}
+            <a
+              href="https://x.com/Web3School_X"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-white underline decoration-white/40 underline-offset-3 transition-colors duration-200 hover:text-amber-100"
+            >
+              @Web3School_X
+            </a>
+            .
+          </p>
+        </div>
+      </div>
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Wordmark */}

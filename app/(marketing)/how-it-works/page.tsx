@@ -53,7 +53,7 @@ const STEPS = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="relative min-h-screen pt-24 pb-16">
+    <div className="relative min-h-screen pt-32 pb-16">
       {/* Dot grid — same as landing page hero */}
       <div
         className="pointer-events-none absolute inset-0 -z-10"

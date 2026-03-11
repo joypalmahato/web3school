@@ -120,7 +120,7 @@ export function RoleDetailClient({
   };
 
   return (
-    <div className={`min-h-screen pt-24 ${isAuthenticated ? "pb-16" : "pb-28"}`}>
+    <div className={`min-h-screen pt-32 ${isAuthenticated ? "pb-16" : "pb-28"}`}>
       {/* Sticky bottom bar for unauthenticated visitors */}
       {!isAuthenticated && (
         <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/[0.08] bg-[rgba(10,10,10,0.92)] backdrop-blur-xl px-4 py-3">
