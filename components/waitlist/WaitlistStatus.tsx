@@ -12,7 +12,7 @@ interface WaitlistStatusProps {
   appUrl: string;
 }
 
-const X_FOLLOW_URL = "https://x.com/Web3School_";
+const X_FOLLOW_URL = "https://x.com/web3school_X";
 
 export function WaitlistStatus({
   position,
@@ -105,7 +105,7 @@ export function WaitlistStatus({
               >
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
-              Follow @Web3School_
+              Follow @web3school_X
             </a>
           </Button>
         </div>
@@ -133,7 +133,7 @@ export function WaitlistStatus({
           <div className="bg-black/30 border border-white/10 rounded-lg p-4">
             <p className="text-white/70 text-xs leading-relaxed">
               Just signed up on{" "}
-              <span className="text-white font-medium">@Web3School_</span> to
+              <span className="text-white font-medium">@web3school_X</span> to
               find my Web3 career path 🚀
               <br />
               <br />

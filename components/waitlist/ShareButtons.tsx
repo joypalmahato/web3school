@@ -8,7 +8,7 @@ interface ShareButtonsProps {
   referralLink: string;
 }
 
-const TWEET_TEXT = `Just signed up on @Web3School_ to find my Web3 career path 🚀
+const TWEET_TEXT = `Just signed up on @web3school_X to find my Web3 career path 🚀
 
 AI matches me to the right Web3 role → adaptive learning with the latest tools & tech → skill passport to prove it.
 

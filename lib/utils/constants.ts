@@ -24,7 +24,7 @@ export const ACCEPTED_IMAGE_TYPES = [
 export const WHITEPAPER_URL = "https://web3school.gitbook.io/whitepaper";
 
 export const SOCIAL_LINKS = {
-  twitter: "https://x.com/Web3School_",
+  twitter: "https://x.com/web3school_X",
   discord: "https://discord.gg/web3school",
   telegram: "https://t.me/web3school",
   github: "https://github.com/web3school",

@@ -73,7 +73,7 @@ export default function PrivacyPage() {
           <p>
             Questions about this policy? Reach us on{" "}
             <a
-              href="https://x.com/Web3School_"
+              href="https://x.com/web3school_X"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#10B981] hover:underline"
