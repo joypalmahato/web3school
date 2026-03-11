@@ -1,18 +1,25 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getInsforgeClient } from "@/lib/insforge/client";
+import {
+  buildPostAuthRedirectPath,
+  clearClientCookie,
+  navigateInBrowser,
+} from "@/lib/insforge/redirect";
+import { normalizeReferralCode, REFERRAL_CODE_COOKIE } from "@/lib/referrals";
 
 function VerifyEmailForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
   const name = searchParams.get("name") || "";
+  const redirectTarget = searchParams.get("redirect");
+  const referralCode = normalizeReferralCode(searchParams.get("ref"));
 
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -65,13 +72,18 @@ function VerifyEmailForm() {
         await fetch("/api/profile/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, full_name: name }),
+          body: JSON.stringify({
+            email,
+            full_name: name,
+            referral_code: referralCode || undefined,
+          }),
         });
+        clearClientCookie(REFERRAL_CODE_COOKIE);
       } catch {
         // Non-fatal
       }
 
-      window.location.href = "/waitlist";
+      navigateInBrowser(buildPostAuthRedirectPath(redirectTarget));
     } catch {
       setError("Verification failed. Please try again.");
       setLoading(false);

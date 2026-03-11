@@ -130,10 +130,10 @@ export default function ResultsPage() {
         <div className="text-center space-y-4 max-w-md">
           <p className="text-text-secondary">{error || "No results found."}</p>
           <Button
-            onClick={() => router.push("/discover")}
+            onClick={() => router.push("/discover?restart=1")}
             className="bg-white text-black hover:opacity-85 rounded-md"
           >
-            Start Discovery
+            Start Fresh Discovery
           </Button>
         </div>
       </div>

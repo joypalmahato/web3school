@@ -1,6 +1,9 @@
 import { auth } from "@insforge/nextjs";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
+import { normalizeReferralCode, REFERRAL_CODE_COOKIE } from "@/lib/referrals";
+import { ensureSignedUpUser } from "@/lib/waitlist/bootstrap";
 import type { Profile } from "@/lib/types";
 import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 
@@ -20,24 +23,24 @@ export default async function OnboardingPage() {
     .eq("user_id", userId)
     .single();
 
-  // Profile may not exist yet (e.g. profile/create failed silently during signup).
-  // Create it here so the user isn't stuck in a redirect loop.
   if (!profile) {
-    const { data: created } = await db("profiles")
-      .insert({
-        user_id: userId,
-        email: user?.email || "",
-        full_name: user?.profile?.name || "",
-        onboarding_completed: false,
-        discovery_completed: false,
-        xp_total: 0,
-        level: 1,
-        is_approved: false,
-      })
-      .select("*")
-      .single();
+    const cookieStore = await cookies();
+    const referredByCode = normalizeReferralCode(
+      cookieStore.get(REFERRAL_CODE_COOKIE)?.value
+    );
 
-    profile = created;
+    try {
+      const bootstrap = await ensureSignedUpUser({
+        userId,
+        email: user?.email || "",
+        fullName: user?.profile?.name || "",
+        referredByCode,
+      });
+
+      profile = bootstrap.profile;
+    } catch (bootstrapError) {
+      console.error("Onboarding bootstrap error:", bootstrapError);
+    }
   }
 
   // If insert also failed, show onboarding with empty defaults

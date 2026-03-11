@@ -1,33 +1,60 @@
-/**
- * Server-side OAuth callback handler.
- *
- * Receives ?insforge_code=xxx, reads the PKCE verifier from the
- * insforge_pkce cookie, exchanges the code for tokens server-side,
- * sets auth cookies (insforge-session + insforge-user), creates
- * profile if needed, and redirects.
- *
- * This bypasses the client-side SDK's detectAuthCallback() which
- * relies on sessionStorage for the PKCE verifier (unreliable across
- * cross-origin OAuth redirect chains).
- */
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import {
+  buildPostAuthRedirectPath,
+  POST_AUTH_REDIRECT_COOKIE,
+  sanitizeAuthRedirectPath,
+  withAuthRedirect,
+} from "@/lib/insforge/redirect";
+import { ensureSignedUpUser } from "@/lib/waitlist/bootstrap";
+import { normalizeReferralCode, REFERRAL_CODE_COOKIE } from "@/lib/referrals";
+
+function decodeCookieValue(value: string | undefined): string | null {
+  if (!value) {
+    return null;
+  }
+
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function redirectToLogin(
+  origin: string,
+  errorCode: string,
+  redirectPath: string | null
+) {
+  const loginUrl = new URL(withAuthRedirect("/login", redirectPath), origin);
+  loginUrl.searchParams.set("error", errorCode);
+
+  const response = NextResponse.redirect(loginUrl);
+  response.cookies.delete("insforge_pkce");
+  response.cookies.delete(POST_AUTH_REDIRECT_COOKIE);
+
+  return response;
+}
 
 export async function GET(request: NextRequest) {
   const { origin } = new URL(request.url);
   const code = request.nextUrl.searchParams.get("insforge_code");
   const codeVerifier = request.cookies.get("insforge_pkce")?.value;
+  const redirectPath = sanitizeAuthRedirectPath(
+    decodeCookieValue(request.cookies.get(POST_AUTH_REDIRECT_COOKIE)?.value)
+  );
+  const referredByCode = normalizeReferralCode(
+    decodeCookieValue(request.cookies.get(REFERRAL_CODE_COOKIE)?.value)
+  );
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/login?error=no_code`);
+    return redirectToLogin(origin, "no_code", redirectPath);
   }
 
   if (!codeVerifier) {
-    return NextResponse.redirect(`${origin}/login?error=session_expired`);
+    return redirectToLogin(origin, "session_expired", redirectPath);
   }
 
   try {
-    // Exchange the OAuth code for tokens server-side
     const baseUrl = process.env.NEXT_PUBLIC_INSFORGE_BASE_URL!;
     const anonKey = process.env.NEXT_PUBLIC_INSFORGE_ANON_KEY!;
 
@@ -46,98 +73,39 @@ export async function GET(request: NextRequest) {
     if (!exchangeRes.ok) {
       const err = await exchangeRes.text();
       console.error("OAuth exchange failed:", err);
-      return NextResponse.redirect(`${origin}/login?error=exchange_failed`);
+      return redirectToLogin(origin, "exchange_failed", redirectPath);
     }
 
     const tokenData = await exchangeRes.json();
 
     if (!tokenData.accessToken || !tokenData.user) {
       console.error("No token/user in exchange response");
-      return NextResponse.redirect(`${origin}/login?error=no_token`);
+      return redirectToLogin(origin, "no_token", redirectPath);
     }
-
-    // Create profile if needed
-    const userId = tokenData.user.id;
-    const email = tokenData.user.email || "";
-    const fullName = tokenData.user.profile?.name || "";
-    let redirectPath = "/waitlist";
 
     try {
-      const { data: existing } = await db("profiles")
-        .select("user_id, onboarding_completed, discovery_completed, is_approved")
-        .eq("user_id", userId)
-        .single();
-
-      if (!existing) {
-        // Generate name-based referral code: firstname-xxxx
-        const firstName = fullName.split(" ")[0]?.toLowerCase().replace(/[^a-z0-9]/g, "") || "user";
-        const suffix = Math.random().toString(36).substring(2, 6);
-        const oauthReferralCode = `${firstName}-${suffix}`;
-
-        await db("profiles").insert({
-          user_id: userId,
-          email,
-          full_name: fullName,
-          discovery_completed: false,
-          onboarding_completed: false,
-          xp_total: 0,
-          level: 1,
-          is_approved: false,
-          approved_at: null,
-          referral_code: oauthReferralCode,
-        });
-
-        // Auto-create waitlist entry for OAuth users
-        try {
-          const { data: existingWaitlist } = await db("waitlist")
-            .select("id")
-            .eq("email", email)
-            .single();
-
-          if (!existingWaitlist) {
-            await db("waitlist").insert({
-              name: fullName,
-              email,
-              status: "signed_up",
-              user_id: userId,
-              referral_code: oauthReferralCode,
-            });
-          } else {
-            await db("waitlist")
-              .update({ user_id: userId, status: "signed_up", referral_code: oauthReferralCode })
-              .eq("id", existingWaitlist.id);
-          }
-        } catch {
-          // Non-fatal
-        }
-
-        redirectPath = "/waitlist";
-      } else if (!existing.is_approved) {
-        redirectPath = "/waitlist";
-      } else if (existing.discovery_completed) {
-        redirectPath = "/learn";
-      } else if (existing.onboarding_completed) {
-        redirectPath = "/discover";
-      } else {
-        redirectPath = "/onboarding";
-      }
-    } catch (dbErr) {
-      console.error("Profile check/create error:", dbErr);
+      await ensureSignedUpUser({
+        userId: tokenData.user.id,
+        email: tokenData.user.email || "",
+        fullName: tokenData.user.profile?.name || "",
+        referredByCode,
+      });
+    } catch (bootstrapError) {
+      console.error("OAuth bootstrap error:", bootstrapError);
     }
 
-    // Build redirect response with auth cookies
-    const response = NextResponse.redirect(`${origin}${redirectPath}`);
+    const response = NextResponse.redirect(
+      new URL(buildPostAuthRedirectPath(redirectPath), origin)
+    );
 
-    // Set InsForge auth cookies (names must match @insforge/nextjs cookies.ts)
     response.cookies.set("insforge-session", tokenData.accessToken, {
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
     });
 
-    // Set user info cookie for SSR
     response.cookies.set(
       "insforge-user",
       JSON.stringify({
@@ -154,12 +122,13 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    // Clear the PKCE cookie
     response.cookies.delete("insforge_pkce");
+    response.cookies.delete(POST_AUTH_REDIRECT_COOKIE);
+    response.cookies.delete(REFERRAL_CODE_COOKIE);
 
     return response;
   } catch (err) {
     console.error("OAuth callback error:", err);
-    return NextResponse.redirect(`${origin}/login?error=server_error`);
+    return redirectToLogin(origin, "server_error", redirectPath);
   }
 }

@@ -1,14 +1,8 @@
-/**
- * @component LoginPage
- * @part-of Web3School — Authentication
- * @design Dark theme, centered card, neutral/white accents (Kled style)
- * @flow Email + password → InsForge login → redirect to /learn or /discover
- */
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Github, Mail } from "lucide-react";
@@ -17,12 +11,43 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { getInsforgeClient } from "@/lib/insforge/client";
+import {
+  buildPostAuthRedirectPath,
+  navigateInBrowser,
+  setClientCookie,
+  setPostAuthRedirectCookie,
+  withAuthRedirect,
+} from "@/lib/insforge/redirect";
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
 
-export default function LoginPage() {
-  const router = useRouter();
+function getLoginErrorMessage(errorCode: string | null): string | null {
+  switch (errorCode) {
+    case "no_code":
+      return "The provider did not return a sign-in code. Please try again.";
+    case "session_expired":
+      return "Your sign-in session expired. Please try again.";
+    case "exchange_failed":
+      return "The OAuth sign-in could not be completed. Please try again.";
+    case "no_token":
+      return "Sign-in completed, but no session was returned. Please try again.";
+    case "server_error":
+      return "The server could not finish signing you in. Please try again.";
+    default:
+      return null;
+  }
+}
+
+function LoginForm() {
+  const searchParams = useSearchParams();
+  const redirectTarget = searchParams.get("redirect");
   const [error, setError] = useState<string | null>(null);
   const insforge = getInsforgeClient();
+  const initialError = getLoginErrorMessage(searchParams.get("error"));
+  const signupHref = withAuthRedirect("/signup", redirectTarget);
+  const forgotPasswordHref = withAuthRedirect(
+    "/forgot-password",
+    redirectTarget
+  );
 
   const {
     register,
@@ -47,7 +72,7 @@ export default function LoginPage() {
     }
 
     // Sync the access token to httpOnly cookie BEFORE redirecting.
-    // The InsforgeBrowserProvider does this via onSignIn, but it's async
+    // The InsforgeBrowserProvider does this via onSignIn, but it is async
     // and may not complete before our redirect fires.
     const token = result.data?.accessToken;
     const user = result.data?.user;
@@ -65,12 +90,12 @@ export default function LoginPage() {
       });
     }
 
-    // Let the server-side /waitlist page handle the redirect chain.
-    // It checks is_approved and routes to /onboarding, /discover, or /learn.
-    window.location.href = "/waitlist";
+    navigateInBrowser(buildPostAuthRedirectPath(redirectTarget));
   };
 
   const handleOAuth = async (provider: "google" | "github") => {
+    setPostAuthRedirectCookie(redirectTarget);
+
     // Use skipBrowserRedirect to capture the PKCE codeVerifier,
     // then store it in a cookie (survives cross-origin redirects,
     // unlike sessionStorage which can be lost in some browsers).
@@ -80,16 +105,18 @@ export default function LoginPage() {
       redirectTo: `${window.location.origin}/api/auth/callback`,
       skipBrowserRedirect: true,
     });
+
     if (result.error) {
       setError(result.error.message);
       return;
     }
+
     if (result.data?.codeVerifier) {
-      const secure = window.location.protocol === "https:" ? "; Secure" : "";
-      document.cookie = `insforge_pkce=${result.data.codeVerifier}; path=/; max-age=600; SameSite=Lax${secure}`;
+      setClientCookie("insforge_pkce", result.data.codeVerifier, 600);
     }
+
     if (result.data?.url) {
-      window.location.href = result.data.url;
+      navigateInBrowser(result.data.url);
     }
   };
 
@@ -105,7 +132,6 @@ export default function LoginPage() {
       </div>
 
       <div className="bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-xl p-5 sm:p-8">
-        {/* OAuth buttons */}
         <div className="space-y-3">
           <Button
             type="button"
@@ -150,7 +176,6 @@ export default function LoginPage() {
           <Separator className="flex-1 bg-border" />
         </div>
 
-        {/* Email/password form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-text-primary">
@@ -174,7 +199,7 @@ export default function LoginPage() {
                 Password
               </Label>
               <Link
-                href="/forgot-password"
+                href={forgotPasswordHref}
                 className="text-white hover:text-white/80 text-sm transition-colors"
               >
                 Forgot password?
@@ -194,9 +219,9 @@ export default function LoginPage() {
             )}
           </div>
 
-          {error && (
+          {(error || initialError) && (
             <div className="bg-red-error/10 border border-red-error/20 rounded-md p-3">
-              <p className="text-red-error text-sm">{error}</p>
+              <p className="text-red-error text-sm">{error || initialError}</p>
             </div>
           )}
 
@@ -219,7 +244,7 @@ export default function LoginPage() {
         <p className="text-text-muted text-sm text-center mt-6">
           Don&apos;t have an account?{" "}
           <Link
-            href="/signup"
+            href={signupHref}
             className="text-white hover:text-white/80 transition-colors"
           >
             Sign up
@@ -227,5 +252,19 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full max-w-md text-center">
+          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

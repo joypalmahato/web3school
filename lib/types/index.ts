@@ -246,6 +246,15 @@ export interface WaitlistEntry {
   user_id: string | null;
 }
 
+export interface ReferralEvent {
+  id: string;
+  referrer_waitlist_id: string;
+  referred_waitlist_id: string;
+  referrer_code: string;
+  referred_user_id: string | null;
+  created_at: string;
+}
+
 export interface ResultCard {
   id: string;
   user_id: string | null;

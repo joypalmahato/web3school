@@ -102,6 +102,15 @@ export function setClientCookie(
   )}; path=/; max-age=${maxAgeSeconds}; SameSite=Lax${secure}`;
 }
 
+export function clearClientCookie(name: string): void {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax${secure}`;
+}
+
 export function navigateInBrowser(url: string): void {
   if (typeof window === "undefined") {
     return;

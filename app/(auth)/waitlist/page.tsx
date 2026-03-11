@@ -1,8 +1,11 @@
 import { auth } from "@insforge/nextjs";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { WaitlistStatus } from "@/components/waitlist/WaitlistStatus";
 import { db } from "@/lib/db";
 import { sanitizeAuthRedirectPath } from "@/lib/insforge/redirect";
+import { normalizeReferralCode, REFERRAL_CODE_COOKIE } from "@/lib/referrals";
+import { ensureSignedUpUser } from "@/lib/waitlist/bootstrap";
 import type { Profile, WaitlistEntry } from "@/lib/types";
 
 export const metadata = {
@@ -24,10 +27,26 @@ export default async function WaitlistPage({
     : resolvedSearchParams?.redirect;
   const safeRedirect = sanitizeAuthRedirectPath(redirectParam);
 
-  const { userId } = await auth();
+  const { userId, user } = await auth();
 
   if (!userId) {
     redirect("/signup");
+  }
+
+  const cookieStore = await cookies();
+  const referredByCode = normalizeReferralCode(
+    cookieStore.get(REFERRAL_CODE_COOKIE)?.value
+  );
+
+  try {
+    await ensureSignedUpUser({
+      userId,
+      email: user?.email || "",
+      fullName: user?.profile?.name || "",
+      referredByCode,
+    });
+  } catch (bootstrapError) {
+    console.error("Waitlist bootstrap error:", bootstrapError);
   }
 
   const { data: profile } = await db("profiles")

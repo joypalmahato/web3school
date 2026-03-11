@@ -36,9 +36,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Role not found" }, { status: 404 });
     }
 
-    // Archive any active roadmaps for a DIFFERENT role before generating
+    // Retire any active roadmaps for a different role before generating a new one
     await db("roadmaps")
-      .update({ status: "archived" })
+      .update({ status: "abandoned" })
       .eq("user_id", userId)
       .eq("status", "active")
       .neq("role_id", dbRole.id);

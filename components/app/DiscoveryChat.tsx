@@ -26,11 +26,13 @@ interface Message {
 interface DiscoveryChatProps {
   existingSessionId?: string | null;
   existingMessages?: Message[];
+  isRestarting?: boolean;
 }
 
 export function DiscoveryChat({
   existingSessionId = null,
   existingMessages = [],
+  isRestarting = false,
 }: DiscoveryChatProps) {
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>(existingMessages);
@@ -283,17 +285,19 @@ export function DiscoveryChat({
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-2xl font-heading font-bold text-text-primary">
-                Let's find your path
+                {isRestarting ? "Let's find your next path" : "Let's find your path"}
               </h2>
               <p className="text-text-secondary max-w-md mx-auto">
-                Quick chat, no wrong answers. We'll figure out which Web3 career
+                {isRestarting
+                  ? "Fresh start. We'll ignore the old conversation and figure out whether a different Web3 role fits you better now."
+                  : "Quick chat, no wrong answers. We'll figure out which Web3 career actually fits you - not what sounds cool on paper." /*
                 actually fits you — not what sounds cool on paper.
-              </p>
+              */}</p>
               <Button
                 onClick={() => sendMessage("Hey! I'm curious about getting into Web3.")}
                 className="bg-white text-black hover:opacity-85 rounded-md px-6 py-3 font-semibold"
               >
-                Let's go
+                {isRestarting ? "Start fresh" : "Let's go"}
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </motion.div>
@@ -472,7 +476,7 @@ export function DiscoveryChat({
               className="text-center space-y-3"
             >
               <p className="text-text-secondary text-sm">
-                Nice chat! Let's see what fits you best.
+                Nice chat! Let&apos;s see what fits you best.
               </p>
               <Button
                 onClick={handleCompleteDiscovery}

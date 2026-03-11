@@ -18,6 +18,15 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { getInsforgeClient } from "@/lib/insforge/client";
 import {
+  buildPostAuthRedirectPath,
+  clearClientCookie,
+  navigateInBrowser,
+  setPostAuthRedirectCookie,
+  setClientCookie,
+  withAuthRedirect,
+} from "@/lib/insforge/redirect";
+import { normalizeReferralCode, REFERRAL_CODE_COOKIE } from "@/lib/referrals";
+import {
   signupSchema,
   type SignupFormData,
 } from "@/lib/validations/auth";
@@ -39,12 +48,24 @@ export default function SignupPage() {
 function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const refCode = searchParams.get("ref") || "";
+  const refCode = normalizeReferralCode(searchParams.get("ref")) || "";
+  const redirectTarget = searchParams.get("redirect");
   const [error, setError] = useState<string | null>(null);
   const insforge = getInsforgeClient();
+  const loginHref = withAuthRedirect("/login", redirectTarget);
+  const verifyEmailBasePath = (() => {
+    const params = new URLSearchParams();
+
+    if (redirectTarget) {
+      params.set("redirect", redirectTarget);
+    }
+
+    return params.toString();
+  })();
 
   const {
     register,
+    getValues,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({
@@ -56,6 +77,13 @@ function SignupForm() {
 
   const onSubmit = async (data: SignupFormData) => {
     setError(null);
+    const normalizedReferralCode = normalizeReferralCode(data.referral_code);
+
+    if (normalizedReferralCode) {
+      setClientCookie(REFERRAL_CODE_COOKIE, normalizedReferralCode, 1800);
+    } else {
+      clearClientCookie(REFERRAL_CODE_COOKIE);
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = await insforge.auth.signUp({
@@ -71,7 +99,16 @@ function SignupForm() {
 
     // If email verification is required, redirect to verify page
     if (result.data?.requireEmailVerification) {
-      router.push(`/verify-email?email=${encodeURIComponent(data.email)}&name=${encodeURIComponent(data.full_name)}`);
+      const params = new URLSearchParams(verifyEmailBasePath);
+      params.set("email", data.email);
+      params.set("name", data.full_name);
+      if (normalizedReferralCode) {
+        params.set("ref", normalizedReferralCode);
+      }
+
+      router.push(
+        `/verify-email?${params.toString()}`
+      );
       return;
     }
 
@@ -92,21 +129,36 @@ function SignupForm() {
       });
     }
 
-    // Fire-and-forget profile creation — don't block the redirect
-    fetch("/api/profile/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: data.email,
-        full_name: data.full_name,
-        referral_code: data.referral_code || undefined,
-      }),
-    }).catch(() => {});
+    try {
+      await fetch("/api/profile/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: data.email,
+          full_name: data.full_name,
+          referral_code: normalizedReferralCode || undefined,
+        }),
+      });
+      clearClientCookie(REFERRAL_CODE_COOKIE);
+    } catch (profileCreateError) {
+      console.error("Profile bootstrap request failed:", profileCreateError);
+    }
 
-    window.location.href = "/waitlist";
+    navigateInBrowser(buildPostAuthRedirectPath(redirectTarget));
   };
 
   const handleOAuth = async (provider: "google" | "github") => {
+    setPostAuthRedirectCookie(redirectTarget);
+    const normalizedReferralCode = normalizeReferralCode(
+      getValues("referral_code")
+    );
+
+    if (normalizedReferralCode) {
+      setClientCookie(REFERRAL_CODE_COOKIE, normalizedReferralCode, 1800);
+    } else {
+      clearClientCookie(REFERRAL_CODE_COOKIE);
+    }
+
     // Use skipBrowserRedirect to capture the PKCE codeVerifier,
     // then store it in a cookie (survives cross-origin redirects,
     // unlike sessionStorage which can be lost in some browsers).
@@ -123,11 +175,10 @@ function SignupForm() {
       return;
     }
     if (result.data?.codeVerifier) {
-      const secure = window.location.protocol === "https:" ? "; Secure" : "";
-      document.cookie = `insforge_pkce=${result.data.codeVerifier}; path=/; max-age=600; SameSite=Lax${secure}`;
+      setClientCookie("insforge_pkce", result.data.codeVerifier, 600);
     }
     if (result.data?.url) {
-      window.location.href = result.data.url;
+      navigateInBrowser(result.data.url);
     }
   };
 
@@ -297,7 +348,7 @@ function SignupForm() {
         <p className="text-text-muted text-sm text-center mt-6">
           Already have an account?{" "}
           <Link
-            href="/login"
+            href={loginHref}
             className="text-white hover:text-white/80 transition-colors"
           >
             Log in
