@@ -13,9 +13,7 @@ export const metadata = {
 };
 
 type WaitlistPageProps = {
-  searchParams?:
-    | Promise<{ redirect?: string | string[] }>
-    | { redirect?: string | string[] };
+  searchParams?: Promise<{ redirect?: string | string[] }>;
 };
 
 export default async function WaitlistPage({

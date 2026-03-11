@@ -14,9 +14,7 @@ export const metadata = {
 };
 
 type DiscoverPageProps = {
-  searchParams?:
-    | Promise<{ restart?: string | string[] }>
-    | { restart?: string | string[] };
+  searchParams?: Promise<{ restart?: string | string[] }>;
 };
 
 export default async function DiscoverPage({
