@@ -1,13 +1,77 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#FFFFFF"/>
-  <!-- Connector lines -->
-  <line x1="9" y1="21" x2="15" y2="14" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
-  <line x1="15" y1="14" x2="20" y2="17" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
-  <line x1="20" y1="17" x2="25" y2="9" stroke="#000000" stroke-width="1.8" stroke-linecap="round"/>
-  <!-- Hollow nodes -->
-  <circle cx="9" cy="21" r="2.8" fill="none" stroke="#000000" stroke-width="1.8"/>
-  <circle cx="15" cy="14" r="2.8" fill="none" stroke="#000000" stroke-width="1.8"/>
-  <circle cx="20" cy="17" r="2.8" fill="none" stroke="#000000" stroke-width="1.8"/>
-  <!-- Filled top node -->
-  <circle cx="25" cy="9" r="3.2" fill="#000000"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#F8F4EC"/>
+  <circle cx="32" cy="32" r="24" stroke="#111111" stroke-width="3"/>
+  <circle cx="32" cy="32" r="18" stroke="#C46A3D" stroke-width="2.5"/>
+  <circle cx="32" cy="32" r="12" stroke="#111111" stroke-width="2.5"/>
+
+  <path
+    d="M32 4L36.5 28L32 24L27.5 28L32 4Z"
+    fill="#C46A3D"
+    stroke="#111111"
+    stroke-width="2.2"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M32 60L36.5 36L32 40L27.5 36L32 60Z"
+    fill="#C46A3D"
+    stroke="#111111"
+    stroke-width="2.2"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M60 32L36 36.5L40 32L36 27.5L60 32Z"
+    fill="#C46A3D"
+    stroke="#111111"
+    stroke-width="2.2"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M4 32L28 36.5L24 32L28 27.5L4 32Z"
+    fill="#C46A3D"
+    stroke="#111111"
+    stroke-width="2.2"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M46.8 17.2L40.2 28L36.5 24.3L46.8 17.2Z"
+    fill="#C46A3D"
+    stroke="#111111"
+    stroke-width="1.8"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M17.2 17.2L28 23.8L24.3 27.5L17.2 17.2Z"
+    fill="#C46A3D"
+    stroke="#111111"
+    stroke-width="1.8"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M46.8 46.8L36.5 39.7L40.2 36L46.8 46.8Z"
+    fill="#C46A3D"
+    stroke="#111111"
+    stroke-width="1.8"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M17.2 46.8L24.3 36.5L28 40.2L17.2 46.8Z"
+    fill="#C46A3D"
+    stroke="#111111"
+    stroke-width="1.8"
+    stroke-linejoin="round"
+  />
+
+  <rect
+    x="25.3"
+    y="25.3"
+    width="13.4"
+    height="13.4"
+    transform="rotate(45 32 32)"
+    fill="#F8F4EC"
+    stroke="#111111"
+    stroke-width="2.2"
+  />
+  <path d="M32 22V42" stroke="#C46A3D" stroke-width="2" stroke-linecap="round"/>
+  <path d="M22 32H42" stroke="#C46A3D" stroke-width="2" stroke-linecap="round"/>
 </svg>
