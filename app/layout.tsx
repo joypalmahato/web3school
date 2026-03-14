@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import { getAuthFromCookies } from "@insforge/nextjs";
 import { Providers } from "./providers";
 import "./globals.css";
+
+const googleAnalyticsId = "G-KMJNGLHRSL";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-heading",
@@ -63,6 +66,18 @@ export default async function RootLayout({
       <body
         className={`${plusJakartaSans.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased overflow-x-hidden`}
       >
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${googleAnalyticsId}');
+          `}
+        </Script>
         {/* Global background — hero image blurred + dark overlay, fixed behind all pages */}
         <div
           className="fixed -z-20 bg-cover bg-bottom"
