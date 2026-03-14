@@ -5,7 +5,6 @@
  */
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
 import { useUserStore } from "@/lib/stores/user-store";
 
 interface StreakData {
@@ -16,33 +15,16 @@ interface StreakData {
 }
 
 export function useStreak(): StreakData {
-  const { profile } = useUserStore();
-  const [maintainedToday, setMaintainedToday] = useState(false);
-  const [checked, setChecked] = useState(false);
-
-  const checkToday = useCallback(async () => {
-    if (!profile) {
-      setChecked(true);
-      return;
-    }
-
-    // Check last_active_at instead of making a DB query
-    if (profile.last_active_at) {
-      const lastActive = new Date(profile.last_active_at).toISOString().split("T")[0];
-      const today = new Date().toISOString().split("T")[0];
-      setMaintainedToday(lastActive === today);
-    }
-    setChecked(true);
-  }, [profile]);
-
-  useEffect(() => {
-    checkToday();
-  }, [checkToday]);
+  const { profile, isLoading } = useUserStore();
+  const maintainedToday = profile?.last_active_at
+    ? new Date(profile.last_active_at).toISOString().split("T")[0] ===
+      new Date().toISOString().split("T")[0]
+    : false;
 
   return {
-    currentStreak: profile?.streak_count || 0,
-    longestStreak: profile?.longest_streak || 0,
+    currentStreak: profile?.streak_count ?? 0,
+    longestStreak: profile?.longest_streak ?? 0,
     maintainedToday,
-    isLoading: !checked,
+    isLoading,
   };
 }
