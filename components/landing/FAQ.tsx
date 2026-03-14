@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
@@ -25,11 +25,45 @@ const FAQS = [
   },
   {
     q: "How is this different from YouTube or a Udemy course?",
-    a: "Those platforms give everyone the same content in the same order. Web3School builds your specific path based on your role, your pace, and how your brain learns. If you get stuck, the platform restructures the lesson — it doesn't just move on. You also finish with a Skill Passport, not just a completion badge.",
+    a: "Those platforms give everyone the same content in the same order. Web3School builds your specific path based on your role, your pace, and how your brain learns. If you get stuck, the platform restructures the lesson - it doesn't just move on. You also finish with a Skill Passport, not just a completion badge.",
+  },
+  {
+    q: "Why should I use Web3School instead of ChatGPT, NotebookLM, or other AI tools?",
+    a: (
+      <>
+        <p>
+          AI tools like ChatGPT and NotebookLM are general-purpose - they can answer
+          questions, but they cannot build your career.
+        </p>
+        <p>Web3School is different in 3 ways:</p>
+        <ol className="space-y-3 list-decimal pl-5">
+          <li>
+            <strong className="text-white">Structured, not scattered.</strong> Instead of
+            random Q&amp;A, you get a personalized learning roadmap based on your skills
+            and career goals. The AI adapts as you grow.
+          </li>
+          <li>
+            <strong className="text-white">Build real projects, not just read about them.</strong>{" "}
+            You deploy actual smart contracts and dApps on-chain, building a real
+            portfolio - not just copy-pasting code snippets.
+          </li>
+          <li>
+            <strong className="text-white">Prove it on-chain.</strong> Every skill you
+            master becomes a blockchain-verified credential through your Web3 Passport.
+            Employers and DAOs can verify your expertise in one click. No chatbot gives
+            you that.
+          </li>
+        </ol>
+        <p>
+          ChatGPT can explain Solidity. Web3School makes you a verified Solidity
+          developer.
+        </p>
+      </>
+    ),
   },
   {
     q: "How long does it take?",
-    a: "The discovery chat takes about 10 minutes. Your roadmap? However long you need. Some fast learners push through in 6–8 weeks. Others take 4–5 months because life happens. The platform doesn't care about a timeline — it adapts to your pace, not the other way around.",
+    a: "The discovery chat takes about 10 minutes. Your roadmap? However long you need. Some fast learners push through in 6-8 weeks. Others take 4-5 months because life happens. The platform doesn't care about a timeline - it adapts to your pace, not the other way around.",
   },
   {
     q: "I already have some Web3 experience. Can I start at the right level?",
@@ -41,7 +75,7 @@ const FAQS = [
   },
 ];
 
-function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
+function FAQItem({ q, a, index }: { q: string; a: ReactNode; index: number }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -75,9 +109,9 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
             transition={{ duration: 0.28, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <p className="px-6 pb-5 text-[#888888] text-sm leading-relaxed border-t border-white/[0.06] pt-4">
+            <div className="px-6 pb-5 text-[#888888] text-sm leading-relaxed border-t border-white/[0.06] pt-4 space-y-3">
               {a}
-            </p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
