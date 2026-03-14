@@ -28,6 +28,7 @@ type BootstrappedWaitlistEntry = Pick<
   | "email"
   | "name"
   | "status"
+  | "approved_at"
   | "user_id"
   | "referral_code"
   | "referred_by"
@@ -59,7 +60,7 @@ async function getProfileByUserId(userId: string) {
 async function getWaitlistEntry(userId: string, email: string | null) {
   const waitlistByUserId = await db("waitlist")
     .select(
-      "id, email, name, status, user_id, referral_code, referred_by, referral_count, waitlist_position"
+      "id, email, name, status, approved_at, user_id, referral_code, referred_by, referral_count, waitlist_position"
     )
     .eq("user_id", userId)
     .limit(1);
@@ -74,7 +75,7 @@ async function getWaitlistEntry(userId: string, email: string | null) {
 
   const waitlistByEmail = await db("waitlist")
     .select(
-      "id, email, name, status, user_id, referral_code, referred_by, referral_count, waitlist_position"
+      "id, email, name, status, approved_at, user_id, referral_code, referred_by, referral_count, waitlist_position"
     )
     .eq("email", email)
     .limit(1);
@@ -162,6 +163,7 @@ export async function ensureSignedUpUser({
   fullName,
   referredByCode,
 }: BootstrapSignedUpUserParams) {
+  const approvalTimestamp = new Date().toISOString();
   const normalizedEmail = email?.trim().toLowerCase() || null;
   const normalizedName = fullName?.trim() || "";
   const normalizedReferredBy = normalizeReferralCode(referredByCode);
@@ -181,8 +183,8 @@ export async function ensureSignedUpUser({
         onboarding_completed: false,
         xp_total: 0,
         level: 1,
-        is_approved: false,
-        approved_at: null,
+        is_approved: true,
+        approved_at: approvalTimestamp,
         referral_code: ownReferralCode,
       })
       .select(
@@ -208,6 +210,14 @@ export async function ensureSignedUpUser({
 
     if (!profile.referral_code) {
       profileUpdates.referral_code = ownReferralCode;
+    }
+
+    if (!profile.is_approved) {
+      profileUpdates.is_approved = true;
+    }
+
+    if (!profile.approved_at) {
+      profileUpdates.approved_at = approvalTimestamp;
     }
 
     if (Object.keys(profileUpdates).length > 0) {
@@ -239,13 +249,14 @@ export async function ensureSignedUpUser({
       .insert({
         name: normalizedName || profile.full_name || "Web3School User",
         email: normalizedEmail || profile.email,
-        status: "signed_up",
+        status: "approved",
+        approved_at: approvalTimestamp,
         user_id: userId,
         referred_by: normalizedReferredBy,
         referral_code: ownReferralCode,
       })
       .select(
-        "id, email, name, status, user_id, referral_code, referred_by, referral_count, waitlist_position"
+        "id, email, name, status, approved_at, user_id, referral_code, referred_by, referral_count, waitlist_position"
       )
       .single();
 
@@ -264,8 +275,12 @@ export async function ensureSignedUpUser({
       waitlistUpdates.user_id = userId;
     }
 
-    if (waitlistEntry.status !== "signed_up") {
-      waitlistUpdates.status = "signed_up";
+    if (waitlistEntry.status !== "approved") {
+      waitlistUpdates.status = "approved";
+    }
+
+    if (!waitlistEntry.approved_at) {
+      waitlistUpdates.approved_at = approvalTimestamp;
     }
 
     if (nextName && waitlistEntry.name !== nextName) {
@@ -293,7 +308,7 @@ export async function ensureSignedUpUser({
         .update(waitlistUpdates)
         .eq("id", waitlistEntry.id)
         .select(
-          "id, email, name, status, user_id, referral_code, referred_by, referral_count, waitlist_position"
+          "id, email, name, status, approved_at, user_id, referral_code, referred_by, referral_count, waitlist_position"
         )
         .single();
 

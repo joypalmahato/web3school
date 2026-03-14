@@ -5,6 +5,7 @@ import {
   sanitizeAuthRedirectPath,
   withAuthRedirect,
 } from "@/lib/insforge/redirect";
+import { sendBetaAccessEmail } from "@/lib/emails/sendBetaAccessEmail";
 import { ensureSignedUpUser } from "@/lib/waitlist/bootstrap";
 import { normalizeReferralCode, REFERRAL_CODE_COOKIE } from "@/lib/referrals";
 
@@ -92,6 +93,16 @@ export async function GET(request: NextRequest) {
       });
     } catch (bootstrapError) {
       console.error("OAuth bootstrap error:", bootstrapError);
+    }
+
+    try {
+      await sendBetaAccessEmail({
+        userId: tokenData.user.id,
+        email: tokenData.user.email || "",
+        name: tokenData.user.profile?.name || "",
+      });
+    } catch (emailError) {
+      console.error("OAuth beta access email error:", emailError);
     }
 
     const response = NextResponse.redirect(

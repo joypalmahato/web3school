@@ -117,11 +117,14 @@ function VerifyEmailForm() {
           <Mail className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-3xl font-heading font-bold text-text-primary">
-          Check your email
+          Verify your email
         </h1>
         <p className="text-text-secondary mt-2">
           We sent a verification code to{" "}
           <span className="text-text-primary font-medium">{email}</span>
+        </p>
+        <p className="text-text-muted mt-3 text-sm">
+          Enter it to unlock instant beta access.
         </p>
       </div>
 

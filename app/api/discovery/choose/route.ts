@@ -29,8 +29,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Role not found" }, { status: 404 });
     }
 
-    // Update user profile with chosen role
-    // discovery_completed must also be set so the waitlist router sends them to /learn
+    // Update user profile with chosen role.
+    // discovery_completed must be set so the post-auth router sends them to /learn.
     await db("profiles")
       .update({
         current_role_id: role.id,

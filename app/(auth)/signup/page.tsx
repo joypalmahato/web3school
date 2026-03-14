@@ -189,7 +189,11 @@ function SignupForm() {
           Create your account
         </h1>
         <p className="text-text-secondary mt-2">
-          Start your Web3 career discovery journey
+          Open beta is live. Sign up now and start your Web3 career discovery journey.
+        </p>
+        <p className="text-text-muted mt-3 text-sm">
+          New signups are instantly approved after email verification. AI can
+          make mistakes, so please cross-check anything important.
         </p>
       </div>
 

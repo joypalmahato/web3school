@@ -103,6 +103,7 @@ export interface Profile {
   // Waitlist & approval gating
   is_approved: boolean;
   approved_at: string | null;
+  beta_access_emailed_at: string | null;
   waitlist_id: string | null;
   referral_code: string | null;
 }

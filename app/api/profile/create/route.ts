@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { auth } from "@insforge/nextjs";
+import { sendBetaAccessEmail } from "@/lib/emails/sendBetaAccessEmail";
 import { ensureSignedUpUser } from "@/lib/waitlist/bootstrap";
 import { normalizeReferralCode, REFERRAL_CODE_COOKIE } from "@/lib/referrals";
 
 /**
  * POST /api/profile/create
- * Ensures the signed-in user has a profile row, a linked waitlist row,
+ * Ensures the signed-in user has a profile row, a linked legacy waitlist row,
  * referral attribution, and referral history.
  */
 export async function POST(request: Request) {
@@ -27,6 +28,16 @@ export async function POST(request: Request) {
       fullName: user?.profile?.name || body.full_name || "",
       referredByCode,
     });
+
+    try {
+      await sendBetaAccessEmail({
+        userId,
+        email: result.profile.email || user?.email || body.email || "",
+        name: result.profile.full_name || user?.profile?.name || body.full_name || "",
+      });
+    } catch (emailError) {
+      console.error("Beta access email error:", emailError);
+    }
 
     const response = NextResponse.json({
       success: true,

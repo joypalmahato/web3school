@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@insforge/nextjs";
 import { z } from "zod/v4";
 import { db } from "@/lib/db";
+import { sendBetaAccessEmail } from "@/lib/emails/sendBetaAccessEmail";
 
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
   .split(",")
@@ -58,32 +59,10 @@ export async function POST(request: Request) {
           })
           .eq("email", email);
 
-        // Send approval email
-        if (process.env.RESEND_API_KEY) {
-          try {
-            const { Resend } = await import("resend");
-            const { approvalEmail } = await import("@/lib/emails/templates");
-            const resend = new Resend(process.env.RESEND_API_KEY);
-
-            const { data: userProfile } = await db("profiles")
-              .select("full_name")
-              .eq("email", email)
-              .single();
-
-            const emailContent = approvalEmail({
-              name: userProfile?.full_name || "there",
-              appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://web3school.study",
-            });
-
-            await resend.emails.send({
-              from: "Web3School <onboarding@resend.dev>",
-              to: email,
-              subject: emailContent.subject,
-              html: emailContent.html,
-            });
-          } catch (emailErr) {
-            console.error("Approval email error:", emailErr);
-          }
+        try {
+          await sendBetaAccessEmail({ email });
+        } catch (emailErr) {
+          console.error("Approval email error:", emailErr);
         }
 
         results.push({ email, success: true });

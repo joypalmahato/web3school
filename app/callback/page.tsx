@@ -97,9 +97,8 @@ export default function CallbackPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async function ensureProfileAndRedirect(_insforge: any, _user: any) {
       // /api/auth/callback already created the profile server-side.
-      // Let the server-side /waitlist page handle the redirect chain
-      // (it checks is_approved and routes to /onboarding, /discover, or /learn).
-      window.location.href = "/waitlist";
+      // Let the server-side beta access router handle the redirect chain.
+      window.location.href = "/beta-access";
     }
 
     handleCallback();

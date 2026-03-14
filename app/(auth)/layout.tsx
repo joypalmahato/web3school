@@ -18,10 +18,10 @@ export default async function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Don't redirect if already on /waitlist — that would cause an infinite loop
   const headersList = await headers();
   const pathname = headersList.get("x-pathname") || "";
-  if (pathname === "/waitlist") {
+
+  if (pathname === "/waitlist" || pathname === "/beta-access") {
     return (
       <div className="relative min-h-screen flex flex-col">
         <div className="p-6">
@@ -36,21 +36,19 @@ export default async function AuthLayout({
     );
   }
 
-  // For all other auth pages: if already logged in, redirect to the right place
   const { userId } = await auth();
   if (userId) {
     try {
       const { data: profile } = await db("profiles")
-        .select("onboarding_completed, discovery_completed, is_approved")
+        .select("onboarding_completed, discovery_completed")
         .eq("user_id", userId)
         .single();
 
-      if (!profile?.is_approved) redirect("/waitlist");
-      else if (profile?.discovery_completed) redirect("/learn");
+      if (profile?.discovery_completed) redirect("/learn");
       else if (profile?.onboarding_completed) redirect("/discover");
       else redirect("/onboarding");
     } catch {
-      redirect("/discover");
+      redirect("/onboarding");
     }
   }
 

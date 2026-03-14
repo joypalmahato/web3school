@@ -116,27 +116,30 @@ export function approvalEmail(params: {
   appUrl: string;
 }): { subject: string; html: string } {
   return {
-    subject: "You're in! Your Web3School account is active",
+    subject: "Beta access is open - your Web3School account is ready",
     html: wrapper(`
       <div style="text-align:center;margin-bottom:20px;">
         <span style="font-size:48px;">&#127881;</span>
       </div>
       <h1 style="color:${BRAND.text};font-size:22px;margin:0 0 16px;text-align:center;">
-        You're in!
+        Beta access is open
       </h1>
       <p style="color:${BRAND.text};font-size:15px;line-height:1.6;margin:0 0 12px;">
         Hey ${params.name},
       </p>
       <p style="color:${BRAND.text};font-size:15px;line-height:1.6;margin:0 0 24px;">
-        Your Web3School account has been approved. You can now complete your profile and start discovering your ideal Web3 career path.
+        Your Web3School account is approved and ready to use. If you signed up earlier, you now have access to the product.
+      </p>
+      <p style="color:${BRAND.text};font-size:15px;line-height:1.6;margin:0 0 24px;">
+        We're in beta, so AI-generated guidance can make mistakes. Please cross-check anything important before you act on it.
       </p>
       <div style="text-align:center;margin-bottom:16px;">
         <a href="${params.appUrl}/onboarding" style="display:inline-block;background:${BRAND.purple};color:white;padding:12px 32px;border-radius:12px;text-decoration:none;font-weight:600;font-size:15px;">
-          Start your journey &rarr;
+          Start in beta &rarr;
         </a>
       </div>
       <p style="color:${BRAND.muted};font-size:13px;text-align:center;margin:0;">
-        Welcome to the future of Web3 education.
+        Thanks for testing Web3School with us.
       </p>
     `),
   };

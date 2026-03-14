@@ -46,11 +46,6 @@ export default async function OnboardingPage() {
   // If insert also failed, show onboarding with empty defaults
   const typedProfile = (profile || {}) as Profile;
 
-  // Unapproved users must wait
-  if (!typedProfile.is_approved) {
-    redirect("/waitlist");
-  }
-
   if (typedProfile.onboarding_completed) {
     redirect("/discover");
   }

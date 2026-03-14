@@ -33,15 +33,11 @@ export default async function DiscoverPage({
   }
 
   const { data: profile } = await db("profiles")
-    .select("onboarding_completed, is_approved")
+    .select("onboarding_completed")
     .eq("user_id", userId)
     .single();
 
-  if (!profile?.is_approved) {
-    redirect("/waitlist");
-  }
-
-  if (!profile.onboarding_completed) {
+  if (!profile?.onboarding_completed) {
     redirect("/onboarding");
   }
 

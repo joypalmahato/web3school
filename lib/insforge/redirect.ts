@@ -1,11 +1,12 @@
 const REDIRECT_PARAM = "redirect";
-const WAITLIST_PATH = "/waitlist";
+const POST_AUTH_PATH = "/beta-access";
 const REDIRECT_URL_BASE = "http://web3school.local";
 const DISALLOWED_REDIRECT_PATHS = new Set([
   "/login",
   "/signup",
   "/verify-email",
   "/forgot-password",
+  "/beta-access",
   "/waitlist",
   "/callback",
 ]);
@@ -64,7 +65,7 @@ export function withAuthRedirect(
 export function buildPostAuthRedirectPath(
   redirectPath: string | null | undefined
 ): string {
-  return withAuthRedirect(WAITLIST_PATH, redirectPath);
+  return withAuthRedirect(POST_AUTH_PATH, redirectPath);
 }
 
 export function setPostAuthRedirectCookie(
