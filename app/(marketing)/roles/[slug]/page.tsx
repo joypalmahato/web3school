@@ -1,15 +1,15 @@
 /**
  * @component RoleDetailPage
- * @part-of Web3School — Public Role Exploration
+ * @part-of Web3School - Public Role Exploration
  * @design Hero + day in life + skills + growth path + traits + related roles + CTA
  * @seo Dynamic meta, JSON-LD structured data, canonical URLs
  */
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import { auth } from "@insforge/nextjs";
 import { INITIAL_ROLES } from "@/data/roles";
 import { APP_NAME, APP_URL } from "@/lib/utils/constants";
+import { trimDescription } from "@/lib/seo";
 import { RoleDetailClient } from "./RoleDetailClient";
-import { auth } from "@insforge/nextjs";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props) {
   }
 
   const title = `How to Become a ${role.name} in Web3`;
-  const description = role.description.slice(0, 160);
+  const description = trimDescription(role.description);
 
   return {
     title,
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props) {
       canonical: `${APP_URL}/roles/${slug}`,
     },
     openGraph: {
-      title: `${title} — ${APP_NAME}`,
+      title: `${title} | ${APP_NAME}`,
       description,
       url: `${APP_URL}/roles/${slug}`,
       siteName: APP_NAME,
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props) {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} — ${APP_NAME}`,
+      title: `${title} | ${APP_NAME}`,
       description,
     },
   };
@@ -66,7 +66,6 @@ export default async function RoleDetailPage({ params }: Props) {
     (r) => r.slug !== slug && r.category === role.category
   ).slice(0, 3);
 
-  // If same category has <2, fill with other roles
   if (relatedRoles.length < 2) {
     const others = INITIAL_ROLES.filter(
       (r) => r.slug !== slug && !relatedRoles.find((rr) => rr.slug === r.slug)
@@ -74,7 +73,6 @@ export default async function RoleDetailPage({ params }: Props) {
     relatedRoles.push(...others);
   }
 
-  // JSON-LD structured data
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Occupation",
@@ -92,7 +90,8 @@ export default async function RoleDetailPage({ params }: Props) {
       percentile90: role.salary_range_max,
     },
     skills: role.key_skills.join(", "),
-    educationRequirements: "No formal degree required — learn through Web3School's AI-powered curriculum",
+    educationRequirements:
+      "No formal degree required - learn through Web3School's AI-powered curriculum",
     provider: {
       "@type": "Organization",
       name: APP_NAME,
@@ -106,7 +105,11 @@ export default async function RoleDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <RoleDetailClient role={role} relatedRoles={relatedRoles} isAuthenticated={isAuthenticated} />
+      <RoleDetailClient
+        role={role}
+        relatedRoles={relatedRoles}
+        isAuthenticated={isAuthenticated}
+      />
     </>
   );
 }

@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://web3school.study";
+import { absoluteUrl } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,9 +7,20 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/callback", "/dashboard", "/learn/", "/roadmap", "/progress", "/passport", "/settings", "/notifications", "/discover", "/results"],
+        disallow: [
+          "/api/",
+          "/callback",
+          "/dashboard",
+          "/discover",
+          "/learn/",
+          "/notifications",
+          "/progress",
+          "/results",
+          "/roadmap",
+          "/settings",
+        ],
       },
     ],
-    sitemap: `${APP_URL}/sitemap.xml`,
+    sitemap: absoluteUrl("/sitemap.xml"),
   };
 }

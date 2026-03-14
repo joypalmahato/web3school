@@ -3,14 +3,26 @@
  * @part-of Web3School -- Marketing
  * @design 5-step vertical layout with green step numbers
  */
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Compass, Target, BookOpen, Code, ShieldCheck } from "lucide-react";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
+import { absoluteUrl } from "@/lib/seo";
 
-export const metadata = {
-  title: "How It Works | Web3School",
+export const metadata: Metadata = {
+  title: "How It Works",
   description:
     "Five steps from confusion to a verified Web3 career — AI-matched role, personalized roadmap, adaptive lessons, and a Skill Passport you can show.",
+  alternates: {
+    canonical: absoluteUrl("/how-it-works"),
+  },
+  openGraph: {
+    title: "How It Works",
+    description:
+      "Five steps from confusion to a verified Web3 career — AI-matched role, personalized roadmap, adaptive lessons, and a Skill Passport you can show.",
+    url: absoluteUrl("/how-it-works"),
+    type: "article",
+  },
 };
 
 const STEPS = [
@@ -52,9 +64,27 @@ const STEPS = [
 ];
 
 export default function HowItWorksPage() {
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How Web3School Works",
+    description:
+      "Five steps from confusion to a verified Web3 career with AI role matching, adaptive learning, and a Skill Passport.",
+    step: STEPS.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.title,
+      text: step.description,
+      url: absoluteUrl("/how-it-works"),
+    })),
+  };
+
   return (
     <div className="relative min-h-screen pt-32 pb-16">
-      {/* Dot grid — same as landing page hero */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+      />
       <div
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
@@ -63,7 +93,6 @@ export default function HowItWorksPage() {
         }}
       />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <AnimatedSection className="text-center mb-16">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white">
             How It Works
@@ -74,20 +103,17 @@ export default function HowItWorksPage() {
           </p>
         </AnimatedSection>
 
-        {/* Steps */}
         <div className="space-y-6">
           {STEPS.map((step, i) => (
             <AnimatedSection key={step.number} delay={i * 0.08}>
               <div className="bg-[#111111]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8">
                 <div className="flex items-start gap-5">
-                  {/* Step number */}
                   <div className="flex-shrink-0">
                     <span className="text-3xl sm:text-4xl font-heading font-bold text-[#10B981]">
                       {step.number}
                     </span>
                   </div>
 
-                  {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
                       <step.icon className="w-5 h-5 text-white/60" />
@@ -105,7 +131,6 @@ export default function HowItWorksPage() {
           ))}
         </div>
 
-        {/* CTA */}
         <AnimatedSection delay={0.5} className="text-center mt-16">
           <div className="bg-[#111111]/50 backdrop-blur-md border border-white/10 rounded-2xl p-8 sm:p-12">
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">

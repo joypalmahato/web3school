@@ -22,17 +22,13 @@ const LIVE_MATCHES = [
   { name: "Jordan K.", sector: "Protocol Researcher", milestone: "ZK research path unlocked" },
 ];
 
-// ---------------------------------------------------------------------------
-// Copy variants
-// ---------------------------------------------------------------------------
-
 const VARIANTS = {
   a: {
     headline1: "You know crypto.",
     headline2: "Now turn it into a career.",
     sub: "The Web3 career platform for the AI age.",
     pillars: [
-      { label: "Match", desc: "Quick AI chat → precise role match" },
+      { label: "Match", desc: "Quick AI chat -> precise role match" },
       { label: "Learn", desc: "Adapts pace and style to you" },
       { label: "Prove", desc: "A Skill Passport you can show" },
     ],
@@ -44,7 +40,7 @@ const VARIANTS = {
     headline2: "Now turn it into a career.",
     sub: "The Web3 career platform for the AI age.",
     pillars: [
-      { label: "Match", desc: "Quick AI chat → precise role match" },
+      { label: "Match", desc: "Quick AI chat -> precise role match" },
       { label: "Learn", desc: "Adapts pace and style to you" },
       { label: "Prove", desc: "A Skill Passport you can show" },
     ],
@@ -53,15 +49,10 @@ const VARIANTS = {
   },
 } as const;
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
   const [matchIndex, setMatchIndex] = useState(0);
   const copy = VARIANTS[variant];
 
-  // Rotate the live match card
   useEffect(() => {
     const interval = setInterval(() => {
       setMatchIndex((i) => (i + 1) % LIVE_MATCHES.length);
@@ -69,13 +60,11 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
     return () => clearInterval(interval);
   }, []);
 
-  // Track which variant this visitor sees
   useEffect(() => {
     posthog.capture("hero_variant_viewed", { variant });
   }, [variant]);
 
   const current = LIVE_MATCHES[matchIndex];
-
 
   const trackCta = (cta: "primary" | "secondary") => {
     posthog.capture("hero_cta_clicked", { variant, cta });
@@ -83,7 +72,6 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Dot grid */}
       <div
         className="absolute inset-0"
         style={{
@@ -93,8 +81,6 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
       />
 
       <div className="relative z-10 max-w-[900px] mx-auto px-6 pt-40 pb-24 lg:pt-44 lg:pb-32 text-center">
-
-        {/* Status pill */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -107,7 +93,6 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           </span>
         </motion.div>
 
-        {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -119,7 +104,6 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           <span className="text-[#10B981]">{copy.headline2}</span>
         </motion.h1>
 
-        {/* Subheadline */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -129,7 +113,6 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           {copy.sub}
         </motion.p>
 
-        {/* Three pillars */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -144,7 +127,6 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           ))}
         </motion.div>
 
-        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -158,16 +140,15 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           >
             {copy.cta}
           </Link>
-          <a
-            href="#how-it-works"
+          <Link
+            href="/how-it-works"
             onClick={() => trackCta("secondary")}
             className="inline-flex items-center justify-center bg-transparent text-white font-medium text-base px-8 py-4 rounded-md border border-white/20 hover:border-white/40 hover:bg-white/[0.05] transition-all duration-200 w-full sm:w-auto"
           >
             See How It Works
-          </a>
+          </Link>
         </motion.div>
 
-        {/* Microcopy */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -177,7 +158,6 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           {copy.microcopy}
         </motion.p>
 
-        {/* Example match card */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -213,10 +193,8 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
             </AnimatePresence>
           </div>
         </motion.div>
-
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

@@ -3,37 +3,89 @@
  * @part-of Web3School -- Marketing / Blog
  * @design Clean reading layout, max-width 720px
  */
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { BLOG_POSTS } from "@/data/blog";
+import {
+  PUBLISHED_BLOG_POSTS,
+  getPublishedBlogPost,
+} from "@/data/blog";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
+import { absoluteUrl, trimDescription } from "@/lib/seo";
 
 interface BlogPostPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({ slug: post.slug }));
+  return PUBLISHED_BLOG_POSTS.map((post) => ({ slug: post.slug }));
 }
 
-export function generateMetadata({ params }: BlogPostPageProps) {
-  const post = BLOG_POSTS.find((p) => p.slug === params.slug);
-  if (!post) return { title: "Post Not Found | Web3School" };
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPublishedBlogPost(slug);
+
+  if (!post) {
+    return {
+      title: "Post Not Found",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  const canonical = absoluteUrl(`/blog/${post.slug}`);
+  const description = trimDescription(post.excerpt);
+
   return {
-    title: `${post.title} | Web3School Blog`,
-    description: post.excerpt,
+    title: post.title,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title: post.title,
+      description,
+      url: canonical,
+      type: "article",
+    },
+    twitter: {
+      card: "summary",
+      title: post.title,
+      description,
+    },
   };
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = BLOG_POSTS.find((p) => p.slug === params.slug);
-  if (!post) notFound();
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+  const post = getPublishedBlogPost(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: trimDescription(post.excerpt),
+    datePublished: post.date,
+    dateModified: post.date,
+    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
+  };
 
   return (
     <div className="min-h-screen pt-32 pb-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <div className="max-w-[720px] mx-auto px-4 sm:px-6">
-        {/* Back link */}
         <AnimatedSection>
           <Link
             href="/blog"
@@ -44,7 +96,6 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           </Link>
         </AnimatedSection>
 
-        {/* Header */}
         <AnimatedSection delay={0.05}>
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
@@ -60,7 +111,6 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         </AnimatedSection>
 
-        {/* Content */}
         <AnimatedSection delay={0.1}>
           <div
             className="prose prose-invert prose-sm max-w-none
@@ -75,7 +125,6 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           />
         </AnimatedSection>
 
-        {/* Divider + CTA */}
         <AnimatedSection delay={0.15}>
           <div className="border-t border-white/10 mt-12 pt-8 text-center">
             <p className="text-[#A0A0A0] text-sm">

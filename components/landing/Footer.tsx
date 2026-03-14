@@ -10,7 +10,7 @@ const NAV_COLS = [
   {
     heading: "Product",
     links: [
-      { label: "How It Works", href: "/#how-it-works" },
+      { label: "How It Works", href: "/how-it-works" },
       { label: "Explore Roles", href: "/roles" },
       { label: "Roadmap", href: "/product-roadmap" },
       { label: "Blog", href: "/blog" },
@@ -31,9 +31,7 @@ export function Footer() {
   return (
     <footer className="border-t border-white/[0.06]">
       <div className="max-w-[1200px] mx-auto px-6 py-12">
-        {/* Top row: wordmark + nav cols */}
         <div className="flex flex-col md:flex-row gap-10 md:gap-16 mb-10">
-          {/* Wordmark + tagline */}
           <div className="flex-shrink-0">
             <span className="text-base font-semibold text-white font-heading">
               Web3School
@@ -43,7 +41,6 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Nav columns */}
           <div className="flex gap-8 md:gap-12 flex-wrap">
             {NAV_COLS.map((col) => (
               <div key={col.heading}>
@@ -78,7 +75,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom row: copyright + legal */}
         <div className="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-[#555555]">
             &copy; {currentYear} Web3School. All rights reserved.

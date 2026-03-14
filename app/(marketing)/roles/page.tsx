@@ -1,12 +1,12 @@
 /**
  * @component RolesIndexPage
- * @part-of Web3School — Public Role Exploration
+ * @part-of Web3School - Public Role Exploration
  * @design Grid of all roles with category + thematic filters and search
  * @seo Static page, high priority for organic traffic
  */
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, ArrowRight, TrendingUp, Users, Briefcase } from "lucide-react";
@@ -18,6 +18,7 @@ import {
   type ThematicGroup,
 } from "@/components/landing/RolesPreview";
 import type { RoleCategory } from "@/lib/types";
+import { absoluteUrl } from "@/lib/seo";
 
 const CATEGORIES: { label: string; value: RoleCategory | "all" }[] = [
   { label: "All Roles", value: "all" },
@@ -56,7 +57,7 @@ const DEMAND_LABELS: Record<string, string> = {
 function formatSalary(min: number, max: number): string {
   const fmtMin = min >= 1000 ? `$${Math.round(min / 1000)}k` : `$${min}`;
   const fmtMax = max >= 1000 ? `$${Math.round(max / 1000)}k` : `$${max}`;
-  return `${fmtMin} – ${fmtMax}`;
+  return `${fmtMin} - ${fmtMax}`;
 }
 
 function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
@@ -70,24 +71,20 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
         href={`/roles/${role.slug}`}
         className="group block h-full bg-[#111111]/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all duration-300"
       >
-        {/* Category badge */}
         <span
           className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${CATEGORY_COLORS[role.category]}`}
         >
           {role.category.replace("-", " ")}
         </span>
 
-        {/* Role name */}
         <h3 className="text-lg font-heading font-bold text-white mt-4 group-hover:text-white transition-colors">
           {role.name}
         </h3>
 
-        {/* Short description */}
         <p className="text-text-secondary text-sm mt-2 line-clamp-2">
           {role.short_description}
         </p>
 
-        {/* Stats row */}
         <div className="flex items-center gap-4 mt-4 text-xs text-text-muted">
           <span className="flex items-center gap-1">
             <Briefcase className="w-3.5 h-3.5" />
@@ -99,7 +96,6 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
           </span>
         </div>
 
-        {/* Skills preview */}
         <div className="flex flex-wrap gap-1.5 mt-4">
           {role.key_skills.slice(0, 3).map((skill) => (
             <span
@@ -116,7 +112,6 @@ function RoleCard({ role, index }: { role: RoleSeedData; index: number }) {
           )}
         </div>
 
-        {/* Arrow */}
         <div className="flex items-center gap-1 mt-4 text-sm text-white opacity-0 group-hover:opacity-100 transition-opacity">
           Learn more <ArrowRight className="w-4 h-4" />
         </div>
@@ -129,29 +124,45 @@ export default function RolesPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<RoleCategory | "all">("all");
   const [activeThematic, setActiveThematic] = useState<ThematicGroup | "all">("all");
+  const rolesJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Web3School role directory",
+    url: absoluteUrl("/roles"),
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: INITIAL_ROLES.map((role, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: absoluteUrl(`/roles/${role.slug}`),
+        name: role.name,
+      })),
+    },
+  };
 
-  const filtered = useMemo(() => {
-    return INITIAL_ROLES.filter((role) => {
-      const matchesCategory =
-        activeCategory === "all" || role.category === activeCategory;
-      const matchesThematic =
-        activeThematic === "all" ||
-        (SLUG_TO_THEMATIC[role.slug] ?? "web3") === activeThematic;
-      const matchesSearch =
-        search.trim() === "" ||
-        role.name.toLowerCase().includes(search.toLowerCase()) ||
-        role.short_description.toLowerCase().includes(search.toLowerCase()) ||
-        role.key_skills.some((s) =>
-          s.toLowerCase().includes(search.toLowerCase())
-        );
-      return matchesCategory && matchesThematic && matchesSearch;
-    });
-  }, [search, activeCategory, activeThematic]);
+  const filtered = INITIAL_ROLES.filter((role) => {
+    const matchesCategory =
+      activeCategory === "all" || role.category === activeCategory;
+    const matchesThematic =
+      activeThematic === "all" ||
+      (SLUG_TO_THEMATIC[role.slug] ?? "web3") === activeThematic;
+    const matchesSearch =
+      search.trim() === "" ||
+      role.name.toLowerCase().includes(search.toLowerCase()) ||
+      role.short_description.toLowerCase().includes(search.toLowerCase()) ||
+      role.key_skills.some((s) =>
+        s.toLowerCase().includes(search.toLowerCase())
+      );
+    return matchesCategory && matchesThematic && matchesSearch;
+  });
 
   return (
     <div className="min-h-screen pt-32 pb-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(rolesJsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center max-w-2xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -172,7 +183,6 @@ export default function RolesPage() {
           </motion.p>
         </div>
 
-        {/* Search */}
         <div className="mt-10 flex flex-col items-center gap-6">
           <div className="relative w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
@@ -184,7 +194,6 @@ export default function RolesPage() {
             />
           </div>
 
-          {/* Thematic filters */}
           <div className="flex flex-wrap justify-center gap-2">
             {THEMATIC_FILTERS.map((tab) => (
               <button
@@ -201,7 +210,6 @@ export default function RolesPage() {
             ))}
           </div>
 
-          {/* Category filters */}
           <div className="flex flex-wrap justify-center gap-2">
             {CATEGORIES.map((cat) => (
               <button
@@ -219,7 +227,6 @@ export default function RolesPage() {
           </div>
         </div>
 
-        {/* Role count */}
         <div className="mt-6 flex items-center gap-2 text-text-muted text-sm">
           <Users className="w-4 h-4" />
           <span>
@@ -227,14 +234,12 @@ export default function RolesPage() {
           </span>
         </div>
 
-        {/* Role grid */}
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {filtered.map((role, i) => (
             <RoleCard key={role.slug} role={role} index={i} />
           ))}
         </div>
 
-        {/* Empty state */}
         {filtered.length === 0 && (
           <div className="text-center py-16">
             <p className="text-text-secondary text-lg">
@@ -253,7 +258,6 @@ export default function RolesPage() {
           </div>
         )}
 
-        {/* Bottom CTA */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -264,7 +268,7 @@ export default function RolesPage() {
             Not sure which role fits you?
           </h2>
           <p className="text-text-secondary mt-2 text-sm max-w-md mx-auto">
-            Take our AI-powered career discovery chat — answer a few questions
+            Take our AI-powered career discovery chat - answer a few questions
             and we&apos;ll match you with your ideal role from {INITIAL_ROLES.length}+ paths.
           </p>
           <Button

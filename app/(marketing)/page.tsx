@@ -1,7 +1,7 @@
 /**
  * @component LandingPage
- * @part-of Web3School — Marketing
- * @design 8 sections: Hero → ProofBar → Problem → HowItWorks → ProductPreview → Roles → FAQ → FinalCTA
+ * @part-of Web3School - Marketing
+ * @design 8 sections: Hero -> ProofBar -> Problem -> HowItWorks -> ProductPreview -> Roles -> FAQ -> FinalCTA
  * @spec docs/01-website-blueprint.md
  */
 import type { Metadata } from "next";
@@ -13,26 +13,34 @@ import { Problem } from "@/components/landing/Problem";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { FAQ } from "@/components/landing/FAQ";
 import { FinalCTA } from "@/components/landing/FinalCTA";
+import {
+  absoluteUrl,
+  organizationJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Web3School — Find Your Web3 Career Path",
+  title: "Find Your Web3 Career Path",
   description:
     "A short AI discovery chat matches you to your ideal Web3 role, then builds a personalized adaptive roadmap at your pace. Free to join.",
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
   openGraph: {
-    title: "Web3School — Find Your Web3 Career Path",
+    title: "Find Your Web3 Career Path",
     description:
-      "AI discovery chat → Web3 role match → adaptive roadmap at your pace. Built for crypto natives and Web3 newcomers.",
+      "AI discovery chat -> Web3 role match -> adaptive roadmap at your pace. Built for crypto natives and Web3 newcomers.",
+    url: absoluteUrl("/"),
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web3School — Find Your Web3 Career Path",
+    title: "Find Your Web3 Career Path",
     description:
-      "AI discovery chat → Web3 role match → adaptive roadmap at your pace. Free to join.",
+      "AI discovery chat -> Web3 role match -> adaptive roadmap at your pace. Free to join.",
   },
 };
 
-// Lazy-load heavy below-fold sections
 const ProductPreview = dynamic(() =>
   import("@/components/landing/ProductPreview").then((m) => m.ProductPreview)
 );
@@ -46,6 +54,12 @@ export default async function LandingPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([organizationJsonLd, websiteJsonLd]),
+        }}
+      />
       <Hero variant={variant} />
       <ProofBar />
       <Problem />

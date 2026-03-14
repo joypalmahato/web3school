@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Web3School",
+  title: "Privacy Policy",
+  description: "Read how Web3School collects, uses, and protects your data.",
+  alternates: {
+    canonical: absoluteUrl("/privacy"),
+  },
 };
 
 export default function PrivacyPage() {

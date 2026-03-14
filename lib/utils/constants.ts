@@ -2,9 +2,9 @@ export const APP_NAME = "Web3School";
 export const APP_DESCRIPTION =
   "AI-Powered Web3 Career Discovery & Learning Platform";
 export const APP_URL =
-  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  process.env.NEXT_PUBLIC_APP_URL || "https://web3school.study";
 export const APP_TAGLINE =
-  "Go from 'I don't know what to learn' to 'I have a marketable skill and I can prove it' — guided by AI every step of the way.";
+  "Go from 'I don't know what to learn' to 'I have a marketable skill and I can prove it' - guided by AI every step of the way.";
 
 export const DISCOVERY_MAX_MESSAGES = 20;
 export const DISCOVERY_MIN_MESSAGES = 8;

@@ -5,6 +5,7 @@ export interface BlogPost {
   category: string;
   excerpt: string;
   content: string;
+  published: boolean;
 }
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -15,6 +16,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Web3 Insight",
     excerpt:
       "The Web3 job market has exploded. From DeFi protocols to on-chain gaming studios, companies are hiring faster than talent can keep up. Here is what is driving the surge.",
+    published: false,
     content: `
       <p>The Web3 industry has undergone a dramatic transformation over the past two years. What was once a niche corner of tech dominated by crypto traders and Solidity maximalists has evolved into a sprawling ecosystem of real companies solving real problems.</p>
 
@@ -42,6 +44,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Product Update",
     excerpt:
       "Traditional education follows a one-size-fits-all model. AI-powered learning adapts to you. Here is how Web3School uses AI to personalize every step of your journey.",
+    published: false,
     content: `
       <p>For decades, education has operated on a broadcast model: one teacher, one curriculum, many students. The assumption is that everyone learns the same way, at the same pace. We know that is not true.</p>
 
@@ -68,6 +71,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Learning Tip",
     excerpt:
       "Starting your blockchain journey can feel overwhelming. These five practical tips will help you build a strong foundation without burning out.",
+    published: false,
     content: `
       <p>You have decided to learn blockchain. Congratulations. Now comes the hard part: figuring out where to actually start. The space moves fast, the jargon is dense, and every resource assumes you already know something you do not.</p>
 
@@ -90,3 +94,9 @@ export const BLOG_POSTS: BlogPost[] = [
     `,
   },
 ];
+
+export const PUBLISHED_BLOG_POSTS = BLOG_POSTS.filter((post) => post.published);
+
+export function getPublishedBlogPost(slug: string): BlogPost | undefined {
+  return PUBLISHED_BLOG_POSTS.find((post) => post.slug === slug);
+}

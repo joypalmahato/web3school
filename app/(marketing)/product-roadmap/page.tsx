@@ -3,14 +3,26 @@
  * @part-of Web3School — Marketing
  * @design Phase-based product roadmap. Phase 1 (live) + Phase 2 (coming).
  */
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Check, Clock, Zap } from "lucide-react";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
+import { absoluteUrl } from "@/lib/seo";
 
-export const metadata = {
-  title: "Product Roadmap | Web3School",
+export const metadata: Metadata = {
+  title: "Product Roadmap",
   description:
     "See what we've built and what's coming next. Web3School's product roadmap — from prototype to the world's leading Web3 career platform.",
+  alternates: {
+    canonical: absoluteUrl("/product-roadmap"),
+  },
+  openGraph: {
+    title: "Product Roadmap",
+    description:
+      "See what we've built and what's coming next. Web3School's product roadmap — from prototype to the world's leading Web3 career platform.",
+    url: absoluteUrl("/product-roadmap"),
+    type: "article",
+  },
 };
 
 const PHASE_1_ITEMS = [
@@ -37,11 +49,25 @@ const PHASE_2_ITEMS = [
 ];
 
 export default function RoadmapPage() {
+  const roadmapJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Web3School product roadmap",
+    itemListElement: [...PHASE_1_ITEMS, ...PHASE_2_ITEMS].map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.label,
+      description: item.desc,
+    })),
+  };
+
   return (
     <div className="min-h-screen pt-32 pb-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(roadmapJsonLd) }}
+      />
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
-
-        {/* Header */}
         <AnimatedSection className="text-center mb-16">
           <p className="text-xs font-medium uppercase tracking-[0.08em] text-[#666666] mb-4">
             Product Roadmap
@@ -57,7 +83,6 @@ export default function RoadmapPage() {
           </p>
         </AnimatedSection>
 
-        {/* Phase 1 */}
         <AnimatedSection delay={0.1} className="mb-10">
           <div className="flex items-center gap-3 mb-6">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#10B981]/10 border border-[#10B981]/20">
@@ -83,7 +108,6 @@ export default function RoadmapPage() {
           </div>
         </AnimatedSection>
 
-        {/* Phase 2 */}
         <AnimatedSection delay={0.2} className="mb-16">
           <div className="flex items-center gap-3 mb-6">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08]">
@@ -109,7 +133,6 @@ export default function RoadmapPage() {
           </div>
         </AnimatedSection>
 
-        {/* CTA */}
         <AnimatedSection delay={0.3} className="text-center">
           <div className="bg-[#111111]/60 backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 sm:p-12">
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white">
@@ -126,7 +149,6 @@ export default function RoadmapPage() {
             </Link>
           </div>
         </AnimatedSection>
-
       </div>
     </div>
   );

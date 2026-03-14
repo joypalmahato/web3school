@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — Web3School",
+  title: "Terms of Service",
+  description: "Read the terms that govern your use of Web3School.",
+  alternates: {
+    canonical: absoluteUrl("/terms"),
+  },
 };
 
 export default function TermsPage() {

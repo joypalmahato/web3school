@@ -1,7 +1,7 @@
 /**
  * @component Navbar
  * @part-of Web3School — Landing Page
- * @design Sticky, near-transparent → glass on scroll. Minimal: wordmark, 3 links, CTA.
+ * @design Sticky, near-transparent -> glass on scroll. Minimal: wordmark, 3 links, CTA.
  * @spec docs/04-page-build-spec.md — Navigation
  */
 "use client";
@@ -22,8 +22,8 @@ import { cn } from "@/lib/utils";
 import { WHITEPAPER_URL } from "@/lib/utils/constants";
 
 const NAV_LINKS = [
-  { label: "How It Works", href: "#how-it-works", external: false },
-  { label: "Roles", href: "#roles", external: false },
+  { label: "How It Works", href: "/how-it-works", external: false },
+  { label: "Roles", href: "/roles", external: false },
   { label: "Roadmap", href: "/product-roadmap", external: false },
   { label: "Whitepaper", href: WHITEPAPER_URL, external: true },
   { label: "Blog", href: "/blog", external: false },
@@ -82,7 +82,6 @@ export function Navbar() {
       </div>
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* Wordmark */}
           <Link
             href="/"
             onClick={handleLogoClick}
@@ -91,21 +90,30 @@ export function Navbar() {
             Web3School
           </Link>
 
-          {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="text-sm text-[#A0A0A0] hover:text-white transition-colors duration-200"
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((link) =>
+              link.external ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#A0A0A0] hover:text-white transition-colors duration-200"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-[#A0A0A0] hover:text-white transition-colors duration-200"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
 
-          {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
             <Link
               href="/login"
@@ -121,7 +129,6 @@ export function Navbar() {
             </Button>
           </div>
 
-          {/* Mobile hamburger */}
           <div className="md:hidden">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
@@ -135,29 +142,38 @@ export function Navbar() {
               >
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
 
-                {/* Header */}
                 <div className="flex items-center justify-between px-6 h-16 border-b border-white/[0.06]">
                   <span className="text-lg font-bold text-white font-heading">
                     Web3School
                   </span>
                 </div>
 
-                {/* Nav links */}
                 <div className="flex flex-col flex-1 px-6 py-6 gap-1">
-                  {NAV_LINKS.map((link) => (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                      onClick={() => setMobileOpen(false)}
-                      className="text-[#A0A0A0] hover:text-white transition-colors duration-200 text-base py-3 px-3 rounded-lg hover:bg-white/[0.04]"
-                    >
-                      {link.label}
-                    </a>
-                  ))}
+                  {NAV_LINKS.map((link) =>
+                    link.external ? (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setMobileOpen(false)}
+                        className="text-[#A0A0A0] hover:text-white transition-colors duration-200 text-base py-3 px-3 rounded-lg hover:bg-white/[0.04]"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="text-[#A0A0A0] hover:text-white transition-colors duration-200 text-base py-3 px-3 rounded-lg hover:bg-white/[0.04]"
+                      >
+                        {link.label}
+                      </Link>
+                    )
+                  )}
                 </div>
 
-                {/* CTA pinned to bottom */}
                 <div className="px-6 pb-10 border-t border-white/[0.06] pt-6 space-y-3">
                   <Button
                     asChild
