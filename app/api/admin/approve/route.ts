@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 
             const emailContent = approvalEmail({
               name: userProfile?.full_name || "there",
-              appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://web3school.io",
+              appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://web3school.study",
             });
 
             await resend.emails.send({

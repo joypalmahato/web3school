@@ -83,7 +83,7 @@ export default async function WaitlistPage({
     "waitlist_position" | "referral_code" | "referral_count"
   > | null;
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://web3school.io";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://web3school.study";
   const referralCode =
     typedProfile?.referral_code || typedEntry?.referral_code || "";
 

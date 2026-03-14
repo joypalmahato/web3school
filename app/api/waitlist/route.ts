@@ -66,7 +66,7 @@ export async function POST(request: Request) {
           name: parsed.name,
           position: data.waitlist_position,
           referralCode: data.referral_code,
-          appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://web3school.io",
+          appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://web3school.study",
         });
         await resend.emails.send({
           from: "Web3School <onboarding@resend.dev>",

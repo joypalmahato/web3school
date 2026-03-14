@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://web3school.io";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://web3school.study";
 
 export default function robots(): MetadataRoute.Robots {
   return {

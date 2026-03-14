@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { INITIAL_ROLES } from "@/data/roles";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://web3school.io";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://web3school.study";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const roles = INITIAL_ROLES.map((role) => ({
