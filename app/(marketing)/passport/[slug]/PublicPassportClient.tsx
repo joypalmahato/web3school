@@ -63,7 +63,7 @@ export function PublicPassportClient({
           <div className="relative z-10 space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <Logo size="sm" />
+          <Logo size="sm" href="/" />
               <span className="text-text-muted text-xs font-mono">
                 SKILL PASSPORT
               </span>

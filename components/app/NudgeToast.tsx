@@ -8,6 +8,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Flame, Star, Trophy, Sparkles } from "lucide-react";
+import { getGuestNudges } from "@/lib/guest/demo-data";
+import { useUser } from "@/lib/hooks/useUser";
 import { cn } from "@/lib/utils";
 
 type NudgeType = "streak" | "celebration" | "milestone" | "tip";
@@ -41,16 +43,25 @@ const NUDGE_ICON_COLORS: Record<NudgeType, string> = {
 };
 
 export function NudgeToast() {
-  const [nudges, setNudges] = useState<Nudge[]>([]);
+  const [remoteNudges, setRemoteNudges] = useState<Nudge[]>([]);
+  const [dismissedGuestIds, setDismissedGuestIds] = useState<string[]>([]);
+  const { isGuest } = useUser();
+  const nudges = isGuest
+    ? getGuestNudges().filter((nudge) => !dismissedGuestIds.includes(nudge.id))
+    : remoteNudges;
 
   useEffect(() => {
+    if (isGuest) {
+      return;
+    }
+
     const fetchNudges = async () => {
       try {
         const res = await fetch("/api/nudges");
         if (!res.ok) return;
         const data = await res.json();
         if (data.nudges?.length) {
-          setNudges(data.nudges);
+          setRemoteNudges(data.nudges);
         }
       } catch {
         // Silently fail — nudges are non-critical
@@ -60,10 +71,15 @@ export function NudgeToast() {
     // Fetch nudges after a short delay to not block initial render
     const timer = setTimeout(fetchNudges, 2000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isGuest]);
 
   const dismissNudge = (id: string) => {
-    setNudges((prev) => prev.filter((n) => n.id !== id));
+    if (isGuest) {
+      setDismissedGuestIds((prev) => [...prev, id]);
+      return;
+    }
+
+    setRemoteNudges((prev) => prev.filter((n) => n.id !== id));
   };
 
   // Auto-dismiss after 5 seconds
@@ -71,11 +87,16 @@ export function NudgeToast() {
     if (nudges.length === 0) return;
 
     const timer = setTimeout(() => {
-      setNudges((prev) => prev.slice(1));
+      if (isGuest) {
+        setDismissedGuestIds((prev) => [...prev, nudges[0].id]);
+        return;
+      }
+
+      setRemoteNudges((prev) => prev.slice(1));
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [nudges]);
+  }, [isGuest, nudges]);
 
   return (
     <div className="fixed bottom-24 md:bottom-6 left-4 md:left-auto md:right-6 z-40 space-y-2 max-w-sm">

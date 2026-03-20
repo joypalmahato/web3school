@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/shared/Logo";
 import { StreakCounter } from "@/components/app/StreakCounter";
+import { useUser } from "@/lib/hooks/useUser";
 import { useAppStore } from "@/lib/stores/app-store";
 import { cn } from "@/lib/utils";
 
@@ -31,14 +32,6 @@ const NAV_ITEMS = [
     iconColor: "text-white",
     activeBg: "bg-white/8",
     activeText: "text-white",
-  },
-  {
-    href: "/discover",
-    label: "Discover",
-    icon: Compass,
-    iconColor: "text-orange-400",
-    activeBg: "bg-orange-500/10",
-    activeText: "text-orange-300",
   },
   {
     href: "/roadmap",
@@ -84,7 +77,19 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { isGuest } = useUser();
   const { sidebarOpen, toggleSidebar } = useAppStore();
+  const navItems = isGuest ? NAV_ITEMS : [
+    {
+      href: "/discover",
+      label: "Discover",
+      icon: Compass,
+      iconColor: "text-orange-400",
+      activeBg: "bg-orange-500/10",
+      activeText: "text-orange-300",
+    },
+    ...NAV_ITEMS,
+  ];
 
   return (
     <aside
@@ -111,7 +116,7 @@ export function Sidebar() {
 
       {/* Nav items */}
       <nav className="flex-1 px-2 py-4 space-y-1">
-        {NAV_ITEMS.map(({ href, label, icon: Icon, iconColor, activeBg, activeText }) => {
+        {navItems.map(({ href, label, icon: Icon, iconColor, activeBg, activeText }) => {
           const isActive = pathname === href || pathname?.startsWith(href + "/");
           return (
             <Link

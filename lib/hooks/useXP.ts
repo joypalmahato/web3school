@@ -6,7 +6,7 @@
  */
 "use client";
 
-import { useUserStore } from "@/lib/stores/user-store";
+import { useUser } from "@/lib/hooks/useUser";
 import { getLevelFromXP, getXPForNextLevel } from "@/lib/types";
 
 interface XPData {
@@ -18,7 +18,7 @@ interface XPData {
 }
 
 export function useXP(): XPData {
-  const { profile } = useUserStore();
+  const { profile } = useUser();
   const totalXP = profile?.xp_total || 0;
   const level = getLevelFromXP(totalXP);
   const { current, needed, progress } = getXPForNextLevel(totalXP);

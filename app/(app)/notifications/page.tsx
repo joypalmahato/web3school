@@ -17,6 +17,9 @@ import {
   Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getGuestNotifications } from "@/lib/guest/demo-data";
+import { useGuestStore } from "@/lib/guest/store";
+import { useUser } from "@/lib/hooks/useUser";
 import { cn } from "@/lib/utils";
 
 interface Notification {
@@ -62,10 +65,21 @@ function formatTimeAgo(dateStr: string): string {
 }
 
 export default function NotificationsPage() {
+  const { isGuest } = useUser();
+  const readNotificationIds = useGuestStore((state) => state.readNotificationIds);
+  const markAllGuestNotificationsRead = useGuestStore(
+    (state) => state.markAllNotificationsRead
+  );
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isGuest) {
+      setNotifications(getGuestNotifications(readNotificationIds));
+      setIsLoading(false);
+      return;
+    }
+
     const fetchNotifications = async () => {
       try {
         const res = await fetch("/api/notifications");
@@ -80,10 +94,18 @@ export default function NotificationsPage() {
     };
 
     fetchNotifications();
-  }, []);
+  }, [isGuest, readNotificationIds]);
 
   const markAllRead = async () => {
     try {
+      if (isGuest) {
+        markAllGuestNotificationsRead();
+        setNotifications((prev) =>
+          prev.map((notification) => ({ ...notification, is_read: true }))
+        );
+        return;
+      }
+
       await fetch("/api/notifications/read", { method: "POST" });
       setNotifications((prev) =>
         prev.map((n) => ({ ...n, is_read: true }))

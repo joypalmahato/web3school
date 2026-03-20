@@ -5,6 +5,8 @@ import { auth } from "@insforge/nextjs";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { GUEST_HOME_PATH } from "@/lib/guest/constants";
+import { isGuestSession } from "@/lib/guest/server";
 
 export const metadata: Metadata = {
   robots: {
@@ -34,6 +36,10 @@ export default async function AuthLayout({
         </div>
       </div>
     );
+  }
+
+  if (await isGuestSession()) {
+    redirect(GUEST_HOME_PATH);
   }
 
   const { userId } = await auth();

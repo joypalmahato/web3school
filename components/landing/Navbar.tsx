@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { GuestModeButton } from "@/components/shared/GuestModeButton";
 import {
   Sheet,
   SheetContent,
@@ -121,6 +122,11 @@ export function Navbar() {
             >
               Log in
             </Link>
+            <GuestModeButton
+              variant="ghost"
+              className="text-sm text-[#A0A0A0] hover:text-white hover:bg-transparent px-0"
+              label="Guest Demo"
+            />
             <Button
               asChild
               className="bg-white text-black hover:opacity-85 rounded-md px-5 py-2.5 text-sm font-semibold transition-opacity duration-200"
@@ -175,6 +181,12 @@ export function Navbar() {
                 </div>
 
                 <div className="px-6 pb-10 border-t border-white/[0.06] pt-6 space-y-3">
+                  <GuestModeButton
+                    variant="outline"
+                    className="w-full border-white/15 bg-white/[0.03] text-white hover:bg-white/[0.07]"
+                    label="Open Guest Demo"
+                    onClick={() => setMobileOpen(false)}
+                  />
                   <Button
                     asChild
                     className="bg-white text-black hover:opacity-85 rounded-md text-sm font-semibold w-full h-12"

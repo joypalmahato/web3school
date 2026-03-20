@@ -1,21 +1,40 @@
 import { InsforgeMiddleware } from "@insforge/nextjs/middleware";
 import { NextRequest, NextResponse } from "next/server";
+import {
+  GUEST_HOME_PATH,
+  GUEST_SESSION_COOKIE,
+  GUEST_SESSION_VALUE,
+  isGuestSupportedPath,
+} from "@/lib/guest/constants";
 
 const insforgeHandler = InsforgeMiddleware({
   baseUrl: process.env.NEXT_PUBLIC_INSFORGE_BASE_URL!,
-  publicRoutes: ["/", "/login", "/signup", "/verify-email", "/callback", "/waitlist", "/share", "/passport", "/blog", "/roles", "/how-it-works", "/product-roadmap"],
+  publicRoutes: [
+    "/",
+    "/login",
+    "/signup",
+    "/verify-email",
+    "/callback",
+    "/waitlist",
+    "/share",
+    "/passport",
+    "/blog",
+    "/roles",
+    "/how-it-works",
+    "/product-roadmap",
+    "/privacy",
+    "/terms",
+    "/robots.txt",
+    "/sitemap.xml",
+  ],
   signInUrl: "/login",
   signUpUrl: "/signup",
   useBuiltInAuth: false,
 });
 
-export default function middleware(request: NextRequest) {
-  const response = insforgeHandler(request) as NextResponse;
-
-  // Forward pathname to server components so layouts can avoid redirect loops
+function finalizeResponse(request: NextRequest, response: NextResponse) {
   response.headers.set("x-pathname", request.nextUrl.pathname);
 
-  // A/B test: assign hero variant cookie on homepage first visit (30-day window)
   if (
     request.nextUrl.pathname === "/" &&
     !request.cookies.get("hero_variant")?.value
@@ -30,6 +49,34 @@ export default function middleware(request: NextRequest) {
   }
 
   return response;
+}
+
+export default function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  const isGuestSession =
+    request.cookies.get(GUEST_SESSION_COOKIE)?.value === GUEST_SESSION_VALUE;
+
+  if (isGuestSession) {
+    if (
+      pathname === "/discover" ||
+      pathname.startsWith("/discover/") ||
+      pathname === "/results" ||
+      pathname.startsWith("/results/") ||
+      pathname === "/onboarding" ||
+      pathname.startsWith("/onboarding/")
+    ) {
+      return finalizeResponse(
+        request,
+        NextResponse.redirect(new URL(GUEST_HOME_PATH, request.url))
+      );
+    }
+
+    if (isGuestSupportedPath(pathname)) {
+      return finalizeResponse(request, NextResponse.next());
+    }
+  }
+
+  return finalizeResponse(request, insforgeHandler(request) as NextResponse);
 }
 
 export const config = {

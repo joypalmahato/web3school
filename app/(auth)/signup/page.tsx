@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Github, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GuestModeButton } from "@/components/shared/GuestModeButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -358,6 +359,12 @@ function SignupForm() {
             Log in
           </Link>
         </p>
+        <GuestModeButton
+          redirectTarget={redirectTarget}
+          variant="ghost"
+          className="w-full mt-3 text-text-secondary hover:text-white hover:bg-white/[0.04]"
+          label="Continue as guest"
+        />
       </div>
     </div>
   );

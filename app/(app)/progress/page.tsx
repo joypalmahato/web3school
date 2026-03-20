@@ -22,6 +22,9 @@ import { ProgressRing } from "@/components/app/ProgressRing";
 import { CalendarHeatmap } from "@/components/app/CalendarHeatmap";
 import { SkillRadar } from "@/components/app/SkillRadar";
 import { NudgeToast } from "@/components/app/NudgeToast";
+import { getGuestProgressData } from "@/lib/guest/demo-data";
+import { useGuestStore } from "@/lib/guest/store";
+import { useUser } from "@/lib/hooks/useUser";
 import { cn } from "@/lib/utils";
 import { getLevelFromXP, getXPForNextLevel } from "@/lib/types";
 import type { TraitScores } from "@/lib/types";
@@ -100,10 +103,18 @@ function StatCard({
 }
 
 export default function ProgressPage() {
+  const { profile: guestProfile, isGuest } = useUser();
+  const completedTaskIds = useGuestStore((state) => state.completedTaskIds);
   const [data, setData] = useState<ProgressData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isGuest && guestProfile) {
+      setData(getGuestProgressData(guestProfile, completedTaskIds));
+      setIsLoading(false);
+      return;
+    }
+
     const fetchProgress = async () => {
       try {
         const res = await fetch("/api/progress");
@@ -118,7 +129,7 @@ export default function ProgressPage() {
     };
 
     fetchProgress();
-  }, []);
+  }, [completedTaskIds, guestProfile, isGuest]);
 
   if (isLoading) {
     return (
@@ -136,11 +147,19 @@ export default function ProgressPage() {
     );
   }
 
-  const { profile, roadmap, stats, heatmap, recent_xp, traits, milestones } =
+  const {
+    profile: progressProfile,
+    roadmap,
+    stats,
+    heatmap,
+    recent_xp,
+    traits,
+    milestones,
+  } =
     data;
-  const level = getLevelFromXP(profile.xp_total);
+  const level = getLevelFromXP(progressProfile.xp_total);
   const { current: xpCurrent, needed: xpNeeded, progress: xpProgress } =
-    getXPForNextLevel(profile.xp_total);
+    getXPForNextLevel(progressProfile.xp_total);
 
   return (
     <div className="relative min-h-screen">
@@ -166,7 +185,7 @@ export default function ProgressPage() {
               <Flame
                 className={cn(
                   "w-8 h-8",
-                  profile.streak_count > 0
+                  progressProfile.streak_count > 0
                     ? "text-amber-warning drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]"
                     : "text-text-muted"
                 )}
@@ -174,10 +193,10 @@ export default function ProgressPage() {
             </div>
             <div>
               <p className="text-4xl font-heading font-bold text-text-primary">
-                {profile.streak_count}
+                {progressProfile.streak_count}
               </p>
               <p className="text-text-muted text-sm">
-                day streak{profile.streak_count !== 1 ? "s" : ""}
+                day streak{progressProfile.streak_count !== 1 ? "s" : ""}
               </p>
             </div>
           </div>
@@ -185,7 +204,7 @@ export default function ProgressPage() {
             <div>
               <p className="text-text-muted text-xs">Best Streak</p>
               <p className="text-text-primary font-semibold">
-                {profile.longest_streak} days
+                {progressProfile.longest_streak} days
               </p>
             </div>
             <div className="text-right">
@@ -218,7 +237,7 @@ export default function ProgressPage() {
             />
             <div>
               <p className="text-text-primary font-heading font-bold text-lg">
-                {profile.xp_total.toLocaleString()} XP
+                {progressProfile.xp_total.toLocaleString()} XP
               </p>
               <p className="text-text-muted text-sm">
                 {xpCurrent} / {xpNeeded} to Level {level + 1}

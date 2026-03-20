@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import posthog from "posthog-js";
+import { GuestModeButton } from "@/components/shared/GuestModeButton";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -153,7 +154,7 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4, ease }}
-          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap"
         >
           <Link
             href="/signup"
@@ -169,6 +170,11 @@ export function Hero({ variant = "a" }: { variant?: "a" | "b" }) {
           >
             See How It Works
           </Link>
+          <GuestModeButton
+            variant="ghost"
+            className="w-full text-white hover:bg-white/[0.05] sm:w-auto"
+            label="Open Guest Demo"
+          />
         </motion.div>
 
         <motion.p

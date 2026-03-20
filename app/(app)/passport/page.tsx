@@ -23,9 +23,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { SkillTree } from "@/components/app/SkillTree";
-import { ProgressRing } from "@/components/app/ProgressRing";
 import { SkillRadar } from "@/components/app/SkillRadar";
-import { cn } from "@/lib/utils";
+import { getGuestPassportData } from "@/lib/guest/demo-data";
+import { useGuestStore } from "@/lib/guest/store";
+import { useUser } from "@/lib/hooks/useUser";
 import { APP_URL } from "@/lib/utils/constants";
 import type { TraitScores } from "@/lib/types";
 
@@ -61,6 +62,12 @@ interface PassportData {
 }
 
 export default function PassportPage() {
+  const { profile: guestProfile, isGuest } = useUser();
+  const completedTaskIds = useGuestStore((state) => state.completedTaskIds);
+  const passportPublic = useGuestStore((state) => state.passportPublic);
+  const toggleGuestPassportPublic = useGuestStore(
+    (state) => state.togglePassportPublic
+  );
   const [data, setData] = useState<PassportData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isPublic, setIsPublic] = useState(true);
@@ -68,6 +75,18 @@ export default function PassportPage() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
+    if (isGuest && guestProfile) {
+      const guestPassport = getGuestPassportData(
+        guestProfile,
+        completedTaskIds,
+        passportPublic
+      );
+      setData(guestPassport);
+      setIsPublic(passportPublic);
+      setIsLoading(false);
+      return;
+    }
+
     const fetchPassport = async () => {
       try {
         const res = await fetch("/api/passport");
@@ -83,13 +102,18 @@ export default function PassportPage() {
     };
 
     fetchPassport();
-  }, []);
+  }, [completedTaskIds, guestProfile, isGuest, passportPublic]);
 
   const handleTogglePublic = async (checked: boolean) => {
     setIsUpdating(true);
     setIsPublic(checked);
 
     try {
+      if (isGuest) {
+        toggleGuestPassportPublic(checked);
+        return;
+      }
+
       await fetch("/api/passport", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -127,10 +151,18 @@ export default function PassportPage() {
     );
   }
 
-  const { passport, profile, role_name, skills, projects, completion_percent, traits } = data;
+  const {
+    passport,
+    profile: passportProfile,
+    role_name,
+    skills,
+    projects,
+    completion_percent,
+    traits,
+  } = data;
 
-  const initials = profile.full_name
-    ? profile.full_name
+  const initials = passportProfile.full_name
+    ? passportProfile.full_name
         .split(" ")
         .map((n) => n[0])
         .join("")
@@ -156,7 +188,7 @@ export default function PassportPage() {
             <div className="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-full">
               <Star className="w-3 h-3 text-white" />
               <span className="text-white text-xs font-semibold">
-                Level {profile.level}
+                Level {passportProfile.level}
               </span>
             </div>
           </div>
@@ -164,10 +196,10 @@ export default function PassportPage() {
           {/* User info */}
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
-              {profile.avatar_url ? (
+              {passportProfile.avatar_url ? (
                 <img
-                  src={profile.avatar_url}
-                  alt={profile.full_name || "User"}
+                  src={passportProfile.avatar_url}
+                  alt={passportProfile.full_name || "User"}
                   className="w-full h-full rounded-xl object-cover"
                 />
               ) : (
@@ -178,7 +210,7 @@ export default function PassportPage() {
             </div>
             <div>
               <h2 className="text-xl font-heading font-bold text-text-primary">
-                {profile.full_name || "Web3 Learner"}
+                {passportProfile.full_name || "Web3 Learner"}
               </h2>
               <p className="text-text-secondary font-medium text-sm">
                 {role_name}
@@ -190,7 +222,7 @@ export default function PassportPage() {
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
               <p className="text-2xl font-heading font-bold text-text-primary">
-                {profile.xp_total.toLocaleString()}
+                {passportProfile.xp_total.toLocaleString()}
               </p>
               <p className="text-text-muted text-xs">Total XP</p>
             </div>
@@ -198,7 +230,7 @@ export default function PassportPage() {
               <div className="flex items-center justify-center gap-1">
                 <Flame className="w-5 h-5 text-amber-warning" />
                 <p className="text-2xl font-heading font-bold text-text-primary">
-                  {profile.streak_count}
+                  {passportProfile.streak_count}
                 </p>
               </div>
               <p className="text-text-muted text-xs">Day Streak</p>
@@ -245,7 +277,7 @@ export default function PassportPage() {
       </motion.div>
 
       {/* Share buttons */}
-      {isPublic && passport.public_slug && (
+      {!isGuest && isPublic && passport.public_slug && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -271,7 +303,7 @@ export default function PassportPage() {
           >
             <a
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                `Check out my Web3 Skill Passport! I'm a Level ${profile.level} ${role_name} 🎯`
+                `Check out my Web3 Skill Passport! I'm a Level ${passportProfile.level} ${role_name} 🎯`
               )}&url=${encodeURIComponent(
                 `${APP_URL}/passport/${passport.public_slug}`
               )}`}
@@ -290,6 +322,17 @@ export default function PassportPage() {
           >
             <Download className="w-4 h-4" />
           </Button>
+        </motion.div>
+      )}
+
+      {isGuest && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="rounded-xl border border-dashed border-white/10 bg-white/[0.03] p-4 text-sm text-text-secondary"
+        >
+          Sharing is disabled in guest mode. Create an account to publish a real public passport link.
         </motion.div>
       )}
 
@@ -353,7 +396,7 @@ export default function PassportPage() {
       )}
 
       {/* View public page link */}
-      {isPublic && passport.public_slug && (
+      {!isGuest && isPublic && passport.public_slug && (
         <div className="text-center pb-4">
           <Button
             asChild

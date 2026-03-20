@@ -26,6 +26,9 @@ import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
 import { AITutorChat } from "@/components/app/AITutorChat";
 import { LessonContent } from "@/components/app/LessonContent";
+import { getGuestTask } from "@/lib/guest/demo-data";
+import { useGuestStore } from "@/lib/guest/store";
+import { useUser } from "@/lib/hooks/useUser";
 import { cn } from "@/lib/utils";
 
 interface TaskContent {
@@ -74,6 +77,9 @@ export default function TaskPage({
 }) {
   const { taskId } = use(params);
   const router = useRouter();
+  const { isGuest } = useUser();
+  const completedTaskIds = useGuestStore((state) => state.completedTaskIds);
+  const completeGuestTask = useGuestStore((state) => state.completeTask);
   const [task, setTask] = useState<TaskData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isCompleting, setIsCompleting] = useState(false);
@@ -86,6 +92,12 @@ export default function TaskPage({
 
   useEffect(() => {
     const fetchTask = async () => {
+      if (isGuest) {
+        setTask(getGuestTask(taskId, completedTaskIds));
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const res = await fetch(`/api/tasks/${taskId}`);
         if (!res.ok) throw new Error("Task not found");
@@ -99,10 +111,11 @@ export default function TaskPage({
     };
 
     fetchTask();
-  }, [taskId]);
+  }, [completedTaskIds, isGuest, taskId]);
 
   // Auto-generate content if task loaded but content is empty
   useEffect(() => {
+    if (isGuest) return;
     if (!task) return;
     const c = task.content as TaskContent;
     const isEmpty = !c?.lesson_text && !c?.exercise_prompt && !c?.project_brief &&
@@ -116,6 +129,15 @@ export default function TaskPage({
     setIsCompleting(true);
 
     try {
+      if (isGuest) {
+        completeGuestTask(task.id, task.xp_reward);
+        setXpAwarded(task.xp_reward);
+        setShowXPReward(true);
+        setTask((prev) => (prev ? { ...prev, status: "completed" } : null));
+        setTimeout(() => setShowXPReward(false), 3000);
+        return;
+      }
+
       const res = await fetch(`/api/tasks/${task.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -140,6 +162,7 @@ export default function TaskPage({
 
   const handleGenerateContent = async () => {
     if (!task || isGenerating) return;
+    if (isGuest) return;
     setIsGenerating(true);
     setGenerateError(false);
     try {
@@ -474,7 +497,7 @@ export default function TaskPage({
       </div>
 
       {/* AI Tutor Chat */}
-      <AITutorChat taskId={task.id} />
+      {!isGuest && <AITutorChat taskId={task.id} />}
     </div>
   );
 }

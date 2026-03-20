@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProgressRing } from "@/components/app/ProgressRing";
+import { getGuestTodayData } from "@/lib/guest/demo-data";
+import { useGuestStore } from "@/lib/guest/store";
 import { useUser } from "@/lib/hooks/useUser";
 import { useStreak } from "@/lib/hooks/useStreak";
 import { useXP } from "@/lib/hooks/useXP";
@@ -41,14 +43,32 @@ interface DashboardData {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { profile } = useUser();
+  const { profile, isGuest } = useUser();
   const { currentStreak, maintainedToday } = useStreak();
   const { level, totalXP, progress: xpProgress } = useXP();
+  const completedTaskIds = useGuestStore((state) => state.completedTaskIds);
   const [data, setData] = useState<DashboardData | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isGuest) {
+      const guestToday = getGuestTodayData(completedTaskIds);
+      setData({
+        current_task: guestToday.current_task,
+        tasks_today: guestToday.total_today,
+        completed_today: guestToday.completed_today,
+        overall_progress: Math.round(
+          (guestToday.completed_today / guestToday.total_today) * 100
+        ),
+        current_week: guestToday.current_week,
+        total_weeks: 12,
+      });
+      setUserName(profile?.full_name?.split(" ")[0] || "Guest");
+      setIsLoading(false);
+      return;
+    }
+
     const fetchDashboard = async () => {
       try {
         // Fetch tasks and profile name in parallel
@@ -85,7 +105,7 @@ export default function DashboardPage() {
     };
 
     fetchDashboard();
-  }, []);
+  }, [completedTaskIds, isGuest, profile?.full_name]);
 
   const greeting = (() => {
     const hour = new Date().getHours();

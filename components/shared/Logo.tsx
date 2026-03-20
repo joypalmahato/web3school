@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils/cn";
 interface LogoProps {
   size?: "sm" | "md" | "lg";
   className?: string;
+  href?: string;
 }
 
 const sizeClasses = {
@@ -17,17 +18,20 @@ const sizeClasses = {
   lg: "text-4xl",
 };
 
-export function Logo({ size = "md", className }: LogoProps) {
-  return (
-    <Link
-      href="/"
-      className={cn(
-        "font-heading font-bold text-white hover:opacity-80 transition-opacity duration-200",
-        sizeClasses[size],
-        className
-      )}
-    >
-      Web3School
-    </Link>
+export function Logo({ size = "md", className, href }: LogoProps) {
+  const classes = cn(
+    "font-heading font-bold text-white hover:opacity-80 transition-opacity duration-200",
+    sizeClasses[size],
+    className
   );
+
+  if (href) {
+    return (
+      <Link href={href} className={classes}>
+        Web3School
+      </Link>
+    );
+  }
+
+  return <span className={classes}>Web3School</span>;
 }

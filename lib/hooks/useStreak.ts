@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { useUserStore } from "@/lib/stores/user-store";
+import { useUser } from "@/lib/hooks/useUser";
 
 interface StreakData {
   currentStreak: number;
@@ -15,7 +15,7 @@ interface StreakData {
 }
 
 export function useStreak(): StreakData {
-  const { profile, isLoading } = useUserStore();
+  const { profile, isLoading } = useUser();
   const maintainedToday = profile?.last_active_at
     ? new Date(profile.last_active_at).toISOString().split("T")[0] ===
       new Date().toISOString().split("T")[0]

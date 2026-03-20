@@ -20,6 +20,8 @@ import { XPBar } from "@/components/app/XPBar";
 import { useUser } from "@/lib/hooks/useUser";
 import { useAppStore } from "@/lib/stores/app-store";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { getGuestUnreadNotificationCount } from "@/lib/guest/demo-data";
+import { useGuestStore } from "@/lib/guest/store";
 import { cn } from "@/lib/utils";
 
 const PAGE_TITLES: Record<string, string> = {
@@ -44,10 +46,14 @@ function getPageTitle(pathname: string): string {
 export function TopBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { profile, signOut } = useUser();
+  const { profile, signOut, isGuest } = useUser();
   const { notifications } = useAppStore();
+  const readNotificationIds = useGuestStore((state) => state.readNotificationIds);
 
   const pageTitle = getPageTitle(pathname || "");
+  const notificationCount = isGuest
+    ? getGuestUnreadNotificationCount(readNotificationIds)
+    : notifications;
 
   const initials = profile?.full_name
     ? profile.full_name
@@ -60,17 +66,25 @@ export function TopBar() {
 
   const handleSignOut = async () => {
     await signOut();
-    // Clear the httpOnly auth cookie so middleware no longer sees the user as authenticated
-    await fetch("/api/auth", { method: "DELETE" }).catch(() => {});
-    window.location.href = "/login";
+    if (!isGuest) {
+      await fetch("/api/auth", { method: "DELETE" }).catch(() => {});
+    }
+    window.location.href = isGuest ? "/" : "/login";
   };
 
   return (
     <header className="h-16 border-b border-border bg-navy-mid/50 backdrop-blur-sm px-4 md:px-6 flex items-center justify-between sticky top-0 z-30">
       {/* Page title */}
-      <h1 className="text-lg font-heading font-bold text-text-primary">
-        {pageTitle}
-      </h1>
+      <div className="flex items-center gap-3">
+        <h1 className="text-lg font-heading font-bold text-text-primary">
+          {pageTitle}
+        </h1>
+        {isGuest && (
+          <span className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-300">
+            Guest Demo
+          </span>
+        )}
+      </div>
 
       {/* Right side: streak, XP, notifications, avatar */}
       <div className="flex items-center gap-4">
@@ -95,9 +109,9 @@ export function TopBar() {
           onClick={() => router.push("/notifications")}
         >
           <Bell className="w-5 h-5" />
-          {notifications > 0 && (
+          {notificationCount > 0 && (
             <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-              {notifications > 9 ? "9+" : notifications}
+              {notificationCount > 9 ? "9+" : notificationCount}
             </span>
           )}
         </Button>
@@ -128,10 +142,10 @@ export function TopBar() {
           >
             <div className="px-3 py-2">
               <p className="text-sm font-medium text-text-primary truncate">
-                {profile?.full_name || "User"}
+                {profile?.full_name || (isGuest ? "Guest Explorer" : "User")}
               </p>
               <p className="text-xs text-text-muted truncate">
-                {profile?.email}
+                {isGuest ? "Demo workspace" : profile?.email}
               </p>
             </div>
             <DropdownMenuSeparator className="bg-border" />
@@ -155,7 +169,7 @@ export function TopBar() {
               className="text-red-400 hover:text-red-300 cursor-pointer"
             >
               <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
+              {isGuest ? "Exit Demo" : "Sign Out"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

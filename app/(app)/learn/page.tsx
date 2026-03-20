@@ -21,7 +21,10 @@ import {
   Flame,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getGuestTodayData } from "@/lib/guest/demo-data";
+import { useGuestStore } from "@/lib/guest/store";
 import { useStreak } from "@/lib/hooks/useStreak";
+import { useUser } from "@/lib/hooks/useUser";
 import { cn } from "@/lib/utils";
 
 interface TaskData {
@@ -64,12 +67,20 @@ const TASK_LABELS: Record<string, string> = {
 
 export default function LearnPage() {
   const router = useRouter();
+  const { isGuest } = useUser();
   const { currentStreak, maintainedToday } = useStreak();
+  const completedTaskIds = useGuestStore((state) => state.completedTaskIds);
   const [todayData, setTodayData] = useState<TodayData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const fetchToday = useCallback(async () => {
+    if (isGuest) {
+      setTodayData(getGuestTodayData(completedTaskIds));
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/tasks/today");
       if (!res.ok) {
@@ -86,13 +97,18 @@ export default function LearnPage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [completedTaskIds, isGuest]);
 
   useEffect(() => {
     fetchToday();
   }, [fetchToday]);
 
   const handleGenerateRoadmap = async () => {
+    if (isGuest) {
+      setTodayData(getGuestTodayData(completedTaskIds));
+      return;
+    }
+
     setIsGenerating(true);
     try {
       const profileRes = await fetch("/api/profile");

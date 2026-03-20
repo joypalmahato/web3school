@@ -11,6 +11,9 @@ import { motion } from "framer-motion";
 import { Loader2, ArrowDown, Map, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RoadmapTimeline } from "@/components/app/RoadmapTimeline";
+import { getGuestRoadmap } from "@/lib/guest/demo-data";
+import { useGuestStore } from "@/lib/guest/store";
+import { useUser } from "@/lib/hooks/useUser";
 
 interface TimelineTask {
   id?: string;
@@ -53,6 +56,8 @@ interface DailyTaskData {
 
 export default function RoadmapPage() {
   const router = useRouter();
+  const { isGuest } = useUser();
+  const completedTaskIds = useGuestStore((state) => state.completedTaskIds);
   const [roadmap, setRoadmap] = useState<RoadmapData | null>(null);
   const [tasks, setTasks] = useState<DailyTaskData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +65,15 @@ export default function RoadmapPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchRoadmap = useCallback(async () => {
+    if (isGuest) {
+      const guestRoadmap = getGuestRoadmap(completedTaskIds);
+      setRoadmap(guestRoadmap.roadmap);
+      setTasks(guestRoadmap.tasks);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/roadmap");
       if (!res.ok) {
@@ -79,13 +93,21 @@ export default function RoadmapPage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [completedTaskIds, isGuest]);
 
   useEffect(() => {
     fetchRoadmap();
   }, [fetchRoadmap]);
 
   const handleGenerateRoadmap = async () => {
+    if (isGuest) {
+      const guestRoadmap = getGuestRoadmap(completedTaskIds);
+      setRoadmap(guestRoadmap.roadmap);
+      setTasks(guestRoadmap.tasks);
+      setError(null);
+      return;
+    }
+
     setIsGenerating(true);
     try {
       // Fetch the user's current role slug from their profile
@@ -218,15 +240,17 @@ export default function RoadmapPage() {
           <h2 className="text-2xl font-heading font-bold text-text-primary">
             {roadmap.title.replace(/\s*[—–-]+\s*\d+-Week Roadmap/i, "").trim()}
           </h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/discover?restart=1")}
-            className="text-text-muted hover:text-text-primary text-xs flex-shrink-0"
-          >
-            <RotateCcw className="w-3 h-3 mr-1" />
-            Learn a New Role
-          </Button>
+          {!isGuest ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.push("/discover?restart=1")}
+              className="text-text-muted hover:text-text-primary text-xs flex-shrink-0"
+            >
+              <RotateCcw className="w-3 h-3 mr-1" />
+              Learn a New Role
+            </Button>
+          ) : null}
         </div>
         {roadmap.description && (
           <p className="text-text-secondary text-sm">{roadmap.description}</p>
