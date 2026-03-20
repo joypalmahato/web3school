@@ -31,7 +31,16 @@ import { Separator } from "@/components/ui/separator";
 import { useGuestStore } from "@/lib/guest/store";
 import { useUser } from "@/lib/hooks/useUser";
 import { cn } from "@/lib/utils";
-import type { SocialLinks } from "@/lib/types";
+import type {
+  EducationLevel,
+  EmploymentStatus,
+  SocialLinks,
+  TargetTimeline,
+  TechComfort,
+  TimeCommitment,
+} from "@/lib/types";
+
+type SelectFieldValue<T extends string> = T | "";
 
 interface SettingsData {
   full_name: string;
@@ -42,19 +51,19 @@ interface SettingsData {
   location: string;
   headline: string;
   // Onboarding: Career
-  employment_status: string;
+  employment_status: SelectFieldValue<EmploymentStatus>;
   current_role_title: string;
   years_experience: number;
-  education_level: string;
+  education_level: SelectFieldValue<EducationLevel>;
   // Onboarding: Skills & Tools
   existing_skills: string;
   tools_used: string;
-  tech_comfort: string;
+  tech_comfort: SelectFieldValue<TechComfort>;
   // Onboarding: Goals
   interest_areas: string[];
   career_goals: string[];
-  time_commitment: string;
-  target_timeline: string;
+  time_commitment: SelectFieldValue<TimeCommitment>;
+  target_timeline: SelectFieldValue<TargetTimeline>;
   // Social Links
   social_links: SocialLinks;
   // Notification prefs (stored client-side for now)
@@ -81,7 +90,7 @@ const TIMEZONES = [
   "Australia/Sydney",
 ];
 
-const EMPLOYMENT_OPTIONS = [
+const EMPLOYMENT_OPTIONS: { value: EmploymentStatus; label: string }[] = [
   { value: "employed_fulltime", label: "Employed Full-Time" },
   { value: "employed_parttime", label: "Employed Part-Time" },
   { value: "freelancer", label: "Freelancer" },
@@ -91,7 +100,7 @@ const EMPLOYMENT_OPTIONS = [
   { value: "entrepreneur", label: "Entrepreneur" },
 ];
 
-const EDUCATION_OPTIONS = [
+const EDUCATION_OPTIONS: { value: EducationLevel; label: string }[] = [
   { value: "high_school", label: "High School" },
   { value: "some_college", label: "Some College" },
   { value: "bachelors", label: "Bachelor's Degree" },
@@ -101,21 +110,21 @@ const EDUCATION_OPTIONS = [
   { value: "self_taught", label: "Self-Taught" },
 ];
 
-const TECH_COMFORT_OPTIONS = [
+const TECH_COMFORT_OPTIONS: { value: TechComfort; label: string }[] = [
   { value: "beginner", label: "Beginner" },
   { value: "familiar", label: "Familiar" },
   { value: "comfortable", label: "Comfortable" },
   { value: "advanced", label: "Advanced" },
 ];
 
-const TIME_COMMITMENT_OPTIONS = [
+const TIME_COMMITMENT_OPTIONS: { value: TimeCommitment; label: string }[] = [
   { value: "casual", label: "Casual (< 5 hrs/week)" },
   { value: "part_time", label: "Part-Time (5-10 hrs/week)" },
   { value: "half_time", label: "Half-Time (10-20 hrs/week)" },
   { value: "full_time", label: "Full-Time (20+ hrs/week)" },
 ];
 
-const TIMELINE_OPTIONS = [
+const TIMELINE_OPTIONS: { value: TargetTimeline; label: string }[] = [
   { value: "1_month", label: "1 Month" },
   { value: "3_months", label: "3 Months" },
   { value: "6_months", label: "6 Months" },
@@ -132,6 +141,12 @@ const GOAL_OPTIONS = [
   "Get a Web3 job", "Build a project", "Earn crypto",
   "Start a DAO", "Freelance in Web3", "Learn for fun",
 ];
+
+function toNullableSelectValue<T extends string>(
+  value: SelectFieldValue<T>
+): T | null {
+  return value === "" ? null : value;
+}
 
 function CollapsibleSection({
   icon: Icon,
@@ -319,17 +334,17 @@ export default function SettingsPage() {
           display_name: settings.display_name || null,
           location: settings.location || null,
           headline: settings.headline || null,
-          employment_status: settings.employment_status || null,
+          employment_status: toNullableSelectValue(settings.employment_status),
           current_role_title: settings.current_role_title || null,
           years_experience: settings.years_experience,
-          education_level: settings.education_level || null,
+          education_level: toNullableSelectValue(settings.education_level),
           existing_skills: parseCSV(settings.existing_skills),
           tools_used: parseCSV(settings.tools_used),
-          tech_comfort: settings.tech_comfort || null,
+          tech_comfort: toNullableSelectValue(settings.tech_comfort),
           interest_areas: settings.interest_areas,
           career_goals: settings.career_goals,
-          time_commitment: settings.time_commitment || null,
-          target_timeline: settings.target_timeline || null,
+          time_commitment: toNullableSelectValue(settings.time_commitment),
+          target_timeline: toNullableSelectValue(settings.target_timeline),
           social_links: settings.social_links,
         });
         setSaved(true);
@@ -346,17 +361,17 @@ export default function SettingsPage() {
           display_name: settings.display_name || null,
           location: settings.location || null,
           headline: settings.headline || null,
-          employment_status: settings.employment_status || null,
+          employment_status: toNullableSelectValue(settings.employment_status),
           current_role_title: settings.current_role_title || null,
           years_experience: settings.years_experience,
-          education_level: settings.education_level || null,
+          education_level: toNullableSelectValue(settings.education_level),
           existing_skills: parseCSV(settings.existing_skills),
           tools_used: parseCSV(settings.tools_used),
-          tech_comfort: settings.tech_comfort || null,
+          tech_comfort: toNullableSelectValue(settings.tech_comfort),
           interest_areas: settings.interest_areas,
           career_goals: settings.career_goals,
-          time_commitment: settings.time_commitment || null,
-          target_timeline: settings.target_timeline || null,
+          time_commitment: toNullableSelectValue(settings.time_commitment),
+          target_timeline: toNullableSelectValue(settings.target_timeline),
           social_links: settings.social_links,
         }),
       });
@@ -501,7 +516,10 @@ export default function SettingsPage() {
           <Select
             value={settings.employment_status}
             onValueChange={(value) =>
-              setSettings((s) => ({ ...s, employment_status: value }))
+              setSettings((s) => ({
+                ...s,
+                employment_status: value as SettingsData["employment_status"],
+              }))
             }
           >
             <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
@@ -545,7 +563,10 @@ export default function SettingsPage() {
           <Select
             value={settings.education_level}
             onValueChange={(value) =>
-              setSettings((s) => ({ ...s, education_level: value }))
+              setSettings((s) => ({
+                ...s,
+                education_level: value as SettingsData["education_level"],
+              }))
             }
           >
             <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
@@ -583,7 +604,10 @@ export default function SettingsPage() {
           <Select
             value={settings.tech_comfort}
             onValueChange={(value) =>
-              setSettings((s) => ({ ...s, tech_comfort: value }))
+              setSettings((s) => ({
+                ...s,
+                tech_comfort: value as SettingsData["tech_comfort"],
+              }))
             }
           >
             <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
@@ -621,7 +645,10 @@ export default function SettingsPage() {
           <Select
             value={settings.time_commitment}
             onValueChange={(value) =>
-              setSettings((s) => ({ ...s, time_commitment: value }))
+              setSettings((s) => ({
+                ...s,
+                time_commitment: value as SettingsData["time_commitment"],
+              }))
             }
           >
             <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
@@ -641,7 +668,10 @@ export default function SettingsPage() {
           <Select
             value={settings.target_timeline}
             onValueChange={(value) =>
-              setSettings((s) => ({ ...s, target_timeline: value }))
+              setSettings((s) => ({
+                ...s,
+                target_timeline: value as SettingsData["target_timeline"],
+              }))
             }
           >
             <SelectTrigger className="bg-navy-deep border-border text-text-primary rounded-md">
