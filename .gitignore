@@ -19,6 +19,8 @@ build/
 .env.development.local
 .env.test.local
 .env.production.local
+.mcp.json
+.claude/settings.local.json
 
 # Debug
 npm-debug.log*

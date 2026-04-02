@@ -111,13 +111,20 @@ app/
    ```
    Fill in your API keys (see [Environment Variables](#environment-variables) below).
 
-4. **Set up the database**
+4. **Optional local tool configuration**
+   ```bash
+   cp .mcp.json.example .mcp.json
+   cp .claude/settings.local.example.json .claude/settings.local.json
+   ```
+   Keep these files local-only. Put real credentials in local env files or your deployment provider's secret store, never in tracked files.
+
+5. **Set up the database**
    - Create a Supabase project at [supabase.com](https://supabase.com)
    - Run the migration: paste `supabase/migrations/001_initial_schema.sql` in the SQL editor
    - Seed initial data: paste `supabase/seed.sql` in the SQL editor
    - Enable Google and GitHub OAuth in Authentication > Providers
 
-5. **Start the dev server**
+6. **Start the dev server**
    ```bash
    npm run dev
    ```
@@ -145,7 +152,8 @@ app/
 2. Import the project in [Vercel](https://vercel.com)
 3. Add all environment variables from `.env.example` with production values
 4. Set `NEXT_PUBLIC_APP_URL` to your production domain
-5. Deploy — Vercel auto-detects Next.js and configures the build
+5. Keep `.mcp.json` and `.claude/settings.local.json` out of the repo and configure any real secrets only in Vercel, GitHub Actions, or local `.env.local`
+6. Deploy — Vercel auto-detects Next.js and configures the build
 
 ### Supabase Production
 
